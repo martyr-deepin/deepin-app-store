@@ -1,3 +1,14 @@
+<a name="5.3.0.1"></a>
+## 5.3.0.1 (2019-06-21)
+
+
+#### Bug Fixes
+
+*   assemble style ([278deb92](https://github.com/linuxdeepin/deepin-appstore/commit/278deb9233067acd1e9517ad12f6c526776f4c7f))
+*   select locale by language ([04d3220a](https://github.com/linuxdeepin/deepin-appstore/commit/04d3220a9ebc82a0ea9a0189c7d34ca8c926a37b))
+
+
+
 <a name="5.3.0.0"></a>
 ## 5.3.0.0 (2019-06-21)
 
