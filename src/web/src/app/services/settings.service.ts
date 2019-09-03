@@ -5,7 +5,7 @@ import { Channel } from 'app/modules/client/utils/channel';
   providedIn: 'root',
 })
 export class SettingService {
-  settings$ = new Promise<Settings>(resolve => Channel.exec('settings.getSettings', resolve));
+  settings$ = Channel.exec<Settings>('settings.getSettings');
   constructor() {}
 }
 
