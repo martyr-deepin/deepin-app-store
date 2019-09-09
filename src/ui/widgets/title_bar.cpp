@@ -145,8 +145,8 @@ void TitleBar::initConnections()
             this, &TitleBar::forwardButtonClicked);
     connect(search_edit_, &SearchEdit::textChanged,
             this, &TitleBar::onSearchTextChanged);
-    connect(search_edit_, &SearchEdit::focusOut,
-            this, &TitleBar::focusOut);
+    connect(search_edit_, &SearchEdit::focusChanged,
+            this, &TitleBar::focusChanged);
     connect(search_edit_, &SearchEdit::downKeyPressed,
             this, &TitleBar::downKeyPressed);
     connect(search_edit_, &SearchEdit::enterPressed,
@@ -201,14 +201,16 @@ void TitleBar::initUI(bool support_sign_in)
     QHBoxLayout *left_layout = new QHBoxLayout();
     left_layout->setSpacing(0);
     left_layout->setContentsMargins(0, 0, 0, 0);
+    left_layout->addSpacing(10);
     left_layout->addWidget(app_icon);
     left_layout->addSpacing(10);
     left_layout->addWidget(back_button_);
     left_layout->addWidget(forward_button_);
     left_layout->addStretch();
 
+    const auto buttonReserve = 170;
     QFrame *left_buttons = new QFrame();
-    left_buttons->setFixedWidth(26 + 10 + 26 + 26);
+    left_buttons->setFixedWidth(buttonReserve + 26 + 26 + 20);
     left_buttons->setContentsMargins(0, 0, 0, 0);
     left_buttons->setLayout(left_layout);
 
@@ -221,10 +223,11 @@ void TitleBar::initUI(bool support_sign_in)
     main_layout->setSpacing(0);
     main_layout->setContentsMargins(0, 0, 0, 0);
     main_layout->addWidget(left_buttons);
-    main_layout->addSpacing(160);
+    main_layout->addStretch();
     main_layout->addWidget(search_edit_, 1, Qt::AlignCenter);
+    main_layout->addStretch();
     main_layout->addWidget(avatar_button_, 0, Qt::AlignVCenter | Qt::AlignRight);
-    main_layout->addSpacing(170);
+    main_layout->addSpacing(buttonReserve);
     this->setLayout(main_layout);
     this->setAttribute(Qt::WA_TranslucentBackground, true);
 
