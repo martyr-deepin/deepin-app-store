@@ -99,7 +99,7 @@ class WebWindow : public Dtk::Widget::DMainWindow {
  private slots:
   void onSearchAppResult(const SearchMetaList& result);
 
-  void onSearchEditFocusOut();
+  void onSearchEditFocusChanged(bool onFocus);
   void onSearchButtonClicked();
   void onSearchResultClicked(const SearchMeta& result);
   void onSearchTextChanged(const QString& text);

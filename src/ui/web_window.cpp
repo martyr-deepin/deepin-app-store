@@ -107,9 +107,8 @@ WebWindow::WebWindow(QWidget *parent)
       search_re_(QRegularExpression("[\\+\\$\\.\\^!@#%&\\(\\)]"))
 {
     this->setObjectName("WebWindow");
-
     // 使用 redirectContent 模式，用于内嵌 x11 窗口时能有正确的圆角效果
-    DPlatformWindowHandle::enableDXcbForWindow(this, true);
+    Dtk::Widget::DPlatformWindowHandle::enableDXcbForWindow(this, true);
 
     search_timer_->setSingleShot(true);
 
@@ -228,8 +227,8 @@ void WebWindow::initConnections()
             this, &WebWindow::onTitleBarEntered);
     connect(title_bar_, &TitleBar::upKeyPressed,
             completion_window_, &SearchCompletionWindow::goUp);
-    connect(title_bar_, &TitleBar::focusOut,
-            this, &WebWindow::onSearchEditFocusOut);
+    connect(title_bar_, &TitleBar::focusChanged,
+            this, &WebWindow::onSearchEditFocusChanged);
     connect(title_bar_, &TitleBar::loginRequested,
     this, [&](bool login) {
         if (login) {
@@ -334,7 +333,7 @@ void WebWindow::initUI()
     completion_window_->hide();
 
     title_bar_ = new TitleBar(SettingsManager::instance()->supportSignIn());
-    this->titlebar()->setCustomWidget(title_bar_, Qt::AlignCenter, false);
+    this->titlebar()->addWidget(title_bar_, Qt::AlignLeft);
     this->titlebar()->setSeparatorVisible(true);
     tool_bar_menu_ = new TitleBarMenu(SettingsManager::instance()->supportSignIn(), this);
     this->titlebar()->setMenu(tool_bar_menu_);
@@ -423,11 +422,13 @@ void WebWindow::onSearchAppResult(const SearchMetaList &result)
     }
 }
 
-void WebWindow::onSearchEditFocusOut()
+void WebWindow::onSearchEditFocusChanged(bool onFocus)
 {
-    QTimer::singleShot(20, [ = ]() {
-        this->completion_window_->hide();
-    });
+    if (!onFocus) {
+        QTimer::singleShot(20, [ = ]() {
+            this->completion_window_->hide();
+        });
+    }
 }
 
 void WebWindow::onSearchButtonClicked()
@@ -473,7 +474,7 @@ void WebWindow::onSearchTextChanged(const QString &text)
         search_timer_->stop();
         search_timer_->start(kSearchDelay);
     } else {
-        this->onSearchEditFocusOut();
+        this->onSearchEditFocusChanged(false);
     }
 }
 
