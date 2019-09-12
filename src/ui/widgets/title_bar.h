@@ -55,7 +55,7 @@ Q_SIGNALS:
     void downKeyPressed();
     void enterPressed();
     void upKeyPressed();
-    void focusOut();
+    void focusChanged(bool onFocus);
 
 public Q_SLOTS:
     void setBackwardButtonActive(bool active);

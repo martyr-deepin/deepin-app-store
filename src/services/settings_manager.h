@@ -21,9 +21,9 @@
 #include <QObject>
 #include <DSingleton>
 
-class QDBusInterface;
-class QCefGlobalSettings;
+#include <base/sysinfo.h>
 
+class QDBusInterface;
 namespace dstore
 {
 
@@ -44,7 +44,6 @@ private:
 Q_SIGNALS:
 
 public Q_SLOTS:
-    void setQCefSettings(QCefGlobalSettings *settings);
     bool remoteDebug();
 
     bool autoInstall() const;
@@ -68,14 +67,18 @@ public Q_SLOTS:
     bool supportSignIn() const;
     bool upyunBannerVisible() const;
 
+    QString arch() const;
+    QString product() const;
+    QString desktopMode() const;
+
 private:
-    // TODO: use interface from dbus to xml
+    // TODO(lihe): use interface from dbus to xml
     QVariant getSettings(const QString &key) const;
     QVariantMap getMapSettings(const QString &key) const;
     void setSettings(const QString &key, const QVariant &value) const;
 
     QDBusInterface *settings_ifc_;
-    QCefGlobalSettings *qcef_settings_;
+    SysInfo sysinfo;
 };
 
 }  // namespace dstore

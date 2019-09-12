@@ -18,12 +18,3 @@ override_dh_auto_configure:
 	dh_auto_configure -- -DCMAKE_BUILD_TYPE=Release -DUSE_SYSTEM_RESOURCES=ON -DBUILD_WEB_RESOURCES=OFF -DDISABLE_DXCB=ON -DDISABLE_MULTI_THREAD=ON -DCONFIG_VERSION=$(CONFIG_VERSION)
 endif
 
-override_dh_auto_build:
-ifneq (,$(wildcard .git/config))
-	git submodule update --init --recursive
-	git submodule update --remote
-else
-	rm -rf src/web/node_modules src/web/vendor-deps
-	git clone -b deepin-appstore https://github.com/linuxdeepin/vendor-deps src/web/vendor-deps --depth 1
-	cd src/web; ln -s vendor-deps/node_modules node_modules
-endif

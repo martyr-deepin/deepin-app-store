@@ -17,8 +17,9 @@
 
 #include <QtGui/QDesktopServices>
 #include <QUrl>
-#include "ui/channel/settings_proxy.h"
+#include <QDebug>
 
+#include "ui/channel/settings_proxy.h"
 #include "services/settings_manager.h"
 
 namespace dstore
@@ -31,7 +32,7 @@ SettingsProxy::SettingsProxy(QObject *parent) : QObject(parent)
 
 const QVariantMap SettingsProxy::getSettings()
 {
-    return QVariantMap {
+    auto settings = QVariantMap {
         // user settings
         { "themeName", SettingsManager::instance()->themeName() },
         { "autoInstall",  SettingsManager::instance()->autoInstall() },
@@ -49,7 +50,14 @@ const QVariantMap SettingsProxy::getSettings()
 
         // debug
         {"remoteDebug", SettingsManager::instance()->remoteDebug()},
+
+        // sysinfo
+        {"arch", SettingsManager::instance()->arch()},
+        {"product", SettingsManager::instance()->product()},
+        {"desktopMode", SettingsManager::instance()->desktopMode()},
     };
+    qDebug() << settings;
+    return settings;
 }
 
 
