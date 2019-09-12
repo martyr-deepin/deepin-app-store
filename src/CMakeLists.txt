@@ -1,24 +1,18 @@
 option(USE_SYSTEM_RESOURCES "Use web resources in source tree or in system" OFF)
-option(BUILD_WEB_RESOURCES "Build web resources with npm" ON)
 
 if(USE_SYSTEM_RESOURCES)
   add_definitions(
     -DDSTORE_WEB_DIR="${CMAKE_INSTALL_PREFIX}/share/deepin-appstore/web_dist")
-  add_definitions(
-    -DSETTINGS_FILE="${CMAKE_INSTALL_PREFIX}/share/deepin-appstore/settings.ini"
-    )
 else()
   add_definitions(-DDSTORE_WEB_DIR="${CMAKE_CURRENT_SOURCE_DIR}/web_dist")
-  add_definitions(
-    -DSETTINGS_FILE="${CMAKE_CURRENT_SOURCE_DIR}/resources/settings.ini")
 endif()
 
 if(DISABLE_MULTI_THREAD)
   add_definitions(-DDSTORE_DISABLE_MULTI_THREAD="YES")
 endif()
 
-if (DISABLE_DXCB)
-    add_definitions(-DDSTORE_NO_DXCB)
+if(DISABLE_DXCB)
+  add_definitions(-DDSTORE_NO_DXCB)
 endif()
 
 if(CONFIG_VERSION)
@@ -37,29 +31,6 @@ set(CMAKE_AUTORCC ON)
 
 add_definitions("-DQT_MESSAGELOGCONTEXT")
 
-if(CMAKE_BUILD_TYPE MATCHES Debug)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -Werror -Wextra")
-  # -fno-rtti, Disable real-time type information -fno-exceptions Disable
-  # exceptions -fsanitize=address Enable memory sanitize plugin
-  set(CMAKE_CXX_FLAGS
-      "${CMAKE_CXX_FLAGS} -g -Wall -Werror -Wextra -fno-exceptions")
-  # -fsanitize=address, Enable memory address sanitizer. set(CMAKE_CXX_FLAGS
-  # "${CMAKE_CXX_FLAGS} -fsanitize=address") -fsanitize=leak, Enable memory leak
-  # sanitizer. set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=leak")
-  # -fsanitize=memory, Enable detecting uninitited memory sanitizer.
-  # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=memory") "-fsanitize-
-  # memory-track-origins -fPIC -pie -fno-omit-frame-pointer")
-
-  # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wimplicit-fallthrough=1")
-
-  # Enable Qt builtin debug mode
-else()
-  # -Wl, -O2 Enable linker optimizations -Wl, --gc-sections Remove unused code
-  # resulting from -fdsta-sections and -ffunction-sections
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -O2 -Wl,-O1 -Wl,--gc-sections")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O2 -Wl,-O1 -Wl,--gc-sections")
-endif()
-
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5DBus REQUIRED)
@@ -77,12 +48,15 @@ pkg_search_module(DtkFrameWorkDBus REQUIRED dframeworkdbus)
 include_directories(${DtkFrameWorkDBus_INCLUDE_DIRS})
 include_directories(${DtkWidget_INCLUDE_DIRS})
 
-set(Qt_LIBS Qt5::Core Qt5::DBus Qt5::Sql Qt5::Widgets Qt5::WebChannel Qt5::WebEngineWidgets)
+set(Qt_LIBS
+    Qt5::Core
+    Qt5::DBus
+    Qt5::Sql
+    Qt5::Widgets
+    Qt5::WebChannel
+    Qt5::WebEngineWidgets)
 
-set(LINK_LIBS
-    ${Qt_LIBS}
-    ${DtkWidget_LDFLAGS}
-    ${DtkFrameWorkDBus_LDFLAGS})
+set(LINK_LIBS ${Qt_LIBS} ${DtkWidget_LDFLAGS} ${DtkFrameWorkDBus_LDFLAGS})
 
 set(BASE_FILES
     base/sysinfo.cpp
@@ -157,8 +131,8 @@ set(SERVICES_FILES
     services/package/dpk_url.cpp)
 
 set(UI_FILES
-#    ui/web_event_delegate.cpp
-#    ui/web_event_delegate.h
+    # ui/web_event_delegate.cpp
+    # ui/web_event_delegate.h
     ui/web_window.cpp
     ui/web_window.h
     ui/channel/image_viewer_proxy.cpp
@@ -193,30 +167,13 @@ set(UI_FILES
 
 # Executable files Generate .qm files from .ts files.
 file(GLOB DMAN_TRANSLATION_TS
-          ${CMAKE_SOURCE_DIR}/translations/deepin-appstore*.ts)
+     ${CMAKE_SOURCE_DIR}/translations/deepin-appstore*.ts)
 set_source_files_properties(${DMAN_TRANSLATION_TS}
                             PROPERTIES
-			    OUTPUT_LOCATION
-			    ${CMAKE_BINARY_DIR}/translations)
+                            OUTPUT_LOCATION
+                            ${CMAKE_BINARY_DIR}/translations)
 qt5_add_translation(DMAN_TRANSLATION_QM ${DMAN_TRANSLATION_TS})
 add_custom_target(update-qm DEPENDS ${DMAN_TRANSLATION_QM})
-
-# Update angular dist/. Works on x86 based platforms.
-if(BUILD_WEB_RESOURCES)
-  add_custom_command(
-    OUTPUT npm-update-web-dist
-    COMMAND
-      sh -c
-      "python3 fix-i18n.py; PATH=./node_modules/.bin:$PATH npm run build; PATH=./node_modules/.bin:$PATH npm run build-aot; "
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/web"
-    VERBATIM)
-else()
-  add_custom_command(OUTPUT npm-update-web-dist
-                     COMMAND sh -c
-		             "mkdir -p web_dist web_dist_aot/appstore || true"
-			WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-		     VERBATIM)
-endif()
 
 add_custom_command(
   OUTPUT deepin-update-desktop
@@ -234,38 +191,32 @@ add_custom_command(
 
 add_custom_target(appstore-daemon DEPENDS deepin-appstore-daemon)
 add_custom_target(update-desktop DEPENDS deepin-update-desktop)
-add_custom_target(update-web-dist DEPENDS npm-update-web-dist)
 
 add_executable(deepin-appstore
                app/deepin_appstore.cpp
-	       ${BASE_FILES}
-	       ${DBUS_FILES}
-	       ${RESOURCES_FILES}
-	       ${SERVICES_FILES}
-	       ${UI_FILES})
+               ${BASE_FILES}
+               ${DBUS_FILES}
+               ${RESOURCES_FILES}
+               ${SERVICES_FILES}
+               ${UI_FILES})
 
 target_link_libraries(deepin-appstore ${LINK_LIBS})
 
 if(CMAKE_BUILD_TYPE MATCHES Release)
   add_dependencies(deepin-appstore
                    update-qm
-		   update-web-dist
-		   update-desktop
-		   appstore-daemon)
+                   update-desktop
+                   appstore-daemon)
 else()
   add_dependencies(deepin-appstore appstore-daemon)
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
-  add_executable(test-launcher
-                 app/test_launcher.cpp
-		 base/launcher.cpp
-		 base/launcher.h)
+  add_executable(test-launcher app/test_launcher.cpp base/launcher.cpp
+                               base/launcher.h)
   target_link_libraries(test-launcher ${LINK_LIBS})
-  add_executable(test-base64-image
-                 app/base64_image.cpp
-		 base/file_util.cpp
-		 base/file_util.h)
+  add_executable(test-base64-image app/base64_image.cpp base/file_util.cpp
+                                   base/file_util.h)
   target_link_libraries(test-base64-image ${LINK_LIBS})
 
   add_executable(qurl-demo app/qurl_demo.cpp)
@@ -273,11 +224,11 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
 
   add_executable(test-image-viewer
                  app/test_image_viewer.cpp
-		 base/file_util.cpp
-		 base/file_util.h
-		 ui/widgets/image_viewer.cpp
-		 ui/widgets/image_viewer.h
-		 resources/themes/themes.qrc)
+                 base/file_util.cpp
+                 base/file_util.h
+                 ui/widgets/image_viewer.cpp
+                 ui/widgets/image_viewer.h
+                 resources/themes/themes.qrc)
   target_link_libraries(test-image-viewer ${LINK_LIBS})
 endif()
 
@@ -289,13 +240,7 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/deepin-appstore-daemon
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/data/com.deepin.appstore.json
         DESTINATION /etc/deepin/pusher/handler.d)
 
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/web_dist
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-appstore/)
-
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/web_dist_aot
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-appstore/)
-
 install(DIRECTORY ${CMAKE_BINARY_DIR}/translations
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-appstore/
-	FILES_MATCHING
-	PATTERN "*")
+        FILES_MATCHING
+        PATTERN "*")

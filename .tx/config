@@ -9,12 +9,6 @@ source_file = translations/deepin-appstore.ts
 source_lang = en
 type = QT
 
-[deepin-store-5.web]
-source_file = src/web/src/locale/messages.xlf
-file_filter = src/web/src/locale/messages.<lang>.xlf
-source_lang = en
-type = XLIFF
-
 [deepin-store-5.desktopts]
 file_filter = translations/desktop/desktop_<lang>.ts
 source_file = translations/desktop/desktop.ts

@@ -41,13 +41,11 @@ void RccSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
         if (!QFileInfo::exists(app_local_dir)) {
             app_local_dir = kAppDefaultLocalDir;
         }
-        app_local_dir = "/usr/share/deepin-appstore/web_dist/appstore";
         filepath = QString("%1%2").arg(app_local_dir).arg(url.path());
         auto f = new QFile(filepath);
 
         QMimeType type = db.mimeTypeForFile(filepath);
         f->open(QIODevice::ReadOnly);
-        qDebug() << type.name();
         request->reply(type.name().toLatin1(), f);
         connect(request, &QObject::destroyed, f, &QObject::deleteLater);
     }
