@@ -28,15 +28,17 @@
 #include <QSettings>
 #include <QTimer>
 #include <QBuffer>
+
+#include <QWebEngineHistory>
 #include <QWebChannel>
-#include <qcef_web_page.h>
-#include <qcef_web_settings.h>
-#include <qcef_web_view.h>
-#include <qcef_global_settings.h>
+#include <QWebEngineProfile>
+#include <QWebEngineSettings>
+#include <QWebEngineScriptCollection>
+#include <QtWebEngineWidgets/QWebEngineView>
+#include <QtWebEngineWidgets/QWebEnginePage>
 
 #include "base/consts.h"
 #include "services/settings_manager.h"
-#include "ui/web_event_delegate.h"
 #include "ui/channel/image_viewer_proxy.h"
 #include "ui/channel/log_proxy.h"
 #include "ui/channel/menu_proxy.h"
@@ -49,6 +51,7 @@
 #include "ui/widgets/search_completion_window.h"
 #include "ui/widgets/title_bar.h"
 #include "ui/widgets/title_bar_menu.h"
+#include "services/rcc_scheme_handler.h"
 
 namespace dstore
 {
@@ -106,7 +109,23 @@ WebWindow::WebWindow(QWidget *parent)
       search_timer_(new QTimer(this)),
       search_re_(QRegularExpression("[\\+\\$\\.\\^!@#%&\\(\\)]"))
 {
+    QFile scriptFile(":/qtwebchannel/qwebchannel.js");
+    scriptFile.open(QIODevice::ReadOnly);
+    QString apiScript = QString::fromLatin1(scriptFile.readAll());
+    scriptFile.close();
+    QWebEngineScript script;
+    script.setSourceCode(apiScript);
+    script.setName("qwebchannel.js");
+    script.setWorldId(QWebEngineScript::MainWorld);
+    script.setInjectionPoint(QWebEngineScript::DocumentCreation);
+    script.setRunsOnSubFrames(false);
+    QWebEngineProfile::defaultProfile()->scripts()->insert(script);
+
+    dstore::RccSchemeHandler *handler = new dstore::RccSchemeHandler();
+    QWebEngineProfile::defaultProfile()->installUrlSchemeHandler(RccSchemeHandler::schemeName(), handler);
+
     this->setObjectName("WebWindow");
+
     // 使用 redirectContent 模式，用于内嵌 x11 窗口时能有正确的圆角效果
     Dtk::Widget::DPlatformWindowHandle::enableDXcbForWindow(this, true);
 
@@ -159,10 +178,6 @@ WebWindow::~WebWindow()
     }
 }
 
-void WebWindow::setQCefSettings(QCefGlobalSettings *settings)
-{
-    SettingsManager::instance()->setQCefSettings(settings);
-}
 
 void WebWindow::loadPage()
 {
@@ -180,7 +195,7 @@ void WebWindow::showWindow()
 
 void WebWindow::showAppDetail(const QString &app_name)
 {
-    // TODO(Shaohua): Make sure angular context has been initialized.
+    // TODO(xushaohua): Make sure angular context has been initialized.
     emit search_proxy_->openApp(app_name);
 }
 
@@ -257,14 +272,17 @@ void WebWindow::initConnections()
     connect(menu_proxy_, &MenuProxy::userInfoUpdated,
             title_bar_, &TitleBar::setUserInfo);
 
-    connect(web_view_->page(), &QCefWebPage::urlChanged,
+    connect(web_view_->page(), &QWebEnginePage::urlChanged,
             this, &WebWindow::onWebViewUrlChanged);
 
-    connect(web_view_->page(), &QCefWebPage::fullscreenRequested,
-            this, &WebWindow::onFullscreenRequest);
-
-    connect(web_view_->page(), &QCefWebPage::loadingStateChanged,
-            this, &WebWindow::onLoadingStateChanged);
+    connect(web_view_->page(), &QWebEnginePage::loadStarted,
+    this, [this]() {
+        this->onLoadingStateChanged();
+    });
+    connect(web_view_->page(), &QWebEnginePage::loadFinished,
+    this, [this]() {
+        this->onLoadingStateChanged();
+    });
 
     connect(settings_proxy_, &SettingsProxy::raiseWindowRequested,
             this, &WebWindow::raiseWindow);
@@ -277,17 +295,23 @@ void WebWindow::initProxy()
 #else
     bool useMultiThread = true;
 #endif
+    useMultiThread = false;
 
     auto parent = this;
     if (useMultiThread) {
         parent = nullptr;
     }
+
+    auto default_channel = new QWebChannel(parent);
+    web_view_->page()->setWebChannel(default_channel);
+
     auto page_channel = web_view_->page()->webChannel();
     auto channel_proxy = new ChannelProxy(this);
     page_channel->registerObject("channelProxy", channel_proxy);
 
     auto web_channel = new QWebChannel(parent);
     web_channel->connectTo(channel_proxy->transport);
+
     store_daemon_proxy_ = new StoreDaemonProxy(parent);
     image_viewer_proxy_ = new ImageViewerProxy(parent);
     log_proxy_ = new LogProxy(parent);
@@ -322,7 +346,7 @@ void WebWindow::initUI()
 {
     Dtk::Widget::DThemeManager::instance()->registerWidget(this);
 
-    web_view_ = new QCefWebView();
+    web_view_ = new QWebEngineView();
     this->setCentralWidget(web_view_);
 
     image_viewer_ = new ImageViewer(this);
@@ -336,16 +360,10 @@ void WebWindow::initUI()
     tool_bar_menu_ = new TitleBarMenu(SettingsManager::instance()->supportSignIn(), this);
     this->titlebar()->setMenu(tool_bar_menu_);
 
-    // Disable web security.
-    auto settings = web_view_->page()->settings();
-    settings->setMinimumFontSize(8);
-    settings->setWebSecurity(QCefWebSettings::StateDisabled);
-
-    // init default font size
-    settings->setDefaultFontSize(this->fontInfo().pixelSize());
-
-    web_event_delegate_ = new WebEventDelegate(this);
-    web_view_->page()->setEventDelegate(web_event_delegate_);
+    // FIXME(lihe): font size
+//    auto settings = web_view_->page()->settings();
+//    settings->setFontSize(QWebEngineSettings::DefaultFontSize, this->fontInfo().pixelSize());
+//    settings->setFontSize(QWebEngineSettings::DefaultFixedFontSize, this->fontInfo().pixelSize());
 
     this->setFocusPolicy(Qt::ClickFocus);
 
@@ -495,38 +513,25 @@ void WebWindow::onWebViewUrlChanged(const QUrl &url)
     Q_UNUSED(url);
 }
 
-void WebWindow::onLoadingStateChanged(bool,
-                                      bool can_go_back,
-                                      bool can_go_forward)
+void WebWindow::onLoadingStateChanged()
 {
-    title_bar_->setBackwardButtonActive(can_go_back);
-    title_bar_->setForwardButtonActive(can_go_forward);
+    title_bar_->setBackwardButtonActive(web_view_->page()->history()->canGoBack());
+    title_bar_->setForwardButtonActive(web_view_->page()->history()->canGoForward());
 }
 
 void WebWindow::webViewGoBack()
 {
     auto page = web_view_->page();
-    if (page->canGoBack()) {
-        page->back();
+    if (page->history()->canGoBack()) {
+        page->history()->back();
     }
 }
 
 void WebWindow::webViewGoForward()
 {
     auto page = web_view_->page();
-    if (page->canGoForward()) {
-        page->forward();
-    }
-}
-
-void WebWindow::onFullscreenRequest(bool fullscreen)
-{
-    if (fullscreen) {
-        this->titlebar()->hide();
-        this->showFullScreen();
-    } else {
-        this->titlebar()->show();
-        this->showNormal();
+    if (page->history()->canGoForward()) {
+        page->history()->forward();
     }
 }
 

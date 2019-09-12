@@ -108,7 +108,7 @@ PMResult AptPackageManager::Query(const QList<Package> &packages)
     for (const AppVersion &version : version_list) {
         auto package_name = version.pkg_name;
         auto packageID =  package_name.split(":").first();
-        // TODO: remove name
+        // TODO(lihe): remove name
         Package pkg;
         pkg.packageURI = "dpk://deb/" + packageID;
         pkg.packageName = package_name;
@@ -212,7 +212,7 @@ PMResult AptPackageManager::QueryVersion(const QList<Package> &packages)
     for (const AppVersion &version : version_list) {
         auto package_name = version.pkg_name;
         auto packageID =  package_name.split(":").first();
-        // TODO: remove name
+        // TODO(lihe): remove name
         result.append(QVariantMap {
             { "dpk", "dpk://deb/" + packageID },
             { "name", packageID },
@@ -255,13 +255,6 @@ PMResult AptPackageManager::QueryInstalledTime(const QList<Package> &packages)
 PMResult AptPackageManager::ListInstalled(const QList<QString> &/*packageIDs*/)
 {
     Q_D(AptPackageManager);
-//    auto packageIDs = getIDs(packages);
-
-    //TODO: remove
-//    QMap<QString, int> apps;
-//    for (auto id : packageIDs) {
-//        apps.insert(id, 1);
-//    }
 
     const QDBusPendingReply<InstalledAppInfoList> reply =
         d->deb_interface_->ListInstalled();
@@ -284,7 +277,7 @@ PMResult AptPackageManager::ListInstalled(const QList<QString> &/*packageIDs*/)
             pkg.allLocalName[k] = info.localeNames[k];
         }
         pkg.installedTime = info.installationTime;
-        // TODO: remove name
+        // TODO(lihe): remove name
 //        if (apps.contains(packageID)) {
         result.append(pkg.toVariantMap());
 //            qDebug() << info.pkg_name << info.size << info.version;

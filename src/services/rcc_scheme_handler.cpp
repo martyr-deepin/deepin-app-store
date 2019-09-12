@@ -20,29 +20,41 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QLocale>
+#include <QMimeDatabase>
 
-namespace dstore {
+#include <QWebEngineUrlRequestJob>
 
-QString RccSchemeHandler(const QUrl& url) {
-  const QString host = url.host();
-  if (host == "web") {
-    const char kAppDefaultLocalDir[] = DSTORE_WEB_DIR "/appstore";
-    QString app_local_dir = QString("%1/appstore-%2")
-        .arg(DSTORE_WEB_DIR)
-        .arg(QLocale().name());
-    if (!QFileInfo::exists(app_local_dir)) {
-      app_local_dir = kAppDefaultLocalDir;
+namespace dstore
+{
+
+void RccSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
+{
+    static QMimeDatabase db;
+    QUrl url = request->requestUrl();
+    QString filepath;
+    const QString host = url.host();
+    if (host == "web") {
+        const char kAppDefaultLocalDir[] = DSTORE_WEB_DIR "/appstore";
+        QString app_local_dir = QString("%1/appstore-%2")
+                                .arg(DSTORE_WEB_DIR)
+                                .arg(QLocale().name());
+        if (!QFileInfo::exists(app_local_dir)) {
+            app_local_dir = kAppDefaultLocalDir;
+        }
+        app_local_dir = "/usr/share/deepin-appstore/web_dist/appstore";
+        filepath = QString("%1%2").arg(app_local_dir).arg(url.path());
+        auto f = new QFile(filepath);
+
+        QMimeType type = db.mimeTypeForFile(filepath);
+        f->open(QIODevice::ReadOnly);
+        qDebug() << type.name();
+        request->reply(type.name().toLatin1(), f);
+        connect(request, &QObject::destroyed, f, &QObject::deleteLater);
     }
-
-    QString filepath = QString("%1/%2").arg(app_local_dir).arg(url.path());
-    if (!QFileInfo::exists(filepath)) {
-      filepath = QString("%1/%2").arg(app_local_dir).arg("index.html");
-    }
-    return filepath;
-  } else {
-    // 404 not found.
-    return "";
-  }
 }
+
+//QString RccSchemeHandler(const QUrl& url) {
+
+//}
 
 }  // namespace dstore

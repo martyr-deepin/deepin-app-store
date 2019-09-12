@@ -32,7 +32,7 @@ public Q_SLOTS:
 
     PMResult Remove(const AppPackageList &apps);
 
-    //TODO remove
+    //TODO(lihe) remove
     PMResult QueryVersion(const QStringList &packageID);
     PMResult QueryInstalledTime(const QStringList &packageID);
 

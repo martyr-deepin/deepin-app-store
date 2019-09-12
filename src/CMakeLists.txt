@@ -67,24 +67,22 @@ find_package(Qt5Gui REQUIRED)
 find_package(Qt5LinguistTools)
 find_package(Qt5Sql REQUIRED)
 find_package(Qt5WebChannel REQUIRED)
+find_package(Qt5WebEngineWidgets REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 
 pkg_search_module(DtkWidget REQUIRED dtkwidget)
 pkg_search_module(DtkFrameWorkDBus REQUIRED dframeworkdbus)
-pkg_search_module(LibQCef REQUIRED libqcef)
 
 include_directories(${DtkFrameWorkDBus_INCLUDE_DIRS})
 include_directories(${DtkWidget_INCLUDE_DIRS})
-include_directories(${LibQCef_INCLUDE_DIRS})
 
-set(Qt_LIBS Qt5::Core Qt5::DBus Qt5::Sql Qt5::Widgets Qt5::WebChannel)
+set(Qt_LIBS Qt5::Core Qt5::DBus Qt5::Sql Qt5::Widgets Qt5::WebChannel Qt5::WebEngineWidgets)
 
 set(LINK_LIBS
     ${Qt_LIBS}
     ${DtkWidget_LDFLAGS}
-    ${DtkFrameWorkDBus_LDFLAGS}
-    ${LibQCef_LDFLAGS})
+    ${DtkFrameWorkDBus_LDFLAGS})
 
 set(BASE_FILES
     base/command.cpp
@@ -129,6 +127,8 @@ set(RESOURCES_FILES
     resources/themes/themes.qrc)
 
 set(SERVICES_FILES
+    services/rcc_scheme_handler.cpp
+    services/rcc_scheme_handler.h
     services/dbus_manager.cpp
     services/dbus_manager.h
     services/rcc_scheme_handler.cpp
@@ -143,9 +143,6 @@ set(SERVICES_FILES
     services/account_manager.cpp
     services/store_daemon_manager.cpp
     services/store_daemon_manager.h
-    services/backend/chinese2pinyin.cpp
-    services/backend/chinese2pinyin.h
-    services/backend/backend.qrc
     services/package/package_manager_interface.h
     services/package/package_manager_interface.cpp
     services/package/package_manager.h
@@ -158,8 +155,8 @@ set(SERVICES_FILES
     services/package/dpk_url.cpp)
 
 set(UI_FILES
-    ui/web_event_delegate.cpp
-    ui/web_event_delegate.h
+#    ui/web_event_delegate.cpp
+#    ui/web_event_delegate.h
     ui/web_window.cpp
     ui/web_window.h
     ui/channel/image_viewer_proxy.cpp
@@ -245,14 +242,7 @@ add_executable(deepin-appstore
 	       ${SERVICES_FILES}
 	       ${UI_FILES})
 
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-set(CMAKE_INSTALL_RPATH "${LibQCef_LIBDIR}/qcef")
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-set_target_properties(deepin-appstore
-                      PROPERTIES INSTALL_RPATH "${LibQCef_LIBDIR}/qcef")
-target_link_libraries(deepin-appstore ${LibQCef_LIBDIR}/qcef/libcef.so
-                      ${LINK_LIBS})
+target_link_libraries(deepin-appstore ${LINK_LIBS})
 
 if(CMAKE_BUILD_TYPE MATCHES Release)
   add_dependencies(deepin-appstore

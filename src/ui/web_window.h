@@ -22,9 +22,10 @@
 #include <DMainWindow>
 #include <QMenu>
 #include <QRegularExpression>
-class QCefWebView;
-class QCefGlobalSettings;
+
 class QTimer;
+class QWebEngineView;
+class QThread;
 
 #include "services/search_result.h"
 
@@ -52,7 +53,6 @@ class WebWindow : public Dtk::Widget::DMainWindow {
   explicit WebWindow(QWidget* parent = nullptr);
   ~WebWindow() override;
 
-  void setQCefSettings(QCefGlobalSettings *settings);
   /**
    * Load app store main web page.
    */
@@ -78,7 +78,7 @@ class WebWindow : public Dtk::Widget::DMainWindow {
   void initServices();
   void prepareSearch(bool entered);
 
-  QCefWebView* web_view_ = nullptr;
+  QWebEngineView* web_view_ = nullptr;
   ImageViewer* image_viewer_ = nullptr;
   ImageViewerProxy* image_viewer_proxy_ = nullptr;
   LogProxy* log_proxy_ = nullptr;
@@ -91,7 +91,6 @@ class WebWindow : public Dtk::Widget::DMainWindow {
   SettingsProxy* settings_proxy_ = nullptr;
   StoreDaemonProxy* store_daemon_proxy_ = nullptr;
   TitleBar* title_bar_ = nullptr;
-  WebEventDelegate* web_event_delegate_ = nullptr;
   TitleBarMenu* tool_bar_menu_ = nullptr;
 
   QRegularExpression search_re_;
@@ -108,11 +107,8 @@ class WebWindow : public Dtk::Widget::DMainWindow {
   void onThemeChaged(const QString theme_name);
 
   void onWebViewUrlChanged(const QUrl& url);
-  void onFullscreenRequest(bool fullscreen);
 
-  void onLoadingStateChanged(bool is_loading,
-                             bool can_go_back,
-                             bool can_go_forward);
+  void onLoadingStateChanged();
 
   void webViewGoBack();
   void webViewGoForward();
