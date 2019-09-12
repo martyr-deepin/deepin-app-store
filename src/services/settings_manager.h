@@ -21,6 +21,8 @@
 #include <QObject>
 #include <DSingleton>
 
+#include <base/sysinfo.h>
+
 class QDBusInterface;
 namespace dstore
 {
@@ -65,6 +67,10 @@ public Q_SLOTS:
     bool supportSignIn() const;
     bool upyunBannerVisible() const;
 
+    QString arch() const;
+    QString product() const;
+    QString desktopMode() const;
+
 private:
     // TODO(lihe): use interface from dbus to xml
     QVariant getSettings(const QString &key) const;
@@ -72,6 +78,7 @@ private:
     void setSettings(const QString &key, const QVariant &value) const;
 
     QDBusInterface *settings_ifc_;
+    SysInfo sysinfo;
 };
 
 }  // namespace dstore

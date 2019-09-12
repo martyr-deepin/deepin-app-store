@@ -63,7 +63,22 @@ SettingsManager::~SettingsManager()
 
 bool SettingsManager::remoteDebug()
 {
-    return true;
+    return qEnvironmentVariableIsSet("QTWEBENGINE_REMOTE_DEBUGGING");
+}
+
+QString SettingsManager::arch() const
+{
+    return sysinfo.arch();
+}
+
+QString SettingsManager::product() const
+{
+    return sysinfo.product();
+}
+
+QString SettingsManager::desktopMode() const
+{
+    return sysinfo.desktopMode();
 }
 
 QString SettingsManager::metadataServer() const

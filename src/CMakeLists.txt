@@ -85,6 +85,8 @@ set(LINK_LIBS
     ${DtkFrameWorkDBus_LDFLAGS})
 
 set(BASE_FILES
+    base/sysinfo.cpp
+    base/sysinfo.h
     base/command.cpp
     base/command.h
     base/consts.cpp
