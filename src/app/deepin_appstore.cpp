@@ -65,6 +65,14 @@ int main(int argc, char **argv)
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
 
+    // fix error for cutelogger
+    // No appenders assotiated with category js
+    auto category = "js";
+    auto fileAppender = new Dtk::Core::RollingFileAppender(Dtk::Core::DLogManager::getlogFilePath());
+    static Dtk::Core::Logger customLoggerInstance(category);
+    customLoggerInstance.logToGlobalInstance(category, true);
+    customLoggerInstance.registerAppender(fileAppender);
+
     dstore::DBusManager dbus_manager;
     if (dbus_manager.parseArguments()) {
         // Exit process after 1000ms.
