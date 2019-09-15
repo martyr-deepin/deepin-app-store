@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>common/images/deepin-appstore.svg</file>
+        <file>common/images/deepin-app-store.svg</file>
         <file>light/images/backward_hover.svg</file>
         <file>light/images/backward_insensitive.svg</file>
         <file>light/images/backward_normal.svg</file>

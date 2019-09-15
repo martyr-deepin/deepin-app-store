@@ -1,14 +1,14 @@
-# Deepin Store
+# Deepin App Store
 
-Deepin Store is the store power deepin user and developer
+Deepin App Store is the store power deepin user and developer
 
 ## Dependencies
 
-Deepin Store base on QWebEngine, you can install build dependencies in deepin like this:
+Deepin App Store base on QWebEngine, you can install build dependencies in deepin like this:
 
 ```bash
 #For release based on debian
-sudo apt-get build-dep deepin-appstore
+sudo apt-get build-dep deepin-app-store
 ```
 
 ## Installation
@@ -16,7 +16,7 @@ sudo apt-get build-dep deepin-appstore
 If you are deepin user, you can install Deepin Boot Maker from repository:
 
 ```bash
-sudo apt-get install deepin-appstore
+sudo apt-get install deepin-apps-tore
 ```
 
 ## Getting help

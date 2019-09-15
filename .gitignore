@@ -11,12 +11,12 @@ debian/files
 debian/*.log
 debian/*.substvars
 debian/tmp
-debian/deepin-appstore
-debian/deepin-appstore-data
+debian/deepin-app-store
+debian/deepin-app-store-data
 debian/debhelper-build-stamp
 debian/.debhelper/
 src/web_dist
 src/web_dist_aot
-debian/deepin-appstore-data-aot
-src/daemon/deepin-appstore-daemon
+debian/deepin-app-store-data-aot
+src/daemon/deepin-app-store-daemon
 src/daemon/daemon

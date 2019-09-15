@@ -81,12 +81,12 @@
         <translation>Vybrat vše</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_appstore.cpp" line="107"/>
+        <location filename="../src/app/deepin_app-store.cpp" line="107"/>
         <source>Deepin Store</source>
         <translation>Obchod Deepin</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_appstore.cpp" line="108"/>
+        <location filename="../src/app/deepin_app-store.cpp" line="108"/>
         <source>Deepin Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
         <translation>Deepin Store je App Store s různými a kvalitními aplikacemi. Obsahuje populární doporučení, nově aktualizované aplikace, aktuální témata a podporuje instalaci, aktualizaci a odinstalaci jedním kliknutím.</translation>
     </message>

@@ -54,13 +54,13 @@ int main(int argc, char **argv)
     app.setApplicationVersion(Dtk::Widget::DApplication::buildVersion("5.0.0.0"));
     app.setApplicationName(dstore::kAppName);
     app.loadTranslator();
-    app.setApplicationDisplayName(QObject::tr("Deepin Store"));
+    app.setApplicationDisplayName(QObject::tr("Deepin App Store"));
     app.setApplicationDescription(QObject::tr(
-                                      "Deepin Store is an App Store with diverse and quality applications. "
+                                      "Deepin App Store is an App Store with diverse and quality applications. "
                                       "It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, "
                                       "updating and uninstalling."));
     app.setApplicationAcknowledgementPage(
-        "https://www.deepin.org/acknowledgments/deepin-appstore/");
+        "https://www.deepin.org/acknowledgments/deepin-app-store/");
 
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();

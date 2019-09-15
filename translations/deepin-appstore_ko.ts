@@ -81,12 +81,12 @@
         <translation>모두 선택</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_appstore.cpp" line="107"/>
+        <location filename="../src/app/deepin_app-store.cpp" line="107"/>
         <source>Deepin Store</source>
         <translation>Deepin 스토어</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_appstore.cpp" line="108"/>
+        <location filename="../src/app/deepin_app-store.cpp" line="108"/>
         <source>Deepin Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
         <translation>Deepin 스토어는 다양하고 수준높은 응용 프로그램을 갖춘 앱스토어 입니다. 인기 추천 기능, 새로 업데이트 된 앱 및 핫 토픽을 제공하며, 원클릭 설치, 업데이트 및 제거를 지원합니다.</translation>
     </message>

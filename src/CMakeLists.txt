@@ -2,7 +2,7 @@ option(USE_SYSTEM_RESOURCES "Use web resources in source tree or in system" OFF)
 
 if(USE_SYSTEM_RESOURCES)
   add_definitions(
-    -DDSTORE_WEB_DIR="${CMAKE_INSTALL_PREFIX}/share/deepin-appstore/web_dist")
+    -DDSTORE_WEB_DIR="${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/web_dist")
 else()
   add_definitions(-DDSTORE_WEB_DIR="${CMAKE_CURRENT_SOURCE_DIR}/web_dist")
 endif()
@@ -167,7 +167,7 @@ set(UI_FILES
 
 # Executable files Generate .qm files from .ts files.
 file(GLOB DMAN_TRANSLATION_TS
-     ${CMAKE_SOURCE_DIR}/translations/deepin-appstore*.ts)
+     ${CMAKE_SOURCE_DIR}/translations/deepin-app-store*.ts)
 set_source_files_properties(${DMAN_TRANSLATION_TS}
                             PROPERTIES
                             OUTPUT_LOCATION
@@ -179,36 +179,36 @@ add_custom_command(
   OUTPUT deepin-update-desktop
   COMMAND
     sh -c
-    "deepin-desktop-ts-convert ts2desktop resources/deepin-appstore.desktop ../translations/desktop resources/deepin-appstore.desktop"
+    "deepin-desktop-ts-convert ts2desktop resources/deepin-app-store.desktop ../translations/desktop resources/deepin-app-store.desktop"
   )
 
 add_custom_command(
-  OUTPUT deepin-appstore-daemon
+  OUTPUT deepin-app-store-daemon
   COMMAND
     sh -c
-    "GOPATH=\"${CMAKE_CURRENT_SOURCE_DIR}/daemon/vendor:/usr/share/gocode\" go build -o deepin-appstore-daemon ."
+    "GOPATH=\"${CMAKE_CURRENT_SOURCE_DIR}/daemon/vendor:/usr/share/gocode\" go build -o deepin-app-store-daemon ."
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/daemon")
 
-add_custom_target(appstore-daemon DEPENDS deepin-appstore-daemon)
+add_custom_target(app-store-daemon DEPENDS deepin-app-store-daemon)
 add_custom_target(update-desktop DEPENDS deepin-update-desktop)
 
-add_executable(deepin-appstore
-               app/deepin_appstore.cpp
+add_executable(deepin-app-store
+               app/deepin_app_store.cpp
                ${BASE_FILES}
                ${DBUS_FILES}
                ${RESOURCES_FILES}
                ${SERVICES_FILES}
                ${UI_FILES})
 
-target_link_libraries(deepin-appstore ${LINK_LIBS})
+target_link_libraries(deepin-app-store ${LINK_LIBS})
 
 if(CMAKE_BUILD_TYPE MATCHES Release)
-  add_dependencies(deepin-appstore
+  add_dependencies(deepin-app-store
                    update-qm
                    update-desktop
-                   appstore-daemon)
+                   app-store-daemon)
 else()
-  add_dependencies(deepin-appstore appstore-daemon)
+  add_dependencies(deepin-app-store app-store-daemon)
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
@@ -232,15 +232,15 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
   target_link_libraries(test-image-viewer ${LINK_LIBS})
 endif()
 
-install(TARGETS deepin-appstore DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+install(TARGETS deepin-app-store DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/deepin-appstore-daemon
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/deepin-app-store-daemon
         DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/data/com.deepin.appstore.json
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/data/com.deepin.app-store.json
         DESTINATION /etc/deepin/pusher/handler.d)
 
 install(DIRECTORY ${CMAKE_BINARY_DIR}/translations
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-appstore/
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/
         FILES_MATCHING
         PATTERN "*")

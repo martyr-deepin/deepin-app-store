@@ -2,9 +2,9 @@
 Categories=Application;System;Settings
 Comment=A general Linux software manager
 Encoding=UTF-8
-Exec=deepin-appstore %U
+Exec=deepin-app-store %U
 GenericName=App Store
-Icon=deepin-appstore
+Icon=deepin-app-store
 MimeType=x-scheme-handler/dpk;
 Name=Deepin App Store
 StartupNotify=false

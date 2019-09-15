@@ -81,12 +81,12 @@
         <translation>全て選択</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_appstore.cpp" line="107"/>
+        <location filename="../src/app/deepin_app-store.cpp" line="107"/>
         <source>Deepin Store</source>
         <translation>Deepinストア</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_appstore.cpp" line="108"/>
+        <location filename="../src/app/deepin_app-store.cpp" line="108"/>
         <source>Deepin Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
         <translation>Deepinストアは、Linux Deepin向けに開発された色とりどりのハイクオリティアプリケーションを配信する専用サービスの名称である。いつでもアクセスでき、好きなアプリケーションを見つけたらその場でダウンロードとインストールを行うことができる。ワンクリックでダウンロード、インストール、アップデート、アンインストールなどもできる。</translation>
     </message>

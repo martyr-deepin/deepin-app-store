@@ -81,12 +81,12 @@
         <translation>انتخاب همه موارد</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_appstore.cpp" line="107"/>
+        <location filename="../src/app/deepin_app-store.cpp" line="107"/>
         <source>Deepin Store</source>
         <translation>فروشگاه دیپین</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_appstore.cpp" line="108"/>
+        <location filename="../src/app/deepin_app-store.cpp" line="108"/>
         <source>Deepin Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
         <translation>فروشگاه دیپین یک فروشگاه با برنامه های متنوع و گوناگون است این فروشگاه به شما برنامه های محبوب را پیشنهاد می دهد همچنین  با یک دکمه می توانید برنامه هایتان را نصب  یا بروزرسانی و حذف کنید</translation>
     </message>

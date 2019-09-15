@@ -19,7 +19,7 @@
 
 namespace dstore {
 
-const char kAppName[] = "deepin-appstore";
+const char kAppName[] = "deepin-app-store";
 
 #ifndef NDEBUG
 const char kIndexPage[] = "http://localhost:4200";
@@ -28,7 +28,7 @@ const char kIndexPage[] = "rcc://web/index.html";
 #endif  // NDEBUG
 
 QString GetCacheDir() {
-  const char kAppCacheDir[] = ".cache/deepin/deepin-appstore";
+  const char kAppCacheDir[] = ".cache/deepin/deepin-app-store";
   return QDir::home().absoluteFilePath(kAppCacheDir);
 }
 

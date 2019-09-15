@@ -1,5 +1,5 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: deepin-appstore
+Upstream-Name: deepin-app-store
 
 Files: *
 Copyright: Deepin Technology Co., Ltd.

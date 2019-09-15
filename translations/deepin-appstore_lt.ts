@@ -81,12 +81,12 @@
         <translation>Žymėti viską</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_appstore.cpp" line="107"/>
+        <location filename="../src/app/deepin_app-store.cpp" line="107"/>
         <source>Deepin Store</source>
         <translation>Deepin parduotuvė</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_appstore.cpp" line="108"/>
+        <location filename="../src/app/deepin_app-store.cpp" line="108"/>
         <source>Deepin Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
         <translation>Deepin parduotuvė yra programų parduotuvė su įvairiomis ir kokybiškomis programomis. Joje yra populiarios rekomendacijos, naujos atnaujintos programos ir įdomios temos, be to, ji palaiko įdiegimą, atnaujinimą ir šalinimą vienu spustelėjimu.</translation>
     </message>

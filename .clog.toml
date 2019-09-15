@@ -1,5 +1,5 @@
 [clog]
-repository = "https://github.com/linuxdeepin/deepin-appstore"
+repository = "https://github.com/linuxdeepin/deepin-app-store"
 from-latest-tag = true
 
 changelog = "CHANGELOG.md"

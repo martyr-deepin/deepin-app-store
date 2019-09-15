@@ -1,8 +1,8 @@
-install(FILES deepin-appstore.desktop
+install(FILES deepin-app-store.desktop
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications/)
 
-install(FILES themes/common/images/deepin-appstore.svg
+install(FILES themes/common/images/deepin-app-store.svg
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/)
 
 install(FILES settings.ini.default
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-appstore/)
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/)

@@ -1,3 +1,3 @@
 [D-BUS Service]
 Name=com.deepin.AppStore
-Exec=/usr/bin/deepin-appstore --dbus
+Exec=/usr/bin/deepin-app-store --dbus

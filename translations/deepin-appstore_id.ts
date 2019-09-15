@@ -81,12 +81,12 @@
         <translation>Pilih Semua</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_appstore.cpp" line="107"/>
+        <location filename="../src/app/deepin_app-store.cpp" line="107"/>
         <source>Deepin Store</source>
         <translation>Toko Deepin</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_appstore.cpp" line="108"/>
+        <location filename="../src/app/deepin_app-store.cpp" line="108"/>
         <source>Deepin Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
         <translation>Deepin Store adalah App Store dengan beragam aplikasi yang kualitas. Deepin Store merekomendasi aplikasi populer, aplikasi yang baru diperbarui dan topik hangat, dan mendukung instalasi satu-klik, memperbarui dan menghapus aplikasi.</translation>
     </message>
