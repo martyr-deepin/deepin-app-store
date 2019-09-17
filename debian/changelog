@@ -1,3 +1,9 @@
+deepin-app-store (5.6.0.0) unstable; urgency=medium
+
+  * Remove web source
+
+ -- Iceyer <me@iceyer.net>  Tue, 17 Sep 2019 20:34:46 +0800
+
 deepin-app-store (5.0.2.6) unstable; urgency=medium
 
   * Support mips

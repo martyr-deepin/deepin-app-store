@@ -166,14 +166,14 @@ set(UI_FILES
     ui/widgets/title_bar_menu.h)
 
 # Executable files Generate .qm files from .ts files.
-file(GLOB DMAN_TRANSLATION_TS
+file(GLOB TRANSLATION_TS
      ${CMAKE_SOURCE_DIR}/translations/deepin-app-store*.ts)
-set_source_files_properties(${DMAN_TRANSLATION_TS}
+set_source_files_properties(${TRANSLATION_TS}
                             PROPERTIES
                             OUTPUT_LOCATION
                             ${CMAKE_BINARY_DIR}/translations)
-qt5_add_translation(DMAN_TRANSLATION_QM ${DMAN_TRANSLATION_TS})
-add_custom_target(update-qm DEPENDS ${DMAN_TRANSLATION_QM})
+qt5_add_translation(TRANSLATION_QM ${TRANSLATION_TS})
+add_custom_target(update-qm DEPENDS ${TRANSLATION_QM})
 
 add_custom_command(
   OUTPUT deepin-update-desktop
@@ -186,7 +186,7 @@ add_custom_command(
   OUTPUT deepin-app-store-daemon
   COMMAND
     sh -c
-    "GOPATH=\"${CMAKE_CURRENT_SOURCE_DIR}/daemon/vendor:/usr/share/gocode\" go build -o deepin-app-store-daemon ."
+    "GO111MODULE=off GOPATH=\"${CMAKE_CURRENT_SOURCE_DIR}/daemon/vendor:/usr/share/gocode\" go build -o deepin-app-store-daemon ."
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/daemon")
 
 add_custom_target(app-store-daemon DEPENDS deepin-app-store-daemon)
@@ -208,7 +208,7 @@ if(CMAKE_BUILD_TYPE MATCHES Release)
                    update-desktop
                    app-store-daemon)
 else()
-  add_dependencies(deepin-app-store app-store-daemon)
+  add_dependencies(deepin-app-store app-store-daemon update-qm)
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
@@ -237,7 +237,7 @@ install(TARGETS deepin-app-store DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/deepin-app-store-daemon
         DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/data/com.deepin.app-store.json
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/data/com.deepin.AppStore.json
         DESTINATION /etc/deepin/pusher/handler.d)
 
 install(DIRECTORY ${CMAKE_BINARY_DIR}/translations

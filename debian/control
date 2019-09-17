@@ -36,6 +36,6 @@ Depends:${shlibs:Depends}, ${misc:Depends},
  libqt5webengine-data,
  deepin-app-store-data (>=5.3) [!mips64el],
  deepin-app-store-data-aot (>=5.3) [mips64el]
-Replaces: dstore-client
+Replaces: dstore-client, deepin-appstore
 Description: Deepin App Store
  Deepin App Store Client.
