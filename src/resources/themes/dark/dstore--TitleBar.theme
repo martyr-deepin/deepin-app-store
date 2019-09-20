@@ -1,6 +1,6 @@
 
 #AppIcon {
-  image: url(:/common/images/deepin-appstore.svg);
+  image: url(:/common/images/deepin-app-store.svg);
 }
 
 #BackButton {

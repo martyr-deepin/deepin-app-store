@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	appstoreConfPath        = "/usr/share/deepin-appstore/settings.ini"
-	appstoreConfPathDefault = "/usr/share/deepin-appstore/settings.ini.default"
+	appStoreConfPath        = "/usr/share/deepin-app-store/settings.ini"
+	appStoreConfPathDefault = "/usr/share/deepin-app-store/settings.ini.default"
 )
 
 const (
@@ -43,10 +43,10 @@ type Settings struct {
 func NewSettings() *Settings {
 	m := &Settings{}
 	var err error
-	m.sysCfg, err = ini.Load(appstoreConfPath)
+	m.sysCfg, err = ini.Load(appStoreConfPath)
 	if err != nil {
 		logger.Info("fail to read file: %v", err)
-		m.sysCfg, err = ini.Load(appstoreConfPathDefault)
+		m.sysCfg, err = ini.Load(appStoreConfPathDefault)
 		if err != nil {
 			logger.Fatalf("fail to read file: %v", err)
 		}

@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// Metadata store appstore server info
+// Metadata store app-store server info
 type Metadata struct {
 	block      *blocklist
 	debBackend *Backend

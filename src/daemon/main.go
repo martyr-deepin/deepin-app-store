@@ -10,7 +10,7 @@ import (
 	"pkg.deepin.io/lib/log"
 )
 
-var logger = log.NewLogger("deepin-appstore-daemon")
+var logger = log.NewLogger("deepin-app-store-daemon")
 
 const (
 	dbusServiceName = "com.deepin.AppStore.Daemon"
@@ -27,7 +27,7 @@ func init() {
 	} else {
 		cacheFolder = filepath.Join(os.Getenv("HOME"), ".cache")
 	}
-	cacheFolder += "/deepin/deepin-appstore-daemon"
+	cacheFolder += "/deepin/deepin-app-store-daemon"
 	os.MkdirAll(cacheFolder, 0755)
 
 	iconFolder = cacheFolder + "/icons"
@@ -38,7 +38,7 @@ func init() {
 	} else {
 		configFolder = filepath.Join(os.Getenv("HOME"), ".config")
 	}
-	configFolder += "/deepin/deepin-appstore"
+	configFolder += "/deepin/deepin-app-store"
 	os.MkdirAll(configFolder, 0755)
 }
 
@@ -92,7 +92,7 @@ func main() {
 		logger.Fatal(err)
 	}
 
-	logger.Infof("start deepin-appstore-daemon")
+	logger.Infof("start deepin-app-store-daemon")
 	service.SetAutoQuitHandler(3*time.Minute, func() bool {
 		if *daemon {
 			return false

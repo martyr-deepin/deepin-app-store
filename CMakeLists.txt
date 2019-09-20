@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.0)
-project(deepin-appstore)
+project(deepin-app-store)
 
 add_subdirectory(src)
 
 add_custom_command(OUTPUT update-qt-i18n
                    COMMAND lupdate -recursive src/app src/ui -ts
-                           translations/deepin-appstore.ts
+                           translations/deepin-app-store.ts
                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 add_custom_command(OUTPUT upload-to-tx
                    COMMAND tx push -s

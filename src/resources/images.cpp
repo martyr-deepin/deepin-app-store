@@ -19,6 +19,6 @@
 
 namespace dstore {
 
-const char* const kImageDeepinAppStore = ":/common/images/deepin-appstore.svg";
+const char* const kImageDeepinAppStore = ":/common/images/deepin-app-store.svg";
 
 }  // namespace store

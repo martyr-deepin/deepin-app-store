@@ -1,4 +1,4 @@
-Source: deepin-appstore
+Source: deepin-app-store
 Maintainer: Xu Shaohua <xushaohua@deepin.com>
 Section: admin
 Priority: optional
@@ -22,10 +22,10 @@ Build-Depends:
  libdframeworkdbus-dev
 Standards-Version: 3.9.5
 Homepage: https://www.deepin.com
-Vcs-Git: https://github.com/linuxdeepin/deepin-appstore
-Vcs-Browser: https://github.com/linuxdeepin/deepin-appstore
+Vcs-Git: https://github.com/linuxdeepin/deepin-app-store
+Vcs-Browser: https://github.com/linuxdeepin/deepin-app-store
 
-Package: deepin-appstore
+Package: deepin-app-store
 Architecture: any
 Depends:${shlibs:Depends}, ${misc:Depends},
  lastore-daemon (>=0.9.62),
@@ -34,8 +34,8 @@ Depends:${shlibs:Depends}, ${misc:Depends},
  deepin-sync-daemon,
  deepin-deepinid-client,
  libqt5webengine-data,
- deepin-appstore-data (>=5.3) [!mips64el],
- deepin-appstore-data-aot (>=5.3) [mips64el]
-Replaces: dstore-client
+ deepin-app-store-data (>=5.3) [!mips64el],
+ deepin-app-store-data-aot (>=5.3) [mips64el]
+Replaces: dstore-client, deepin-appstore
 Description: Deepin App Store
  Deepin App Store Client.

@@ -34,8 +34,8 @@ void RccSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
     QString filepath;
     const QString host = url.host();
     if (host == "web") {
-        const char kAppDefaultLocalDir[] = DSTORE_WEB_DIR "/appstore";
-        QString app_local_dir = QString("%1/appstore-%2")
+        const char kAppDefaultLocalDir[] = DSTORE_WEB_DIR;
+        QString app_local_dir = QString("%1/app-store-%2")
                                 .arg(DSTORE_WEB_DIR)
                                 .arg(QLocale().name());
         if (!QFileInfo::exists(app_local_dir)) {
@@ -45,7 +45,9 @@ void RccSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
         auto f = new QFile(filepath);
 
         QMimeType type = db.mimeTypeForFile(filepath);
-        f->open(QIODevice::ReadOnly);
+        if (! f->open(QIODevice::ReadOnly)) {
+            qCritical() << "can not open" << filepath;
+        }
         request->reply(type.name().toLatin1(), f);
         connect(request, &QObject::destroyed, f, &QObject::deleteLater);
     }
