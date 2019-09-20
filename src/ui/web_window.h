@@ -56,7 +56,7 @@ class WebWindow : public Dtk::Widget::DMainWindow {
   /**
    * Load app store main web page.
    */
-  void loadPage();
+  void loadPage(const QString& url);
 
   void showWindow();
 

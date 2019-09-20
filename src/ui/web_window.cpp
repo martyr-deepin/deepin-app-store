@@ -178,10 +178,13 @@ WebWindow::~WebWindow()
     }
 }
 
-
-void WebWindow::loadPage()
+void WebWindow::loadPage(const QString &url)
 {
+#ifndef NDEBUG
+    web_view_->load(QUrl(url.isEmpty() ? kIndexPage : url));
+#else
     web_view_->load(QUrl(kIndexPage));
+#endif
 }
 
 void WebWindow::showWindow()

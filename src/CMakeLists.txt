@@ -208,7 +208,7 @@ if(CMAKE_BUILD_TYPE MATCHES Release)
                    update-desktop
                    app-store-daemon)
 else()
-  add_dependencies(deepin-app-store app-store-daemon update-qm)
+  add_dependencies(deepin-app-store app-store-daemon)
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)

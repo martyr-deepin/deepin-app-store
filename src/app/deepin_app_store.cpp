@@ -18,6 +18,7 @@
 #include <QIcon>
 #include <QDBusError>
 #include <QDBusConnection>
+#include <QCommandLineParser>
 
 #include <DApplication>
 #include <DLog>
@@ -34,7 +35,6 @@
 
 int main(int argc, char **argv)
 {
-
 #ifndef DSTORE_NO_DXCB
     Dtk::Widget::DApplication::loadDXcbPlugin();
 #endif
@@ -44,13 +44,23 @@ int main(int argc, char **argv)
         app.setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     }
 
+
+#ifndef NDEBUG
+    // parse args
+    QCommandLineParser parser;
+    QCommandLineOption bootstrap({"b", "bootstrap"}, "start up url", "url", "");
+    parser.addOption(bootstrap);
+    parser.addHelpOption();
+    parser.process(app);
+#endif
+
     auto themName = dstore::SettingsManager::instance()->themeName();
     app.setTheme(themName);
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setWindowIcon(QIcon(dstore::kImageDeepinAppStore));
     app.setProductIcon(QIcon(dstore::kImageDeepinAppStore));
     app.setOrganizationName("deepin");
-    app.setOrganizationDomain("deepin.org");
+    app.setOrganizationDomain("deepin.com");
     app.setApplicationVersion(Dtk::Widget::DApplication::buildVersion("5.6.0.0"));
     app.setApplicationName(dstore::kAppName);
     app.loadTranslator();
@@ -66,7 +76,7 @@ int main(int argc, char **argv)
     Dtk::Core::DLogManager::registerFileAppender();
 
     // fix error for cutelogger
-    // No appenders assotiated with category js
+    // No appenders associated with category js
     auto category = "js";
     auto fileAppender = new Dtk::Core::RollingFileAppender(Dtk::Core::DLogManager::getlogFilePath());
     static Dtk::Core::Logger customLoggerInstance(category);
@@ -89,7 +99,12 @@ int main(int argc, char **argv)
 
         app.installEventFilter(&window);
 
-        window.loadPage();
+#ifndef NDEBUG
+        window.loadPage(parser.value(bootstrap));
+#else
+        window.loadPage("");
+#endif
+
         window.showWindow();
 
         return app.exec();
