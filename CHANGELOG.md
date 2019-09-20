@@ -1,3 +1,22 @@
+<a name="5.6.0.0"></a>
+## 5.6.0.0 (2019-09-20)
+
+
+#### Features
+
+*   add sysinfo ([f5a8d271](https://github.com/linuxdeepin/deepin-app-store/commit/f5a8d2711c235f0eec1564f0f422573a1f7c89bc))
+*   port to qwebengine ([11d238a7](https://github.com/linuxdeepin/deepin-app-store/commit/11d238a7baa2562b6dcbb2d8edbe9b6c484890ac))
+
+#### Bug Fixes
+
+*   build filed ([ccd5339e](https://github.com/linuxdeepin/deepin-app-store/commit/ccd5339e9a5301fbe8d9b44a451353d1a9057888))
+*   register js category log ([e12eb420](https://github.com/linuxdeepin/deepin-app-store/commit/e12eb42096b459bb63eb4d296efd6ced49536c7a))
+*   set mini size ([6d19c1ec](https://github.com/linuxdeepin/deepin-app-store/commit/6d19c1ec9133af1100e9d2e09b696b2b8f8ff28c))
+*   update to dtkwidget5 ([f6f8e43d](https://github.com/linuxdeepin/deepin-app-store/commit/f6f8e43d076753e47336e495a81ddc40e94cfb63))
+*   'getSettings' method calls ([df523c12](https://github.com/linuxdeepin/deepin-app-store/commit/df523c12ef04af1fc9beee470296d0c895de9e84))
+
+
+
 <a name="5.3.0.2"></a>
 ## 5.3.0.2 (2019-07-10)
 
