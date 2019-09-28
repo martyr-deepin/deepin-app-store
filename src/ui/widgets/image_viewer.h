@@ -20,7 +20,7 @@
 
 #include <QDialog>
 #include <DSpinner>
-#include <dimagebutton.h>
+#include <DIconButton>
 
 class QLabel;
 
@@ -72,9 +72,9 @@ class ImageViewer : public QDialog {
   void initConnection();
 
   QLabel* img_label_ = nullptr;
-  Dtk::Widget::DImageButton* close_button_ = nullptr;
-  Dtk::Widget::DImageButton* previous_button_ = nullptr;
-  Dtk::Widget::DImageButton* next_button_ = nullptr;
+  Dtk::Widget::DIconButton* close_button_ = nullptr;
+  Dtk::Widget::DIconButton* previous_button_ = nullptr;
+  Dtk::Widget::DIconButton* next_button_ = nullptr;
   Dtk::Widget::DSpinner* spinner_ = nullptr;
 };
 

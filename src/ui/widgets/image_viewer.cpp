@@ -27,7 +27,7 @@
 #include <QStackedLayout>
 #include <QtCore/QTimer>
 #include <QDesktopWidget>
-
+#include <QLabel>
 
 namespace dstore {
 
@@ -132,11 +132,11 @@ void ImageViewer::showIndicator() {
 }
 
 void ImageViewer::initConnection() {
-  connect(close_button_, &Dtk::Widget::DImageButton::clicked,
+  connect(close_button_, &Dtk::Widget::DIconButton::clicked,
           this, &ImageViewer::close);
-  connect(previous_button_, &Dtk::Widget::DImageButton::clicked,
+  connect(previous_button_, &Dtk::Widget::DIconButton::clicked,
           this, &ImageViewer::previousImageRequested);
-  connect(next_button_, &Dtk::Widget::DImageButton::clicked,
+  connect(next_button_, &Dtk::Widget::DIconButton::clicked,
           this, &ImageViewer::nextImageRequested);
 }
 
@@ -145,13 +145,13 @@ void ImageViewer::initUI() {
   img_label_->setObjectName("ImageLabel");
   img_label_->setMinimumSize(640, 480);
 
-  close_button_ = new Dtk::Widget::DImageButton(this);
+  close_button_ = new Dtk::Widget::DIconButton(this);
   close_button_->setObjectName("CloseButton");
   close_button_->raise();
 
-  previous_button_ = new Dtk::Widget::DImageButton();
+  previous_button_ = new Dtk::Widget::DIconButton(this);
   previous_button_->setObjectName("PreviousButton");
-  next_button_ = new Dtk::Widget::DImageButton();
+  next_button_ = new Dtk::Widget::DIconButton(this);
   next_button_->setObjectName("NextButton");
 
   spinner_ = new Dtk::Widget::DSpinner(this);

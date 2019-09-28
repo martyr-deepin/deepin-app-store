@@ -22,7 +22,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QStackedLayout>
-#include <dimagebutton.h>
+#include <DIconButton>
 
 namespace dstore
 {
@@ -68,8 +68,8 @@ private:
     void initConnections();
     void saveUserAvatar(const QImage &image, const QString &filePath);
 
-    Dtk::Widget::DImageButton *back_button_ = nullptr;
-    Dtk::Widget::DImageButton *forward_button_ = nullptr;
+    Dtk::Widget::DIconButton *back_button_ = nullptr;
+    Dtk::Widget::DIconButton *forward_button_ = nullptr;
     SearchEdit *search_edit_ = nullptr;
     QString user_name_ = "";
     UserMenu *user_menu_ = nullptr;

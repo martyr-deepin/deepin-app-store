@@ -4,19 +4,31 @@
 }
 
 #CloseButton {
-  qproperty-normalPic: url(:/light/images/close_normal.svg);
-  qproperty-hoverPic: url(:/light/images/close_hover.svg);
-  qproperty-pressPic: url(:/light/images/close_press.svg);
+  border-image: url(:/light/images/close_normal.svg);
+}
+#CloseButton:hover {
+  border-image: url(:/light/images/close_hover.svg);
+}
+#CloseButton:pressed {
+  border-image: url(:/light/images/close_press.svg);
 }
 
 #PreviousButton {
-  qproperty-normalPic: url(:/light/images/previous_normal.svg);
-  qproperty-hoverPic: url(:/light/images/previous_hover.svg);
-  qproperty-pressPic: url(:/light/images/previous_press.svg);
+  border-image: url(:/light/images/previous_normal.svg);
+}
+#PreviousButton:hover {
+  border-image: url(:/light/images/previous_hover.svg);
+}
+#PreviousButton:pressed {
+  border-image: url(:/light/images/previous_press.svg);
 }
 
 #NextButton {
-  qproperty-normalPic: url(:/light/images/next_normal.svg);
-  qproperty-hoverPic: url(:/light/images/next_hover.svg);
-  qproperty-pressPic: url(:/light/images/next_press.svg);
+  border-image: url(:/light/images/next_normal.svg);
+}
+#NextButton:hover {
+  border-image: url(:/light/images/next_hover.svg);
+}
+#NextButton:pressed {
+  border-image: url(:/light/images/next_press.svg);
 }

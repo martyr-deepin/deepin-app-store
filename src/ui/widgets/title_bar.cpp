@@ -139,9 +139,9 @@ void TitleBar::refreshAvatar()
 
 void TitleBar::initConnections()
 {
-    connect(back_button_, &Dtk::Widget::DImageButton::clicked,
+    connect(back_button_, &Dtk::Widget::DIconButton::clicked,
             this, &TitleBar::backwardButtonClicked);
-    connect(forward_button_, &Dtk::Widget::DImageButton::clicked,
+    connect(forward_button_, &Dtk::Widget::DIconButton::clicked,
             this, &TitleBar::forwardButtonClicked);
     connect(search_edit_, &SearchEdit::textChanged,
             this, &TitleBar::onSearchTextChanged);
@@ -183,11 +183,11 @@ void TitleBar::initUI(bool support_sign_in)
     app_icon->setObjectName("AppIcon");
     app_icon->setFixedSize(26, 26);
 
-    back_button_ = new Dtk::Widget::DImageButton();
+    back_button_ = new Dtk::Widget::DIconButton(this);
     back_button_->setObjectName("BackButton");
     back_button_->setFixedSize(26, 26);
 
-    forward_button_ = new Dtk::Widget::DImageButton();
+    forward_button_ = new Dtk::Widget::DIconButton(this);
     forward_button_->setObjectName("ForwardButton");
     forward_button_->setFixedSize(26, 26);
 
