@@ -17,7 +17,6 @@
 
 #ifndef DEEPIN_MANUAL_BASE_CONSTS_H
 #define DEEPIN_MANUAL_BASE_CONSTS_H
-
 #include <QDir>
 
 namespace dstore {

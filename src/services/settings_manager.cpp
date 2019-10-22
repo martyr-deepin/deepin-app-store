@@ -22,6 +22,8 @@
 #include <QDBusReply>
 #include <QDBusInterface>
 
+#include <qcef_global_settings.h>
+
 #include "dbus/dbus_consts.h"
 #include "base/file_util.h"
 
@@ -60,12 +62,6 @@ SettingsManager::~SettingsManager()
 
 }
 
-
-bool SettingsManager::remoteDebug()
-{
-    return qEnvironmentVariableIsSet("QTWEBENGINE_REMOTE_DEBUGGING");
-}
-
 QString SettingsManager::arch() const
 {
     return sysinfo.arch();
@@ -79,6 +75,16 @@ QString SettingsManager::product() const
 QString SettingsManager::desktopMode() const
 {
     return sysinfo.desktopMode();
+}
+
+void SettingsManager::setQCefSettings(QCefGlobalSettings *settings)
+{
+    qcef_settings_ = settings;
+}
+
+bool SettingsManager::remoteDebug()
+{
+    return  qcef_settings_->remoteDebug();
 }
 
 QString SettingsManager::metadataServer() const

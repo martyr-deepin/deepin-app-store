@@ -7,7 +7,7 @@ Build-Depends:
  cmake,
  debhelper (>= 9),
  libdtkwidget-dev,
- qtwebengine5-dev,
+ libqcef-dev,
  libqt5webchannel5-dev,
  libsass-dev,
  pkg-config,
@@ -33,9 +33,8 @@ Depends:${shlibs:Depends}, ${misc:Depends},
  libqt5sql5-sqlite,
  deepin-sync-daemon,
  deepin-deepinid-client,
- libqt5webengine-data,
- deepin-app-store-data (>=5.3) [!mips64el],
- deepin-app-store-data-aot (>=5.3) [mips64el]
-Replaces: dstore-client, deepin-appstore
+ deepin-appstore-data (=${binary:Version}) [!mips64el],
+ deepin-appstore-data-aot (=${binary:Version}) [mips64el]
+Replaces: dstore-client
 Description: Deepin App Store
  Deepin App Store Client.
