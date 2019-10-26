@@ -65,6 +65,10 @@ public Q_SLOTS:
      */
     void openApp(const QVariant &app);
 
+    // TODO: remove
+    // update all list of app
+    void updateAppList(const SearchMetaList &app_list);
+
     QVariantMap installedPackages();
 
     QVariantMap query(const QVariantList &apps);

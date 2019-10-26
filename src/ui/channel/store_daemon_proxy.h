@@ -192,6 +192,18 @@ public Q_SLOTS:
         return manager_->fixError(error_type);
     }
 
+    QString test()
+    {
+        QThread::sleep(3);
+        return "this is test";
+    }
+
+    // TODO: just for search
+    void updateAppList(const SearchMetaList &app_list)
+    {
+        return manager_->updateAppList(app_list);
+    }
+
 private:
     void initConnections();
 

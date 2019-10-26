@@ -140,6 +140,14 @@ void StoreDaemonManager::openApp(const QVariant &app)
     d->pm->Open(AppPackage::fromVariantMap(app.toMap()));
 }
 
+void StoreDaemonManager::updateAppList(const SearchMetaList &app_list)
+{
+    Q_D(StoreDaemonManager);
+    for (auto &app : app_list) {
+        d->apps.insert(app.name, app.name);
+    }
+}
+
 bool StoreDaemonManager::isDBusConnected()
 {
     Q_D(StoreDaemonManager);
@@ -250,7 +258,7 @@ QVariantMap StoreDaemonManager::startJob(const QString &job)
 
 QVariantMap StoreDaemonManager::installedPackages()
 {
-    // TODO(lihe): filter install list
+    // TODO: filter install list
     Q_D(StoreDaemonManager);
     auto result = d->pm->ListInstalled(/*d->apps.keys()*/{});
     // qDebug() << result.data;
@@ -306,7 +314,7 @@ QVariantMap StoreDaemonManager::removePackage(const QVariantList &apps)
 
 QVariantMap StoreDaemonManager::jobList()
 {
-    // TODO(lihe): List flatpak jobs.
+    // TODO(Shaohua): List flatpak jobs.
     Q_D(StoreDaemonManager);
     const QList<QDBusObjectPath> jobs = d->deb_interface_->jobList();
     QStringList paths;

@@ -20,46 +20,29 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QLocale>
-#include <QMimeDatabase>
 
-#include <QWebEngineUrlRequestJob>
+namespace dstore {
 
-namespace dstore
-{
-
-void RccSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
-{
-    static QMimeDatabase db;
-    QUrl url = request->requestUrl();
-    QString filepath;
-    const QString host = url.host();
-    if (host == "web") {
-        QString appDefaultLocalDir = DSTORE_WEB_DIR;
-#ifndef NDEBUG
-        if (qEnvironmentVariableIsSet("DSTORE_WEB_DIR")) {
-            appDefaultLocalDir = qEnvironmentVariable("DSTORE_WEB_DIR");
-        }
-#endif
-        QString app_local_dir = QString("%1/app-store-%2")
-                                .arg(appDefaultLocalDir)
-                                .arg(QLocale().name());
-        if (!QFileInfo::exists(app_local_dir)) {
-            app_local_dir = appDefaultLocalDir;
-        }
-        filepath = QString("%1%2").arg(app_local_dir).arg(url.path());
-        auto f = new QFile(filepath);
-
-        QMimeType type = db.mimeTypeForFile(filepath);
-        if (! f->open(QIODevice::ReadOnly)) {
-            qCritical() << "can not open" << filepath;
-        }
-        request->reply(type.name().toLatin1(), f);
-        connect(request, &QObject::destroyed, f, &QObject::deleteLater);
+QString RccSchemeHandler(const QUrl& url) {
+  const QString host = url.host();
+  if (host == "web") {
+    const char kAppDefaultLocalDir[] = DSTORE_WEB_DIR "/appstore";
+    QString app_local_dir = QString("%1/appstore-%2")
+        .arg(DSTORE_WEB_DIR)
+        .arg(QLocale().name());
+    if (!QFileInfo::exists(app_local_dir)) {
+      app_local_dir = kAppDefaultLocalDir;
     }
+
+    QString filepath = QString("%1/%2").arg(app_local_dir).arg(url.path());
+    if (!QFileInfo::exists(filepath)) {
+      filepath = QString("%1/%2").arg(app_local_dir).arg("index.html");
+    }
+    return filepath;
+  } else {
+    // 404 not found.
+    return "";
+  }
 }
-
-//QString RccSchemeHandler(const QUrl& url) {
-
-//}
 
 }  // namespace dstore

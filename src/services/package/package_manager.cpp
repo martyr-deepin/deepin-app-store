@@ -36,7 +36,7 @@ public:
             auto data = result.data.toList();
             pkgList.append(data);
         }
-        // TODO(lihe): error handle
+        // TODO: error handle
         return PMResult(true,
                         "",
                         "",
