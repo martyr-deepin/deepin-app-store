@@ -39,6 +39,7 @@ const QVariantMap SettingsProxy::getSettings()
         { "allowShowPackageName", SettingsManager::instance()->allowShowPackageName() },
 
         // system settings
+        { "server", SettingsManager::instance()->server() },
         { "metadataServer", SettingsManager::instance()->metadataServer() },
         { "operationServerMap", SettingsManager::instance()->operationServerMap()},
         { "defaultRegion", SettingsManager::instance()->defaultRegion() },
