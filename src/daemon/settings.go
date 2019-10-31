@@ -22,6 +22,7 @@ const (
 	keyWindowState          = "windowState"
 	keyAllowShowPackageName = "allowShowPackageName"
 
+	keyServer             = "Server"
 	keyMetadataServer     = "MetadataServer"
 	keySupportAot         = "SupportAot"
 	keySupportSignIn      = "SupportSignIn"
@@ -61,6 +62,10 @@ func NewSettings() *Settings {
 
 func (s *Settings) getSystemSettings(key string) *ini.Key {
 	return s.sysCfg.Section(gGeneral).Key(key)
+}
+
+func (s *Settings) getServer() string {
+	return s.sysCfg.Section(gGeneral).Key(keyServer).String()
 }
 
 func (s *Settings) getMetadataServer() string {

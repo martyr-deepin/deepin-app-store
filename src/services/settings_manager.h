@@ -60,6 +60,7 @@ public Q_SLOTS:
 
     bool allowShowPackageName() const;
 
+    QString server() const;
     QString metadataServer() const;
 
     QVariantMap operationServerMap() const;

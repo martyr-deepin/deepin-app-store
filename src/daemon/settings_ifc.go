@@ -20,6 +20,7 @@ const (
 	WindowState          = "WindowState"
 	AllowShowPackageName = "AllowShowPackageName"
 
+	Server             = "Server"
 	MetadataServer     = "MetadataServer"
 	OperationServerMap = "OperationServerMap"
 	DefaultRegion      = "DefaultRegion"
@@ -46,6 +47,8 @@ func (s *Settings) SetSettings(key string, value dbus.Variant) *dbus.Error {
 func (s *Settings) GetSettings(key string) (dbus.Variant, *dbus.Error) {
 	var ret dbus.Variant
 	switch key {
+	case Server:
+		ret = dbus.MakeVariant(s.getServer())
 	case MetadataServer:
 		ret = dbus.MakeVariant(s.getMetadataServer())
 	case OperationServerMap:

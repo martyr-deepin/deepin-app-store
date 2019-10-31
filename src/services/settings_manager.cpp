@@ -39,6 +39,8 @@ const char kAllowShowPackageName[] = "AllowShowPackageName";
 
 const char kSupportAot[] = "SupportAot";
 const char kSupportSignin[] = "SupportSignIn";
+
+const char kServer[] = "Server";
 const char kMetadataServer[] = "MetadataServer";
 const char kOperationServerMap[] = "OperationServerMap";
 const char kDefaultRegion[] = "DefaultRegion";
@@ -85,6 +87,11 @@ void SettingsManager::setQCefSettings(QCefGlobalSettings *settings)
 bool SettingsManager::remoteDebug()
 {
     return  qcef_settings_->remoteDebug();
+}
+
+QString SettingsManager::server() const
+{
+    return getSettings(kServer).toString();
 }
 
 QString SettingsManager::metadataServer() const
