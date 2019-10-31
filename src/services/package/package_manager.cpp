@@ -149,7 +149,7 @@ PMResult PackageManager::Install(const AppPackageList &apps)
     Q_D(PackageManager);
     QList<Package> packages;
     for (const auto &v : apps) {
-        for (auto package : v.packages) {
+        for (const auto& package : v.packages) {
             packages.append(package);
             qDebug() << package.packageURI << package.dpk.getID() << package.localName;
         }
@@ -161,7 +161,7 @@ PMResult PackageManager::Install(const AppPackageList &apps)
     });
 
     QStringList paths;
-    for (auto v : results) {
+    for (const auto& v : results) {
         paths << v.toString();
     }
 

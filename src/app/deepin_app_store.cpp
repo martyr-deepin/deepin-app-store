@@ -134,10 +134,8 @@ int main(int argc, char **argv)
         QCefBindApp(&app);
 
         dstore::WebWindow window;
-        QObject::connect(&dbus_manager, &dstore::DBusManager::raiseRequested,
-                         &window, &dstore::WebWindow::raiseWindow);
-        QObject::connect(&dbus_manager, &dstore::DBusManager::showDetailRequested,
-                         &window, &dstore::WebWindow::showAppDetail);
+
+        window.setupDaemon(&dbus_manager);
 
         app.installEventFilter(&window);
 

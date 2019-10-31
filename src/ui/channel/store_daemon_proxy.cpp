@@ -55,6 +55,14 @@ void StoreDaemonProxy::initConnections()
             manager_, &StoreDaemonManager::deleteLater);
     connect(manager_, &StoreDaemonManager::jobListChanged,
             this, &StoreDaemonProxy::jobListChanged);
+    connect(this, &StoreDaemonProxy::clearArchives,
+            manager_, &StoreDaemonManager::clearArchives);
+}
+
+void StoreDaemonProxy::onRequestFinished(const QVariantMap &result)
+{
+    auto reqID = result.value("id").toString();
+    Q_EMIT requestFinished(reqID, result);
 }
 
 }  // namespace dstore

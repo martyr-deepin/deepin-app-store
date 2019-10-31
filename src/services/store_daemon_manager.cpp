@@ -35,9 +35,13 @@ namespace dstore
 namespace
 {
 const char kResultOk[] = "ok";
+
 const char kResultErrName[] = "errorName";
+
 const char kResultErrMsg[] = "errorMsg";
+
 const char kResult[] = "result";
+
 const char kResultName[] = "name";
 
 bool ReadJobInfo(LastoreJobInterface &job_interface,
@@ -62,7 +66,7 @@ bool ReadJobInfo(LastoreJobInterface &job_interface,
     const QStringList pkgs = job_interface.packages();
     if (pkgs.length() >= 1) {
         const QString &package_name = pkgs.at(0);
-        auto packageID =  package_name.split(":").first();
+        auto packageID = package_name.split(":").first();
         app_names.append(packageID);
     }
 
@@ -75,12 +79,13 @@ bool ReadJobInfo(LastoreJobInterface &job_interface,
 class StoreDaemonManagerPrivate
 {
 public:
-    StoreDaemonManagerPrivate(StoreDaemonManager *parent) :
+    StoreDaemonManagerPrivate(StoreDaemonManager *parent)
+        :
         deb_interface_(new LastoreDebInterface(
-                           kLastoreDebDbusService,
-                           kLastoreDebDbusPath,
-                           QDBusConnection::sessionBus(),
-                           parent)),
+            kLastoreDebDbusService,
+            kLastoreDebDbusPath,
+            QDBusConnection::sessionBus(),
+            parent)),
         q_ptr(parent)
     {
         auto aptPM = new AptPackageManager(parent);
@@ -89,11 +94,9 @@ public:
 
     }
 
-
     void initConnections();
 
-
-    PackageManager      *pm = nullptr;
+    PackageManager *pm = nullptr;
     LastoreDebInterface *deb_interface_ = nullptr;
 
     QMap<QString, QString> apps;
@@ -127,7 +130,6 @@ StoreDaemonManager::~StoreDaemonManager()
 {
 }
 
-
 void StoreDaemonManager::clearArchives()
 {
     Q_D(StoreDaemonManager);
@@ -151,7 +153,7 @@ void StoreDaemonManager::updateAppList(const SearchMetaList &app_list)
 bool StoreDaemonManager::isDBusConnected()
 {
     Q_D(StoreDaemonManager);
-    return  d->deb_interface_->isValid();
+    return d->deb_interface_->isValid();
 }
 
 QVariantMap StoreDaemonManager::cleanJob(const QString &job)
@@ -163,25 +165,27 @@ QVariantMap StoreDaemonManager::cleanJob(const QString &job)
     if (job_interface.isValid()) {
         const QDBusPendingReply<> reply = job_interface.Clean();
         if (reply.isError()) {
-            return QVariantMap {
-                { kResultOk, false },
-                { kResultErrName, reply.error().name() },
-                { kResultErrMsg, reply.error().message() },
-                { kResult, job}
-            };
-        } else {
-            return QVariantMap {
-                { kResultOk, true },
-                { kResultErrName, "" },
-                { kResultErrMsg, "" },
-                { kResult, job}
+            return QVariantMap{
+                {kResultOk, false},
+                {kResultErrName, reply.error().name()},
+                {kResultErrMsg, reply.error().message()},
+                {kResult, job}
             };
         }
-    } else {
-        return QVariantMap {
-            { kResultOk, false },
-            { kResultErrName, job_interface.lastError().name() },
-            { kResultErrMsg, job_interface.lastError().message() },
+        else {
+            return QVariantMap{
+                {kResultOk, true},
+                {kResultErrName, ""},
+                {kResultErrMsg, ""},
+                {kResult, job}
+            };
+        }
+    }
+    else {
+        return QVariantMap{
+            {kResultOk, false},
+            {kResultErrName, job_interface.lastError().name()},
+            {kResultErrMsg, job_interface.lastError().message()},
         };
     }
 }
@@ -195,29 +199,31 @@ QVariantMap StoreDaemonManager::pauseJob(const QString &job)
     if (job_interface.isValid()) {
         const QDBusPendingReply<> reply = job_interface.Pause();
         if (reply.isError()) {
-            return QVariantMap {
-                { kResultOk, false },
-                { kResultErrName, reply.error().name() },
-                { kResultErrMsg, reply.error().message() },
-                { kResult, job}
-            };
-        } else {
-            return QVariantMap {
-                { kResultOk, true },
-                { kResultErrName, "" },
-                { kResultErrMsg, "" },
-                { kResult, job}
+            return QVariantMap{
+                {kResultOk, false},
+                {kResultErrName, reply.error().name()},
+                {kResultErrMsg, reply.error().message()},
+                {kResult, job}
             };
         }
-    } else {
-        return QVariantMap {
-            { kResultOk, false },
-            { kResultErrName, job_interface.lastError().name() },
-            { kResultErrMsg, job_interface.lastError().message() },
+        else {
+            return QVariantMap{
+                {kResultOk, true},
+                {kResultErrName, ""},
+                {kResultErrMsg, ""},
+                {kResult, job}
+            };
+        }
+    }
+    else {
+        return QVariantMap{
+            {kResultOk, false},
+            {kResultErrName, job_interface.lastError().name()},
+            {kResultErrMsg, job_interface.lastError().message()},
             {
-                kResult, QVariantMap {
-                    { kResultName, job },
-                }
+                kResult, QVariantMap{
+                {kResultName, job},
+            }
             }
         };
     }
@@ -232,26 +238,28 @@ QVariantMap StoreDaemonManager::startJob(const QString &job)
     if (job_interface.isValid()) {
         const QDBusPendingReply<> reply = job_interface.Start();
         if (reply.isError()) {
-            return QVariantMap {
-                { kResultOk, false },
-                { kResultErrName, reply.error().name() },
-                { kResultErrMsg, reply.error().message() },
-                { kResult, job}
-            };
-        } else {
-            return QVariantMap {
-                { kResultOk, true },
-                { kResultErrName, "" },
-                { kResultErrMsg, "" },
-                { kResult, job}
+            return QVariantMap{
+                {kResultOk, false},
+                {kResultErrName, reply.error().name()},
+                {kResultErrMsg, reply.error().message()},
+                {kResult, job}
             };
         }
-    } else {
-        return QVariantMap {
-            { kResultOk, false },
-            { kResultErrName, job_interface.lastError().name() },
-            { kResultErrMsg, job_interface.lastError().message() },
-            { kResult, job}
+        else {
+            return QVariantMap{
+                {kResultOk, true},
+                {kResultErrName, ""},
+                {kResultErrMsg, ""},
+                {kResult, job}
+            };
+        }
+    }
+    else {
+        return QVariantMap{
+            {kResultOk, false},
+            {kResultErrName, job_interface.lastError().name()},
+            {kResultErrMsg, job_interface.lastError().message()},
+            {kResult, job}
         };
     }
 }
@@ -262,14 +270,13 @@ QVariantMap StoreDaemonManager::installedPackages()
     Q_D(StoreDaemonManager);
     auto result = d->pm->ListInstalled(/*d->apps.keys()*/{});
     // qDebug() << result.data;
-    return QVariantMap {
-        { kResultOk, result.success },
-        { kResultErrName, result.errName },
-        { kResultErrMsg, result.errMsg },
-        { kResult, result.data},
+    return QVariantMap{
+        {kResultOk, result.success},
+        {kResultErrName, result.errName},
+        {kResultErrMsg, result.errMsg},
+        {kResult, result.data},
     };
 }
-
 
 QVariantMap StoreDaemonManager::installPackage(const QVariantList &apps)
 {
@@ -281,11 +288,11 @@ QVariantMap StoreDaemonManager::installPackage(const QVariantList &apps)
     }
     auto result = d->pm->Install(list);
 
-    return QVariantMap {
-        { kResultOk, result.success },
-        { kResultErrName, result.errName },
-        { kResultErrMsg, result.errMsg },
-        { kResult, result.data},
+    return QVariantMap{
+        {kResultOk, result.success},
+        {kResultErrName, result.errName},
+        {kResultErrMsg, result.errMsg},
+        {kResult, result.data},
     };
 }
 
@@ -304,11 +311,11 @@ QVariantMap StoreDaemonManager::removePackage(const QVariantList &apps)
     }
     auto result = d->pm->Remove(list);
 
-    return QVariantMap {
-        { kResultOk, result.success },
-        { kResultErrName, result.errName },
-        { kResultErrMsg, result.errMsg },
-        { kResult, result.data},
+    return QVariantMap{
+        {kResultOk, result.success},
+        {kResultErrName, result.errName},
+        {kResultErrMsg, result.errMsg},
+        {kResult, result.data},
     };
 }
 
@@ -321,11 +328,11 @@ QVariantMap StoreDaemonManager::jobList()
     for (const QDBusObjectPath &job : jobs) {
         paths.append(job.path());
     }
-    return QVariantMap {
-        { kResultOk, true },
-        { kResultErrName, "" },
-        { kResultErrMsg, "" },
-        { kResult, paths }
+    return QVariantMap{
+        {kResultOk, true},
+        {kResultErrName, ""},
+        {kResultErrMsg, ""},
+        {kResult, paths}
     };
 }
 
@@ -333,11 +340,11 @@ QVariantMap StoreDaemonManager::queryVersions(const QStringList &apps)
 {
     Q_D(StoreDaemonManager);
     auto result = d->pm->QueryVersion(apps);
-    return QVariantMap {
-        { kResultOk, result.success },
-        { kResultErrName, result.errName },
-        { kResultErrMsg, result.errMsg },
-        { kResult, result.data},
+    return QVariantMap{
+        {kResultOk, result.success},
+        {kResultErrName, result.errName},
+        {kResultErrMsg, result.errMsg},
+        {kResult, result.data},
     };
 }
 
@@ -350,11 +357,11 @@ QVariantMap StoreDaemonManager::query(const QVariantList &apps)
         list.append(AppPackage::fromVariantMap(v.toMap()));
     }
     auto result = d->pm->Query(list);
-    return QVariantMap {
-        { kResultOk, result.success },
-        { kResultErrName, result.errName },
-        { kResultErrMsg, result.errMsg },
-        { kResult, result.data},
+    return QVariantMap{
+        {kResultOk, result.success},
+        {kResultErrName, result.errName},
+        {kResultErrMsg, result.errMsg},
+        {kResult, result.data},
     };
 }
 
@@ -367,11 +374,11 @@ QVariantMap StoreDaemonManager::queryDownloadSize(const QVariantList &apps)
         list.append(AppPackage::fromVariantMap(v.toMap()));
     }
     auto result = d->pm->QueryDownloadSize(list);
-    return QVariantMap {
-        { kResultOk, result.success },
-        { kResultErrName, result.errName },
-        { kResultErrMsg, result.errMsg },
-        { kResult, result.data},
+    return QVariantMap{
+        {kResultOk, result.success},
+        {kResultErrName, result.errName},
+        {kResultErrMsg, result.errMsg},
+        {kResult, result.data},
     };
 
 }
@@ -385,29 +392,31 @@ QVariantMap StoreDaemonManager::getJobInfo(const QString &job)
                                       this);
     if (job_interface.isValid()) {
         if (ReadJobInfo(job_interface, job, result)) {
-            return QVariantMap {
-                { kResultOk, true },
-                { kResultErrName, "" },
-                { kResultErrMsg, "" },
-                { kResult, result },
-            };
-        } else {
-            return QVariantMap {
-                { kResultOk, false },
-                { kResultErrName, "app name list is empty" },
-                { kResultErrMsg, "" },
-                { kResult, job },
+            return QVariantMap{
+                {kResultOk, true},
+                {kResultErrName, ""},
+                {kResultErrMsg, ""},
+                {kResult, result},
             };
         }
-    } else {
-        return QVariantMap {
-            { kResultOk, false },
-            { kResultErrName, "Invalid job interface" },
-            { kResultErrMsg, job_interface.lastError().message() },
+        else {
+            return QVariantMap{
+                {kResultOk, false},
+                {kResultErrName, "app name list is empty"},
+                {kResultErrMsg, ""},
+                {kResult, job},
+            };
+        }
+    }
+    else {
+        return QVariantMap{
+            {kResultOk, false},
+            {kResultErrName, "Invalid job interface"},
+            {kResultErrMsg, job_interface.lastError().message()},
             {
-                kResult, QVariantMap {
-                    { kResultName, job },
-                }
+                kResult, QVariantMap{
+                {kResultName, job},
+            }
             },
         };
     }
@@ -424,16 +433,17 @@ QVariantMap StoreDaemonManager::getJobsInfo(const QStringList &jobs)
         if (job_interface.isValid()) {
             if (ReadJobInfo(job_interface, job, job_info)) {
                 jobs_info.append(job_info);
-            } else {
+            }
+            else {
                 qWarning() << "Invalid app_names for job:" << job;
             }
         }
     }
-    return QVariantMap {
-        { kResultOk, true },
-        { kResultErrName, "" },
-        { kResultErrMsg, "" },
-        { kResult, jobs_info},
+    return QVariantMap{
+        {kResultOk, true},
+        {kResultErrName, ""},
+        {kResultErrMsg, ""},
+        {kResult, jobs_info},
     };
 }
 
@@ -453,13 +463,17 @@ QVariantMap StoreDaemonManager::fixError(const QString &error_type)
     Q_D(StoreDaemonManager);
     const QDBusObjectPath path = d->deb_interface_->FixError(error_type);
     const QString job_path = path.path();
-    return QVariantMap {
-        { kResultOk, (!job_path.isEmpty()) },
-        { kResultErrName, "" },
-        { kResultErrMsg, "" },
-        { kResult, job_path},
+    return QVariantMap{
+        {kResultOk, (!job_path.isEmpty())},
+        {kResultErrName, ""},
+        {kResultErrMsg, ""},
+        {kResult, job_path},
     };
 }
 
+void StoreDaemonManager::onFinish(const QVariantMap &result)
+{
+
+}
 
 }  // namespace dstore

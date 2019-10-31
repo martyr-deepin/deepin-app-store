@@ -20,80 +20,150 @@
 #include <QCommandLineParser>
 #include <QDebug>
 #include <QtDBus>
+#include <QUuid>
 
 #include "dbus/app_store_dbus_adapter.h"
 #include "dbus/app_store_dbus_interface.h"
 #include "dbus/dbus_consts.h"
 
-namespace dstore {
+namespace dstore
+{
 
-DBusManager::DBusManager(QObject* parent) : QObject(parent) {
 
+DBusManager::DBusManager(QObject *parent)
+    : QObject(parent)
+{
 }
 
-DBusManager::~DBusManager() {
+DBusManager::~DBusManager() = default;
 
-}
+bool DBusManager::parseArguments()
+{
+    QCommandLineParser parser;
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addOption(QCommandLineOption(
+        "dbus", "enable daemon mode"
+    ));
+    parser.parse(qApp->arguments());
 
-bool DBusManager::parseArguments() {
-  QCommandLineParser parser;
-  parser.addHelpOption();
-  parser.addVersionOption();
-  parser.addOption(QCommandLineOption(
-      "dbus", "enable daemon mode"
-  ));
-  parser.parse(qApp->arguments());
+    // Register dbus service.
+    QDBusConnection session_bus = QDBusConnection::sessionBus();
 
-  // Register dbus service.
-  QDBusConnection session_bus = QDBusConnection::sessionBus();
+    if (!session_bus.registerService(kAppStoreDbusService) ||
+        !session_bus.registerObject(kAppStoreDbusPath,
+                                    this,
+                                    QDBusConnection::ExportScriptableContents)) {
+        qWarning() << Q_FUNC_INFO
+                   << "Failed to register dbus service"
+                   << session_bus.lastError();
 
-  AppStoreDBusAdapter* adapter = new AppStoreDBusAdapter(this);
-  Q_UNUSED(adapter);
+        // Failed to register dbus service.
+        // Open app with dbus interface.
+        const QStringList args = parser.positionalArguments();
+        if (!args.isEmpty()) {
+            auto *interface = new AppStoreDBusInterface(
+                kAppStoreDbusService,
+                kAppStoreDbusPath,
+                session_bus,
+                this
+            );
 
-  if (!session_bus.registerService(kAppStoreDbusService) ||
-      !session_bus.registerObject(kAppStoreDbusPath, this)) {
-    qWarning() << Q_FUNC_INFO
-               << "Failed to register dbus service"
-               << session_bus.lastError();
-
-    // Failed to register dbus service.
-    // Open app with dbus interface.
-    const QStringList args = parser.positionalArguments();
-    if (!args.isEmpty()) {
-      AppStoreDBusInterface* interface = new AppStoreDBusInterface(
-          kAppStoreDbusService,
-          kAppStoreDbusPath,
-          session_bus,
-          this
-      );
-
-      if (interface->isValid()) {
-        // Only pass the first positional argument.
-        interface->ShowAppDetail(args.first());
-        return true;
-      } else {
-        app_name_ = args.first();
-        return false;
-      }
-    } else {
-      return true;
+            if (interface->isValid()) {
+                // Only pass the first positional argument.
+                interface->ShowAppDetail(args.first());
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
     }
-  } else {
-    const QStringList args = parser.positionalArguments();
-    if (!args.isEmpty()) {
-      app_name_ = args.first();
+    else {
+        const QStringList args = parser.positionalArguments();
+        if (!args.isEmpty()) {
+        }
     }
-  }
 
-  return false;
+    return false;
 }
 
-void DBusManager::Raise() {
-  emit this->raiseRequested();
+void DBusManager::Raise()
+{
+    qDebug() << "Raise";
+    emit this->raiseRequested();
 }
 
-void DBusManager::ShowDetail(const QString& app_name) {
-  emit this->showDetailRequested(app_name);
+void DBusManager::ShowAppDetail(const QString &app_name)
+{
+    emit this->showDetailRequested(app_name);
+}
+
+QVariantMap DBusManager::Install(const QString &appID)
+{
+    auto req = newRequest();
+    qDebug() << "Install" << req->id << appID;
+    req->data["app_id"] = appID;
+    Q_EMIT this->requestInstallApp(req->id, appID);
+    return QVariantMap();
+}
+
+QVariantMap DBusManager::Update(const QString &appID)
+{
+    auto req = newRequest();
+    qDebug() << "Update" << req->id << appID;
+    req->data["app_id"] = appID;
+    Q_EMIT this->requestUpdateApp(req->id, appID);
+    return QVariantMap();
+}
+
+QVariantMap DBusManager::UpdateAll()
+{
+    auto req = newRequest();
+    qDebug() << "UpdateAll" << req->id;
+    Q_EMIT this->requestUpdateAllApp(req->id);
+    return QVariantMap();
+}
+
+QVariantMap DBusManager::Uninstall(const QString &appID)
+{
+    auto req = newRequest();
+    qDebug() << "UninstallApp" << req->id << appID;
+    req->data["app_id"] = appID;
+    Q_EMIT this->requestUninstallApp(req->id, appID);
+    return QVariantMap();
+}
+
+void DBusManager::onRequestFinished(const QString &reqID, const QVariantMap &result)
+{
+    qDebug() << "onRequestFinished" << reqID << result;
+
+    // find request
+    if (!requests.contains(reqID)) {
+        qWarning() << "unknown request id";
+        return;
+    }
+
+    auto req = requests[reqID];
+
+    auto reply = req->msg.createReply();
+    reply << result;
+
+    QDBusConnection::sessionBus().send(reply);
+}
+
+RequestData *DBusManager::newRequest()
+{
+    auto reqID = QUuid::createUuid().toString();
+    auto *req = new RequestData;
+    req->id = reqID;
+    req->msg = message();
+    req->msg.setDelayedReply(true);
+    requests[reqID] = req;
+    return req;
 }
 
 }  // namespace dstore

@@ -30,12 +30,18 @@
 namespace dstore
 {
 
-class StoreDaemonProxy : public QObject
+class StoreDaemonProxy: public QObject
 {
-    Q_OBJECT
+Q_OBJECT
 public:
     explicit StoreDaemonProxy(QObject *parent = nullptr);
     ~StoreDaemonProxy() override;
+
+Q_SIGNALS:
+    /*
+     * 将Web端的请求返回给Window做处理
+     */
+    void requestFinished(const QString &reqID, const QVariantMap &result);
 
 Q_SIGNALS:
     // void isDbusConnectedReply(bool state);
@@ -43,13 +49,18 @@ Q_SIGNALS:
     /**
      * Emitted when apt-get clean is called.
      */
-    void clearArchives();
+    Q_SCRIPTABLE void clearArchives();
 
     /**
     * Emitted when JobList property changed.
     * @param jobs
     */
-    void jobListChanged(const QStringList &jobs);
+    Q_SCRIPTABLE void jobListChanged(const QStringList &jobs);
+
+    Q_SCRIPTABLE void requestInstallApp(const QString &request_id, const QString &appID);
+    Q_SCRIPTABLE void requestUpdateApp(const QString &request_id, const QString &appID);
+    Q_SCRIPTABLE void requestUpdateAllApp(const QString &request_id);
+    Q_SCRIPTABLE void requestUninstallApp(const QString &request_id, const QString &appID);
 
 public Q_SLOTS:
     /**
@@ -61,6 +72,16 @@ public Q_SLOTS:
     }
 
     // Store Manager methods:
+
+    /*
+     * Web错误处理，传入一个对象，需要如下属性
+     * id: 请求id
+     * error_type：错误类型，包括：
+     *      app_not_found
+     *      network_error
+     *      app_is_latest
+     */
+    void onRequestFinished(const QVariantMap &result);
     /**
      * Query application version information.
      * @param apps
@@ -155,7 +176,6 @@ public Q_SLOTS:
     {
         return manager_->getJobsInfo(jobs);
     }
-
 
     /**
      * Clean up a specific job.

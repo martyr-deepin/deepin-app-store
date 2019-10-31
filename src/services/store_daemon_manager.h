@@ -26,9 +26,9 @@ namespace dstore
 {
 
 class StoreDaemonManagerPrivate;
-class StoreDaemonManager : public QObject
+class StoreDaemonManager: public QObject
 {
-    Q_OBJECT
+Q_OBJECT
 public:
     explicit StoreDaemonManager(QObject *parent = nullptr);
     ~StoreDaemonManager() override;
@@ -39,7 +39,6 @@ Q_SIGNALS:
      * @param jobs
      */
     void jobListChanged(const QStringList &jobs);
-
 
     /*
         system login state change
@@ -52,6 +51,7 @@ public Q_SLOTS:
      * @brief clearArchives clean apt arvhives
      */
     void clearArchives();
+
     QVariantMap fixError(const QString &error_type);
 
     /**
@@ -59,6 +59,7 @@ public Q_SLOTS:
      */
     bool isDBusConnected();
 
+    void onFinish(const QVariantMap &result);
     /**
      * @brief openApp by app_name
      * @param app_name: TODO, open by packageURI
@@ -114,7 +115,6 @@ public Q_SLOTS:
      * @param job
      */
     QVariantMap startJob(const QString &job);
-
 
     /**
      * Get temporary job info.

@@ -22,13 +22,15 @@
 #include <DMainWindow>
 #include <QMenu>
 #include <QRegularExpression>
+#include <services/dbus_manager.h>
 class QCefWebView;
 class QCefGlobalSettings;
 class QTimer;
 
 #include "services/search_result.h"
 
-namespace dstore {
+namespace dstore
+{
 
 class ImageViewer;
 class ImageViewerProxy;
@@ -46,76 +48,78 @@ class WebEventDelegate;
 /**
  * Main window of app store.
  */
-class WebWindow : public Dtk::Widget::DMainWindow {
-  Q_OBJECT
- public:
-  explicit WebWindow(QWidget* parent = nullptr);
-  ~WebWindow() override;
+class WebWindow: public Dtk::Widget::DMainWindow
+{
+Q_OBJECT
+public:
+    explicit WebWindow(QWidget *parent = nullptr);
+    ~WebWindow() override;
 
-  void setQCefSettings(QCefGlobalSettings *settings);
-  /**
-   * Load app store main web page.
-   */
-  void loadPage();
+    void setQCefSettings(QCefGlobalSettings *settings);
+    /**
+     * Load app store main web page.
+     */
+    void loadPage();
 
-  void showWindow();
+    void showWindow();
 
-  bool eventFilter(QObject* watched, QEvent* event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
- public slots:
-  void raiseWindow();
-  void showAppDetail(const QString& app_name);
+public slots:
+    void setupDaemon(dstore::DBusManager *pManager);
+    void raiseWindow();
+    void showAppDetail(const QString &app_name);
 
- protected:
-  // Update width of title bar when main window is resized.
-  void resizeEvent(QResizeEvent* event) override;
-  void focusInEvent(QFocusEvent *event) override;
+protected:
+    // Update width of title bar when main window is resized.
+    void resizeEvent(QResizeEvent *event) override;
+    void focusInEvent(QFocusEvent *event) override;
 
- private:
-  void initConnections();
-  void initUI();
-  void initProxy();
-  void initServices();
-  void prepareSearch(bool entered);
+private:
+    void initConnections();
+    void initUI();
+    void initProxy();
+    void initServices();
+    void prepareSearch(bool entered);
 
-  QCefWebView* web_view_ = nullptr;
-  ImageViewer* image_viewer_ = nullptr;
-  ImageViewerProxy* image_viewer_proxy_ = nullptr;
-  LogProxy* log_proxy_ = nullptr;
-  MenuProxy* menu_proxy_ = nullptr;
-  SearchCompletionWindow* completion_window_ = nullptr;
-  SearchProxy* search_proxy_ = nullptr;
-  AccountProxy* account_proxy_ = nullptr;
-  QTimer* search_timer_ = nullptr;
-  QThread* proxy_thread_ = nullptr;
-  SettingsProxy* settings_proxy_ = nullptr;
-  StoreDaemonProxy* store_daemon_proxy_ = nullptr;
-  TitleBar* title_bar_ = nullptr;
-  WebEventDelegate* web_event_delegate_ = nullptr;
-  TitleBarMenu* tool_bar_menu_ = nullptr;
+    QCefWebView *web_view_ = nullptr;
+    ImageViewer *image_viewer_ = nullptr;
+    ImageViewerProxy *image_viewer_proxy_ = nullptr;
+    LogProxy *log_proxy_ = nullptr;
+    MenuProxy *menu_proxy_ = nullptr;
+    SearchCompletionWindow *completion_window_ = nullptr;
+    SearchProxy *search_proxy_ = nullptr;
+    AccountProxy *account_proxy_ = nullptr;
+    QTimer *search_timer_ = nullptr;
+    QThread *proxy_thread_ = nullptr;
+    SettingsProxy *settings_proxy_ = nullptr;
+    StoreDaemonProxy *store_daemon_proxy_ = nullptr;
+    TitleBar *title_bar_ = nullptr;
+    WebEventDelegate *web_event_delegate_ = nullptr;
+    TitleBarMenu *tool_bar_menu_ = nullptr;
 
-  QRegularExpression search_re_;
+    QRegularExpression search_re_;
 
- private slots:
-  void onSearchAppResult(const SearchMetaList& result);
+private slots:
+    void onSearchAppResult(const SearchMetaList &result);
 
-  void onSearchEditFocusChanged(bool onFocus);
-  void onSearchButtonClicked();
-  void onSearchResultClicked(const SearchMeta& result);
-  void onSearchTextChanged(const QString& text);
-  void onSearchTextChangedDelay();
-  void onTitleBarEntered();
-  void onThemeChaged(const QString theme_name);
+    void onSearchEditFocusChanged(bool onFocus);
+    void onSearchButtonClicked();
+    void onSearchResultClicked(const SearchMeta &result);
+    void onSearchTextChanged(const QString &text);
+    void onSearchTextChangedDelay();
+    void onTitleBarEntered();
+    void onThemeChaged(const QString theme_name);
 
-  void onWebViewUrlChanged(const QUrl& url);
-  void onFullscreenRequest(bool fullscreen);
+    void onWebViewUrlChanged(const QUrl &url);
+    void onFullscreenRequest(bool fullscreen);
 
-  void onLoadingStateChanged(bool is_loading,
-                             bool can_go_back,
-                             bool can_go_forward);
+    void onLoadingStateChanged(bool is_loading,
+                               bool can_go_back,
+                               bool can_go_forward);
 
-  void webViewGoBack();
-  void webViewGoForward();
+    void webViewGoBack();
+    void webViewGoForward();
 };
 
 }  // namespace dstore

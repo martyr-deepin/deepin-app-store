@@ -21,6 +21,7 @@
 #include <DThemeManager>
 #include <DPlatformWindowHandle>
 
+#include <QUuid>
 #include <QApplication>
 #include <QDebug>
 #include <QDesktopWidget>
@@ -59,7 +60,9 @@ namespace
 const int kSearchDelay = 200;
 
 const char kSettingsWinSize[] = "size";
+
 const char kSettingsWinPos[] = "pos";
+
 const char kSettingsWinMax[] = "isMaximized";
 
 void BackupWindowState(QWidget *widget)
@@ -181,7 +184,7 @@ void WebWindow::showWindow()
 void WebWindow::showAppDetail(const QString &app_name)
 {
     // TODO(Shaohua): Make sure angular context has been initialized.
-    emit search_proxy_->openApp(app_name);
+    Q_EMIT search_proxy_->openApp(app_name);
 }
 
 void WebWindow::raiseWindow()
@@ -228,13 +231,15 @@ void WebWindow::initConnections()
     connect(title_bar_, &TitleBar::focusChanged,
             this, &WebWindow::onSearchEditFocusChanged);
     connect(title_bar_, &TitleBar::loginRequested,
-    this, [&](bool login) {
-        if (login) {
-            account_proxy_->login();
-        } else {
-            account_proxy_->logout();
-        }
-    });
+            this, [&](bool login)
+            {
+                if (login) {
+                    account_proxy_->login();
+                }
+                else {
+                    account_proxy_->logout();
+                }
+            });
 
     connect(tool_bar_menu_, &TitleBarMenu::recommendAppRequested,
             menu_proxy_, &MenuProxy::recommendAppRequested);
@@ -246,7 +251,6 @@ void WebWindow::initConnections()
             this, &WebWindow::onThemeChaged);
     connect(tool_bar_menu_, &TitleBarMenu::clearCacheRequested,
             store_daemon_proxy_, &StoreDaemonProxy::clearArchives);
-
 
     connect(title_bar_, &TitleBar::commentRequested,
             menu_proxy_, &MenuProxy::commentRequested);
@@ -360,20 +364,20 @@ bool WebWindow::eventFilter(QObject *watched, QEvent *event)
 {
     // Filters mouse press event only.
     if (event->type() == QEvent::MouseButtonPress &&
-            qApp->activeWindow() == this &&
-            watched->objectName() == QLatin1String("QMainWindowClassWindow")) {
+        qApp->activeWindow() == this &&
+        watched->objectName() == QLatin1String("QMainWindowClassWindow")) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         switch (mouseEvent->button()) {
-        case Qt::BackButton: {
-            this->webViewGoBack();
-            break;
-        }
-        case Qt::ForwardButton: {
-            this->webViewGoForward();
-            break;
-        }
-        default: {
-        }
+            case Qt::BackButton: {
+                this->webViewGoBack();
+                break;
+            }
+            case Qt::ForwardButton: {
+                this->webViewGoForward();
+                break;
+            }
+            default: {
+            }
         }
     }
 
@@ -407,7 +411,8 @@ void WebWindow::onSearchAppResult(const SearchMetaList &result)
     if (result.isEmpty()) {
         // Hide completion window if no anchor entry matches.
         completion_window_->hide();
-    } else {
+    }
+    else {
         completion_window_->show();
         completion_window_->raise();
         completion_window_->autoResize();
@@ -423,7 +428,8 @@ void WebWindow::onSearchAppResult(const SearchMetaList &result)
 void WebWindow::onSearchEditFocusChanged(bool onFocus)
 {
     if (!onFocus) {
-        QTimer::singleShot(20, [ = ]() {
+        QTimer::singleShot(20, [=]()
+        {
             this->completion_window_->hide();
         });
     }
@@ -452,9 +458,10 @@ void WebWindow::prepareSearch(bool entered)
 
     // Do real search.
     if (entered) {
-        Q_EMIT search_proxy_->openAppList(text);
+        Q_EMIT search_proxy_->openSearchResult(text);
         completion_window_->hide();
-    } else {
+    }
+    else {
         Q_EMIT search_proxy_->requestComplement(text);
     }
 }
@@ -471,7 +478,8 @@ void WebWindow::onSearchTextChanged(const QString &text)
     if (text.size() > 1) {
         search_timer_->stop();
         search_timer_->start(kSearchDelay);
-    } else {
+    }
+    else {
         this->onSearchEditFocusChanged(false);
     }
 }
@@ -524,10 +532,32 @@ void WebWindow::onFullscreenRequest(bool fullscreen)
     if (fullscreen) {
         this->titlebar()->hide();
         this->showFullScreen();
-    } else {
+    }
+    else {
         this->titlebar()->show();
         this->showNormal();
     }
+}
+void WebWindow::setupDaemon(dstore::DBusManager *pManager)
+{
+    QObject::connect(pManager, &dstore::DBusManager::raiseRequested,
+                     this, &dstore::WebWindow::raiseWindow);
+    QObject::connect(pManager, &dstore::DBusManager::showDetailRequested,
+                     this, &dstore::WebWindow::showAppDetail);
+
+    QObject::connect(pManager, &dstore::DBusManager::requestInstallApp,
+                     store_daemon_proxy_, &dstore::StoreDaemonProxy::requestInstallApp);
+    QObject::connect(pManager, &dstore::DBusManager::requestInstallApp,
+                     store_daemon_proxy_, &dstore::StoreDaemonProxy::requestInstallApp);
+    QObject::connect(pManager, &dstore::DBusManager::requestInstallApp,
+                     store_daemon_proxy_, &dstore::StoreDaemonProxy::requestUpdateApp);
+    QObject::connect(pManager, &dstore::DBusManager::requestUpdateAllApp,
+                     store_daemon_proxy_, &dstore::StoreDaemonProxy::requestUpdateAllApp);
+    QObject::connect(pManager, &dstore::DBusManager::requestUninstallApp,
+                     store_daemon_proxy_, &dstore::StoreDaemonProxy::requestUninstallApp);
+
+    QObject::connect(store_daemon_proxy_, &dstore::StoreDaemonProxy::requestFinished,
+                     pManager, &dstore::DBusManager::onRequestFinished);
 }
 
 }  // namespace dstore

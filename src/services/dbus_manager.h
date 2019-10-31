@@ -19,32 +19,61 @@
 #define DEEPIN_APPSTORE_SERVICES_ARGS_PARSER_H
 
 #include <QObject>
+#include <QDBusContext>
+#include <QVariantMap>
+#include <QDBusMessage>
 
 #include "dbus/dbus_variant/app_metadata.h"
 
-namespace dstore {
+namespace dstore
+{
+
+// TODO: move to common file
+struct RequestData
+{
+    QString id;
+    QVariantMap data;
+    QDBusMessage msg;
+};
 
 // DBusManager implements AppStoreDBusInterface.
 // Works in background thread.
-class DBusManager : public QObject {
-  Q_OBJECT
- public:
-  explicit DBusManager(QObject* parent = nullptr);
-  ~DBusManager() override;
+class DBusManager: public QObject, protected QDBusContext
+{
+Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "com.deepin.AppStore")
+public:
+    explicit DBusManager(QObject *parent = nullptr);
+    ~DBusManager() override;
 
-  bool parseArguments();
+    bool parseArguments();
 
- signals:
-  void raiseRequested();
-  void showDetailRequested(const QString& app_name);
+public Q_SLOTS:
+    void onRequestFinished(const QString &reqID, const QVariantMap &result);
 
- public slots:
-  // Implement AppStore dbus service.
-  void Raise();
-  void ShowDetail(const QString& app_name);
+Q_SIGNALS:
+    void raiseRequested();
+    void showDetailRequested(const QString &appName);
 
- private:
-  QString app_name_;
+    void requestInstallApp(const QString &request_id, const QString &appID);
+    void requestUpdateApp(const QString &request_id, const QString &appID);
+    void requestUpdateAllApp(const QString &request_id);
+    void requestUninstallApp(const QString &request_id, const QString &appID);
+
+public Q_SLOTS:
+    // Implement AppStore dbus service.
+    Q_SCRIPTABLE void Raise();
+    Q_SCRIPTABLE void ShowAppDetail(const QString &appName);
+
+    Q_SCRIPTABLE QVariantMap Install(const QString &appID);
+    Q_SCRIPTABLE QVariantMap Update(const QString &appID);
+    Q_SCRIPTABLE QVariantMap UpdateAll();
+    Q_SCRIPTABLE QVariantMap Uninstall(const QString &appID);
+
+private:
+    RequestData *newRequest();
+
+    QMap<QString, RequestData *> requests;
 };
 
 }  // namespace dstore

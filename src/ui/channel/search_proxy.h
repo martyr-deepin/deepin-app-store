@@ -50,7 +50,7 @@ Q_SIGNALS:
      * @param keyword search keyword
      * @param names
      */
-    Q_SCRIPTABLE void openAppList(const QString &keyword);
+    Q_SCRIPTABLE void openSearchResult(const QString &keyword);
 
 public Q_SLOTS:
     /**
