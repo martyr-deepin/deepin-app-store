@@ -547,9 +547,7 @@ void WebWindow::setupDaemon(dstore::DBusManager *pManager)
 
     QObject::connect(pManager, &dstore::DBusManager::requestInstallApp,
                      store_daemon_proxy_, &dstore::StoreDaemonProxy::requestInstallApp);
-    QObject::connect(pManager, &dstore::DBusManager::requestInstallApp,
-                     store_daemon_proxy_, &dstore::StoreDaemonProxy::requestInstallApp);
-    QObject::connect(pManager, &dstore::DBusManager::requestInstallApp,
+    QObject::connect(pManager, &dstore::DBusManager::requestUpdateApp,
                      store_daemon_proxy_, &dstore::StoreDaemonProxy::requestUpdateApp);
     QObject::connect(pManager, &dstore::DBusManager::requestUpdateAllApp,
                      store_daemon_proxy_, &dstore::StoreDaemonProxy::requestUpdateAllApp);
