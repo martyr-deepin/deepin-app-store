@@ -36,7 +36,9 @@ namespace
 const char kEnableDomStorageFlush[] = "--enable-aggressive-domstorage-flushing";
 
 const char kDisableGpu[] = "--disable-gpu";
+
 const char kEnableLogging[] = "--enable-logging";
+
 const char kLogLevel[] = "--log-level";
 
 }  // namespace
@@ -53,7 +55,8 @@ int main(int argc, char **argv)
         // Open http://localhost:9222 in chromium browser to see dev tools.
         settings.setRemoteDebug(true);
         settings.setLogSeverity(QCefGlobalSettings::LogSeverity::Verbose);
-    } else {
+    }
+    else {
         settings.setRemoteDebug(false);
         settings.setLogSeverity(QCefGlobalSettings::LogSeverity::Error);
     }
@@ -87,7 +90,7 @@ int main(int argc, char **argv)
     }
 
 #ifndef DSTORE_NO_DXCB
-  Dtk::Widget::DApplication::loadDXcbPlugin();
+    Dtk::Widget::DApplication::loadDXcbPlugin();
 #endif
 
     Dtk::Widget::DApplication app(argc, argv);
@@ -106,9 +109,9 @@ int main(int argc, char **argv)
     app.loadTranslator();
     app.setApplicationDisplayName(QObject::tr("Deepin App Store"));
     app.setApplicationDescription(QObject::tr(
-                                      "Deepin App Store is an App Store with diverse and quality applications. "
-                                      "It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, "
-                                      "updating and uninstalling."));
+        "Deepin App Store is an App Store with diverse and quality applications. "
+        "It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, "
+        "updating and uninstalling."));
     app.setApplicationAcknowledgementPage(
         "https://www.deepin.org/acknowledgments/deepin-app-store/");
 
@@ -124,25 +127,28 @@ int main(int argc, char **argv)
     customLoggerInstance.registerAppender(fileAppender);
 
     dstore::DBusManager dbus_manager;
-    if (dbus_manager.parseArguments()) {
+    if (!dbus_manager.registerDBus()) {
+        // register failed, another store running
         // Exit process after 1000ms.
-        QTimer::singleShot(1000, [&]() {
+        QTimer::singleShot(1000, [&]()
+        {
             app.quit();
         });
         return app.exec();
-    } else {
-        QCefBindApp(&app);
-
-        dstore::WebWindow window;
-
-        window.setupDaemon(&dbus_manager);
-
-        app.installEventFilter(&window);
-
-        window.setQCefSettings(&settings);
-        window.loadPage();
-        window.showWindow();
-
-        return app.exec();
     }
+
+
+    QCefBindApp(&app);
+
+    dstore::WebWindow window;
+
+    window.setupDaemon(&dbus_manager);
+
+    app.installEventFilter(&window);
+
+    window.setQCefSettings(&settings);
+    window.loadPage();
+    window.showWindow();
+
+    return app.exec();
 }

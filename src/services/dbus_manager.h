@@ -46,7 +46,7 @@ public:
     explicit DBusManager(QObject *parent = nullptr);
     ~DBusManager() override;
 
-    bool parseArguments();
+    bool registerDBus();
 
 public Q_SLOTS:
     void onRequestFinished(const QString &reqID, const QVariantMap &result);
@@ -60,6 +60,8 @@ Q_SIGNALS:
     void requestUpdateAllApp(const QString &request_id);
     void requestUninstallApp(const QString &request_id, const QString &appID);
 
+    void requestAuthorized(const QString &code, const QString &state);
+
 public Q_SLOTS:
     // Implement AppStore dbus service.
     Q_SCRIPTABLE void Raise();
@@ -69,6 +71,9 @@ public Q_SLOTS:
     Q_SCRIPTABLE QVariantMap Update(const QString &appID);
     Q_SCRIPTABLE QVariantMap UpdateAll();
     Q_SCRIPTABLE QVariantMap Uninstall(const QString &appID);
+
+    Q_SCRIPTABLE void OnAuthorized(const QString &code, const QString &state);
+    Q_SCRIPTABLE void OnCancel();
 
 private:
     RequestData *newRequest();

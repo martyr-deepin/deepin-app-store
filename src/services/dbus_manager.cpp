@@ -37,54 +37,45 @@ DBusManager::DBusManager(QObject *parent)
 
 DBusManager::~DBusManager() = default;
 
-bool DBusManager::parseArguments()
+bool DBusManager::registerDBus()
 {
     QCommandLineParser parser;
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addOption(QCommandLineOption(
-        "dbus", "enable daemon mode"
-    ));
     parser.parse(qApp->arguments());
+
+    const QStringList args = parser.positionalArguments();
+    auto showAppName = args.value(0);
 
     // Register dbus service.
     QDBusConnection session_bus = QDBusConnection::sessionBus();
 
-    if (!session_bus.registerService(kAppStoreDbusService) ||
-        !session_bus.registerObject(kAppStoreDbusPath,
-                                    this,
-                                    QDBusConnection::ExportScriptableContents)) {
-        qWarning() << Q_FUNC_INFO
-                   << "Failed to register dbus service"
-                   << session_bus.lastError();
-
-        // Failed to register dbus service.
-        // Open app with dbus interface.
-        const QStringList args = parser.positionalArguments();
-        if (!args.isEmpty()) {
-            auto *interface = new AppStoreDBusInterface(
-                kAppStoreDbusService,
-                kAppStoreDbusPath,
-                session_bus,
-                this
-            );
-
-            if (interface->isValid()) {
-                // Only pass the first positional argument.
-                interface->ShowAppDetail(args.first());
-                return true;
-            }
-            else {
-                return false;
-            }
+    if (session_bus.registerService(kAppStoreDbusService) &&
+        session_bus.registerObject(kAppStoreDbusPath,
+                                   this,
+                                   QDBusConnection::ExportScriptableContents)) {
+        if (!showAppName.isEmpty()){
+            this->ShowAppDetail(showAppName);
         }
-        else {
-            return true;
-        }
+        return true;
     }
-    else {
-        const QStringList args = parser.positionalArguments();
-        if (!args.isEmpty()) {
+
+    qInfo() << "Failed to register dbus object" << session_bus.lastError();
+
+    // Open app with dbus interface.
+    if (!showAppName.isEmpty()) {
+        auto *interface = new AppStoreDBusInterface(
+            kAppStoreDbusService,
+            kAppStoreDbusPath,
+            session_bus,
+            this
+        );
+
+        if (interface->isValid()) {
+            // Only pass the first positional argument.
+            interface->ShowAppDetail(showAppName);
+        } else {
+            interface->Raise();
         }
     }
 
@@ -93,13 +84,12 @@ bool DBusManager::parseArguments()
 
 void DBusManager::Raise()
 {
-    qDebug() << "Raise";
-    emit this->raiseRequested();
+    Q_EMIT this->raiseRequested();
 }
 
 void DBusManager::ShowAppDetail(const QString &app_name)
 {
-    emit this->showDetailRequested(app_name);
+    Q_EMIT this->showDetailRequested(app_name);
 }
 
 QVariantMap DBusManager::Install(const QString &appID)
@@ -164,6 +154,16 @@ RequestData *DBusManager::newRequest()
     req->msg.setDelayedReply(true);
     requests[reqID] = req;
     return req;
+}
+
+void DBusManager::OnAuthorized(const QString &code, const QString &state)
+{
+    Q_EMIT this->requestAuthorized(code, state);
+}
+
+void DBusManager::OnCancel()
+{
+    qDebug() << "OnCancel";
 }
 
 }  // namespace dstore

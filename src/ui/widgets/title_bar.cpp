@@ -208,7 +208,7 @@ void TitleBar::initUI(bool support_sign_in)
     left_layout->addWidget(forward_button_);
     left_layout->addStretch();
 
-    const auto buttonReserve = 170;
+    const auto buttonReserve = 220;
     QFrame *left_buttons = new QFrame();
     left_buttons->setFixedWidth(buttonReserve + 26 + 26 + 20);
     left_buttons->setContentsMargins(0, 0, 0, 0);

@@ -1,6 +1,7 @@
 #include "account_manager.h"
 
 #include "dbus/deepinid_interface.h"
+#include "dbus/dbus_consts.h"
 
 namespace dstore
 {
@@ -71,6 +72,30 @@ void AccountManager::logout()
 {
     Q_D(AccountManager);
     d->deepinid_interface_->Logout();
+}
+
+void AccountManager::authorize(const QString &clientID,
+                               const QStringList &scopes,
+                               const QString &callback,
+                               const QString &state)
+{
+    QList<QVariant> argumentList;
+
+    static QDBusInterface interface("com.deepin.deepinid.Client",
+                                    "/com/deepin/deepinid/Client",
+                                    "com.deepin.deepinid.Client");
+    argumentList << clientID;
+    argumentList << kAppStoreDbusService;
+    argumentList << kAppStoreDbusPath;
+    argumentList << kAppStoreDbusInterface;
+    interface.callWithArgumentList(QDBus::NoBlock, "Register", argumentList);
+
+    argumentList = {};
+    argumentList << clientID;
+    argumentList << scopes;
+    argumentList << callback;
+    argumentList << state;
+    interface.callWithArgumentList(QDBus::NoBlock, "Authorize", argumentList);
 }
 
 } // namespace dstore

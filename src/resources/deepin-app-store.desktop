@@ -1,7 +1,6 @@
 [Desktop Entry]
-Categories=Application;System;Settings
+Categories=Qt;System;
 Comment=A general Linux software manager
-Encoding=UTF-8
 Exec=deepin-app-store %U
 GenericName=App Store
 Icon=deepin-app-store

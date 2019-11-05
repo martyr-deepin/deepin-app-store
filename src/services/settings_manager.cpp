@@ -33,18 +33,27 @@ namespace dstore
 namespace
 {
 const char kAutoInstall[] = "AutoInstall";
+
 const char kThemeName[] = "ThemeName";
+
 const char kWindowState[] = "WindowState";
+
 const char kAllowShowPackageName[] = "AllowShowPackageName";
 
 const char kSupportAot[] = "SupportAot";
+
 const char kSupportSignin[] = "SupportSignIn";
 
 const char kServer[] = "Server";
+
 const char kMetadataServer[] = "MetadataServer";
+
 const char kOperationServerMap[] = "OperationServerMap";
+
 const char kDefaultRegion[] = "DefaultRegion";
+
 const char kAllowSwitchRegion[] = "AllowSwitchRegion";
+
 const char kUpyunBannerVisible[] = "UpyunBannerVisible";
 }
 
@@ -86,7 +95,7 @@ void SettingsManager::setQCefSettings(QCefGlobalSettings *settings)
 
 bool SettingsManager::remoteDebug()
 {
-    return  qcef_settings_->remoteDebug();
+    return qcef_settings_->remoteDebug();
 }
 
 QString SettingsManager::server() const
@@ -150,7 +159,6 @@ bool SettingsManager::supportAot() const
     return getSettings(kSupportAot).toBool();
 }
 
-
 bool SettingsManager::allowSwitchRegion() const
 {
     return getSettings(kAllowSwitchRegion).toBool();
@@ -180,7 +188,6 @@ const QDBusArgument &operator>>(const QDBusArgument &argument,
     return argument;
 }
 
-
 // a{ss}
 QVariantMap SettingsManager::getMapSettings(const QString &key) const
 {
@@ -191,11 +198,10 @@ QVariantMap SettingsManager::getMapSettings(const QString &key) const
         return operationInfo;
     }
     QList<QVariant> outArgs = reply.arguments();
-    QVariant first = outArgs.at(0);
+    QVariant first = outArgs.value(0);
     QDBusVariant dbvFirst = first.value<QDBusVariant>();
     QVariant vFirst = dbvFirst.variant();
     QDBusArgument dbusArgs = vFirst.value<QDBusArgument>();
-
 
     dbusArgs.beginArray();
     while (!dbusArgs.atEnd()) {

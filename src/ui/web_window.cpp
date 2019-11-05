@@ -36,6 +36,7 @@
 #include <qcef_global_settings.h>
 
 #include "base/consts.h"
+#include "resources/images.h"
 #include "services/settings_manager.h"
 #include "ui/web_event_delegate.h"
 #include "ui/channel/image_viewer_proxy.h"
@@ -556,6 +557,9 @@ void WebWindow::setupDaemon(dstore::DBusManager *pManager)
 
     QObject::connect(store_daemon_proxy_, &dstore::StoreDaemonProxy::requestFinished,
                      pManager, &dstore::DBusManager::onRequestFinished);
+
+    QObject::connect(pManager, &dstore::DBusManager::requestAuthorized,
+                     account_proxy_, &dstore::AccountProxy::onAuthorized);
 }
 
 }  // namespace dstore
