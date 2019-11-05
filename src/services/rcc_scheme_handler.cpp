@@ -26,7 +26,7 @@ namespace dstore {
 QString RccSchemeHandler(const QUrl& url) {
   const QString host = url.host();
   if (host == "web") {
-    const char kAppDefaultLocalDir[] = DSTORE_WEB_DIR "/appstore";
+    const char kAppDefaultLocalDir[] = DSTORE_WEB_DIR;
     QString app_local_dir = QString("%1/appstore-%2")
         .arg(DSTORE_WEB_DIR)
         .arg(QLocale().name());
