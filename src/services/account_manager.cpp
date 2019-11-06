@@ -38,8 +38,6 @@ AccountManager::AccountManager(QObject *parent)
         this);
 
     auto userInfo = d->deepinid_interface_->userInfo();
-//        qDebug() << userInfo;
-
     connect(d->deepinid_interface_, &com::deepin::deepinid::UserInfoChanged,
             this, &AccountManager::userInfoChanged);
 //    connect(d->deepinid_interface_, &com::deepin::deepinid::UserInfoChanged,
@@ -48,31 +46,7 @@ AccountManager::AccountManager(QObject *parent)
 //    });
 }
 
-AccountManager::~AccountManager() {}
-
-QString AccountManager::getToken() const
-{
-    Q_D(const AccountManager);
-    return d->deepinid_interface_->GetToken().value();
-}
-
-QVariantMap AccountManager::getUserInfo() const
-{
-    Q_D(const AccountManager);
-    return d->deepinid_interface_->userInfo();
-}
-
-void AccountManager::login()
-{
-    Q_D(AccountManager);
-    d->deepinid_interface_->Login();
-}
-
-void AccountManager::logout()
-{
-    Q_D(AccountManager);
-    d->deepinid_interface_->Logout();
-}
+AccountManager::~AccountManager() = default;
 
 void AccountManager::authorize(const QString &clientID,
                                const QStringList &scopes,
@@ -96,6 +70,12 @@ void AccountManager::authorize(const QString &clientID,
     argumentList << callback;
     argumentList << state;
     interface.callWithArgumentList(QDBus::NoBlock, "Authorize", argumentList);
+}
+
+void AccountManager::logout()
+{
+    Q_D(AccountManager);
+    d->deepinid_interface_->Logout();
 }
 
 } // namespace dstore

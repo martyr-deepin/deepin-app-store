@@ -235,13 +235,12 @@ void WebWindow::initConnections()
             this, [&](bool login)
             {
                 if (login) {
-                    account_proxy_->login();
+                    Q_EMIT account_proxy_->requestLogin();
                 }
                 else {
                     account_proxy_->logout();
                 }
             });
-
     connect(tool_bar_menu_, &TitleBarMenu::recommendAppRequested,
             menu_proxy_, &MenuProxy::recommendAppRequested);
     connect(tool_bar_menu_, &TitleBarMenu::privacyAgreementRequested,

@@ -13,26 +13,18 @@ class AccountManager: public QObject
 Q_OBJECT
 public:
     explicit AccountManager(QObject *parent = Q_NULLPTR);
-    ~AccountManager();
+    ~AccountManager() Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void userInfoChanged(const QVariantMap &info);
 
 public Q_SLOTS:
-    QVariantMap getUserInfo() const;
-
-    // TODO: remove
-    QString getToken() const;
-
-    // TODO: remove
-    void login();
-
-    void logout();
-
     void authorize(const QString &clientID,
                    const QStringList &scopes,
                    const QString &callback,
                    const QString &state);
+
+    void logout();
 
 private:
     QScopedPointer<AccountManagerPrivate> dd_ptr;
