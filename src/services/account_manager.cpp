@@ -72,6 +72,12 @@ void AccountManager::authorize(const QString &clientID,
     interface.callWithArgumentList(QDBus::NoBlock, "Authorize", argumentList);
 }
 
+QVariantMap AccountManager::getUserInfo() const
+{
+    Q_D(const AccountManager);
+    return d->deepinid_interface_->userInfo();
+}
+
 void AccountManager::logout()
 {
     Q_D(AccountManager);

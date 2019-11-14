@@ -23,6 +23,8 @@ Q_SIGNALS:
     void onAuthorized(const QString &code, const QString &state);
 
 public Q_SLOTS:
+    QVariantMap getUserInfo() const;
+
     void authorize(const QString &clientID,
                    const QStringList &scopes,
                    const QString &callback,

@@ -19,6 +19,8 @@ Q_SIGNALS:
     void userInfoChanged(const QVariantMap &info);
 
 public Q_SLOTS:
+    QVariantMap getUserInfo() const;
+
     void authorize(const QString &clientID,
                    const QStringList &scopes,
                    const QString &callback,

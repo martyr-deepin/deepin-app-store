@@ -13,6 +13,11 @@ AccountProxy::AccountProxy(QObject *parent)
             this, &AccountProxy::userInfoChanged);
 }
 
+QVariantMap dstore::AccountProxy::getUserInfo() const
+{
+    return manager_->getUserInfo();
+}
+
 void AccountProxy::authorize(const QString &clientID,
                              const QStringList &scopes,
                              const QString &callback,
