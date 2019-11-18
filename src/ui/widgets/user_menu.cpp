@@ -17,9 +17,9 @@ class UserMenuPrivate
         parent->connect(comment, &QAction::triggered,
                         parent, &UserMenu::commentRequested);
 
-        Donates = parent->addAction(UserMenu::tr("My donations"));
-        parent->connect(Donates, &QAction::triggered,
-                        parent, &UserMenu::requestDonates);
+//        Donates = parent->addAction(UserMenu::tr("My donations"));
+//        parent->connect(Donates, &QAction::triggered,
+//                        parent, &UserMenu::requestDonates);
 
         apps = parent->addAction(UserMenu::tr("My apps"));
         parent->connect(apps, &QAction::triggered,
