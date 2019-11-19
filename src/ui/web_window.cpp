@@ -559,6 +559,11 @@ void WebWindow::setupDaemon(dstore::DBusManager *pManager)
 
     QObject::connect(pManager, &dstore::DBusManager::requestAuthorized,
                      account_proxy_, &dstore::AccountProxy::onAuthorized);
+
+    QObject::connect(pManager, &dstore::DBusManager::requestOpenCategory,
+                     store_daemon_proxy_, &dstore::StoreDaemonProxy::requestOpenCategory);
+    QObject::connect(pManager, &dstore::DBusManager::requestOpenTag,
+                     store_daemon_proxy_, &dstore::StoreDaemonProxy::requestOpenTag);
 }
 
 }  // namespace dstore

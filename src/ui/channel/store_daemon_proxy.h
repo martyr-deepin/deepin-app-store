@@ -62,6 +62,9 @@ Q_SIGNALS:
     Q_SCRIPTABLE void requestUpdateAllApp(const QString &request_id);
     Q_SCRIPTABLE void requestUninstallApp(const QString &request_id, const QString &appID);
 
+    Q_SCRIPTABLE void requestOpenCategory(const QString &request_id, const QString &category);
+    Q_SCRIPTABLE void requestOpenTag(const QString &request_id, const QString &tag);
+
 public Q_SLOTS:
     /**
      * Check connecting to backend app store daemon or not.

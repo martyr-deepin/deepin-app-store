@@ -62,6 +62,9 @@ Q_SIGNALS:
 
     void requestAuthorized(const QString &code, const QString &state);
 
+    void requestOpenCategory(const QString &request_id, const QString &category);
+    void requestOpenTag(const QString &request_id, const QString &tag);
+
 public Q_SLOTS:
     // Implement AppStore dbus service.
     Q_SCRIPTABLE void Raise();
@@ -74,6 +77,9 @@ public Q_SLOTS:
 
     Q_SCRIPTABLE void OnAuthorized(const QString &code, const QString &state);
     Q_SCRIPTABLE void OnCancel();
+    
+    Q_SCRIPTABLE QVariantMap OpenCategory(const QString &category);
+    Q_SCRIPTABLE QVariantMap OpenTag(const QString &tag);
 
 private:
     RequestData *newRequest();

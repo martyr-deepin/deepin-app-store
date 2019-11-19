@@ -166,4 +166,21 @@ void DBusManager::OnCancel()
     qDebug() << "OnCancel";
 }
 
+QVariantMap DBusManager::OpenCategory(const QString &category)
+{
+    auto req = newRequest();
+    req->data["category"] = category;
+    qDebug() << "OpenCategory" <<  req->id << category;
+    Q_EMIT this->requestOpenCategory(req->id, category);
+    return QVariantMap();
+}
+
+QVariantMap DBusManager::OpenTag(const QString &tag){
+    auto req = newRequest();
+    req->data["tag"] = tag;
+    qDebug() << "OpenTag" << req->id << tag;
+    Q_EMIT this->requestOpenTag(req->id, tag);
+    return QVariantMap();
+}
+
 }  // namespace dstore
