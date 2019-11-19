@@ -1,3 +1,26 @@
+<a name="5.6.1.0"></a>
+## 5.6.1.0 (2019-11-19)
+
+
+#### Bug Fixes
+
+*   update settings ([81012af0](https://github.com/linuxdeepin/deepin-app-store/commit/81012af0057e59b772f60c7846e18df10d0b0346))
+*   remove deepin from appstore ([1f1631ca](https://github.com/linuxdeepin/deepin-app-store/commit/1f1631caa24fe950c65dd61befb9ce6f9358c877))
+*   update login flow ([ac1347eb](https://github.com/linuxdeepin/deepin-app-store/commit/ac1347eb0990ff2099ae8c1926c109cb08f3e8a7))
+*   update web resource path ([c47f21a4](https://github.com/linuxdeepin/deepin-app-store/commit/c47f21a44ac480e21cb48a47d02f25fa752dfe8f))
+*   map arch ([7299cad5](https://github.com/linuxdeepin/deepin-app-store/commit/7299cad55ac2380d2894392f49262143af6ea4a8))
+*   update data package name ([20bd0390](https://github.com/linuxdeepin/deepin-app-store/commit/20bd03901951b6438c61a772e53beeb8f05148a0))
+*   use DIconButton ([e74f7317](https://github.com/linuxdeepin/deepin-app-store/commit/e74f7317fb65d3e96ec7ecda89f80ce1da608f99))
+
+#### Features
+
+*   support new oauth2 flow ([574874e7](https://github.com/linuxdeepin/deepin-app-store/commit/574874e7a7ae1eb1bebd677a77fb55c52bb5c70e))
+*   support voice assistant ([9d7820a2](https://github.com/linuxdeepin/deepin-app-store/commit/9d7820a2c5c4d0dd9b252c18e5f1179f405d6b94))
+*   add Server settings ([ceca1ab7](https://github.com/linuxdeepin/deepin-app-store/commit/ceca1ab768e3956ac7f4c498747723117d765bc9))
+*   add some debug method ([d1a9ce6f](https://github.com/linuxdeepin/deepin-app-store/commit/d1a9ce6fd1804bb3c623544cc0fed2d132dd8ec2))
+
+
+
 <a name="5.6.0.0"></a>
 ## 5.6.0.0 (2019-09-20)
 
