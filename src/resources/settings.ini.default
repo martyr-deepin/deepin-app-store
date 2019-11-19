@@ -7,11 +7,11 @@ SupportAot = false
 SupportSignIn = true
 
 # Base url to server.
-Server = "http://dev.store.deepin.com"
+Server = "https://store.deepin.com"
 
 # After 5.3, store will auto change region by ip.
 # Allow change Region
-AllowSwitchRegion = true
+AllowSwitchRegion = false
 
 # Default operation region.
 DefaultRegion = "CN"
