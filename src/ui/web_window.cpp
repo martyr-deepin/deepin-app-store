@@ -336,7 +336,7 @@ void WebWindow::initUI()
 
     title_bar_ = new TitleBar(SettingsManager::instance()->supportSignIn());
     this->titlebar()->addWidget(title_bar_, Qt::AlignLeft);
-    this->titlebar()->setSeparatorVisible(true);
+    this->titlebar()->setSeparatorVisible(false);
     tool_bar_menu_ = new TitleBarMenu(SettingsManager::instance()->supportSignIn(), this);
     this->titlebar()->setMenu(tool_bar_menu_);
 
