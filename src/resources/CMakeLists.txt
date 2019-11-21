@@ -10,5 +10,8 @@ install(FILES settings.ini.default
 install(FILES appstore-keyring.gpg
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/keyrings/)
 
+install(FILES appstore.gpg
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/)
+
 install(FILES appstore.list
         DESTINATION /etc/apt/sources.list.d/)
