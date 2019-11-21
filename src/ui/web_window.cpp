@@ -241,8 +241,8 @@ void WebWindow::initConnections()
                     account_proxy_->logout();
                 }
             });
-    connect(tool_bar_menu_, &TitleBarMenu::recommendAppRequested,
-            menu_proxy_, &MenuProxy::recommendAppRequested);
+    /*connect(tool_bar_menu_, &TitleBarMenu::recommendAppRequested,
+            menu_proxy_, &MenuProxy::recommendAppRequested);*/
     connect(tool_bar_menu_, &TitleBarMenu::privacyAgreementRequested,
             menu_proxy_, &MenuProxy::privacyAgreementRequested);
     connect(tool_bar_menu_, &TitleBarMenu::switchThemeRequested,

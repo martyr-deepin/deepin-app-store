@@ -32,7 +32,7 @@ class TitleBarMenu : public QMenu {
 
  signals:
   void switchThemeRequested(QString themeName);
-  void recommendAppRequested();
+  //void recommendAppRequested();
   void clearCacheRequested();
   void privacyAgreementRequested();
 
@@ -45,11 +45,11 @@ class TitleBarMenu : public QMenu {
   bool support_sign_in_ = false;
 
   QString theme_name_ = "light";
-  QAction* switch_theme_action_ = nullptr;
+  // QAction* switch_theme_action_ = nullptr;
   QAction* privacy_agreement_action_ = nullptr;
 
  private slots:
-  void onThemeActionTriggered();
+  //void onThemeActionTriggered();
 };
 
 }  // namespace dman

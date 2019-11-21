@@ -42,29 +42,29 @@ void TitleBarMenu::setThemeName(QString theme_name)
     theme_name_ = theme_name;
     SettingsManager::instance()->setThemeName(theme_name_);
 
-    if (theme_name_ == "light") {
+   /* if (theme_name_ == "light") {
         switch_theme_action_->setChecked(false);
     } else {
         switch_theme_action_->setChecked(true);
-    }
+    }*/
 }
 
 void TitleBarMenu::initActions()
 {
-    if (support_sign_in_) {
+    /*if (support_sign_in_) {
         this->addAction(QObject::tr("Recommend App"),
                         this, &TitleBarMenu::recommendAppRequested);
-    }
+    }*/
 
 
     this->addAction(QObject::tr("Clear cache"),
                     this, &TitleBarMenu::clearCacheRequested);
 
     theme_name_ = SettingsManager::instance()->themeName();
-    switch_theme_action_ = this->addAction(QObject::tr("Dark theme"));
+    /*switch_theme_action_ = this->addAction(QObject::tr("Dark theme"));
     switch_theme_action_->setCheckable(true);
     connect(switch_theme_action_, &QAction::triggered,
-            this, &TitleBarMenu::onThemeActionTriggered);
+            this, &TitleBarMenu::onThemeActionTriggered);*/
     this->setThemeName(theme_name_);
 
     privacy_agreement_action_ = this->addAction(QObject::tr("Privacy Policy"));
@@ -74,7 +74,7 @@ void TitleBarMenu::initActions()
     this->addSeparator();
 }
 
-void TitleBarMenu::onThemeActionTriggered()
+/*void TitleBarMenu::onThemeActionTriggered()
 {
     if (theme_name_ == "light") {
         theme_name_ = "dark";
@@ -83,7 +83,7 @@ void TitleBarMenu::onThemeActionTriggered()
     }
     this->setThemeName(theme_name_);
     emit this->switchThemeRequested(theme_name_);
-}
+}*/
 
 
 }  // namespace dstore

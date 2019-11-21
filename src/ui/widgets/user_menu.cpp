@@ -34,7 +34,7 @@ class UserMenuPrivate
 
     QAction *userName;
     QAction *comment;
-    QAction *Donates;
+    //QAction *Donates;
     QAction *apps;
     QAction *logout;
 
