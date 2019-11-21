@@ -33,6 +33,7 @@ Depends:${shlibs:Depends}, ${misc:Depends},
  libqt5sql5-sqlite,
  deepin-sync-daemon,
  deepin-deepinid-client,
+ apt-transport-https,
  deepin-app-store-data (>5.3) [!mips64el],
  deepin-app-store-data-aot (>5.3) [mips64el]
 Replaces: dstore-client, deepin-appstore

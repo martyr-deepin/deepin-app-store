@@ -6,3 +6,9 @@ install(FILES themes/common/images/deepin-app-store.svg
 
 install(FILES settings.ini.default
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/)
+
+install(FILES appstore-keyring.gpg
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/keyrings/)
+
+install(FILES appstore.list
+        DESTINATION /etc/apt/sources.list.d/)
