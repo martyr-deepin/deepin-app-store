@@ -23,8 +23,14 @@ QString SysInfo::arch() const
     // map arch
     auto archMap = QMap<QString, QString>{
         {"x86_64", "amd64"},
+        {"aarch64", "arm64"},
+        {"mips64", "mips64"},
     };
-    return archMap[machine];
+    auto arch = archMap[machine];
+    if (arch.isEmpty()) {
+        arch = machine;
+    }
+    return arch;
 }
 
 QString SysInfo::product() const
