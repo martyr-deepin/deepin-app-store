@@ -254,8 +254,8 @@ void WebWindow::initConnections()
 
     connect(title_bar_, &TitleBar::commentRequested,
             menu_proxy_, &MenuProxy::commentRequested);
-    connect(title_bar_, &TitleBar::requestDonates,
-            menu_proxy_, &MenuProxy::donateRequested);
+    /*connect(title_bar_, &TitleBar::requestDonates,
+            menu_proxy_, &MenuProxy::donateRequested);*/
     connect(title_bar_, &TitleBar::requestApps,
             menu_proxy_, &MenuProxy::appsRequested);
     connect(menu_proxy_, &MenuProxy::userInfoUpdated,

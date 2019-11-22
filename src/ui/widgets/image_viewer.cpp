@@ -86,7 +86,7 @@ void ImageViewer::openPixmap(QPixmap pixmap) {
   spinner_->hide();
   spinner_->stop();
 
-  const int button_width = static_cast<int>(screen_rect.width() * 0.1);
+  const int button_width = static_cast<int>(screen_rect.width() * 0.01);
   previous_button_->setFixedWidth(button_width);
   next_button_->setFixedWidth(button_width);
 
@@ -103,8 +103,8 @@ void ImageViewer::openPixmap(QPixmap pixmap) {
   const QPoint top_right_point = img_rect.topRight();
   close_button_->move(top_right_point.x() - kCloseBtnSize / 2,
                       top_right_point.y() - kCloseBtnSize / 2);
-  close_button_->show();
-  close_button_->raise();
+  //close_button_->show();
+  //close_button_->raise();
 }
 
 void ImageViewer::showIndicator() {

@@ -49,7 +49,7 @@ signals:
     /**
      * This signal is emitted when My Donates menu item is activated.
      */
-    void donateRequested();
+    //void donateRequested();
 
     /**
      * This signal is emitted when My Apps menu item is activated.
@@ -59,7 +59,7 @@ signals:
     /**
      * This signal is emitted when RecommendApp menu item is activated.
      */
-    void recommendAppRequested();
+    //void recommendAppRequested();
 
     /**
      * this signal is emitted when user click menu

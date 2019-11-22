@@ -45,7 +45,7 @@ Q_SIGNALS:
     void loginRequested(bool login);
 
     void commentRequested();
-    void requestDonates();
+    //void requestDonates();
     void requestApps();
 
     void backwardButtonClicked();
