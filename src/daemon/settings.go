@@ -46,7 +46,7 @@ func NewSettings() *Settings {
 	var err error
 	m.sysCfg, err = ini.Load(appStoreConfPath)
 	if err != nil {
-		logger.Info("fail to read file: %v", err)
+		logger.Infof("fail to read file: %v", err)
 		m.sysCfg, err = ini.Load(appStoreConfPathDefault)
 		if err != nil {
 			logger.Fatalf("fail to read file: %v", err)

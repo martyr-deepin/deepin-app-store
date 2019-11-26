@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
+	"strings"
 	"sync"
 	"time"
 )
@@ -59,6 +61,31 @@ type cacheAppInfo struct {
 	Category    string            `json:"category"`
 	PackageName string            `json:"package_name"`
 	LocaleName  map[string]string `json:"locale_name"`
+}
+
+func (m *Metadata) ListStorePackages() (apps map[string]*cacheAppInfo, err error) {
+	apps = make(map[string]*cacheAppInfo)
+
+	// aptitude search "?installed?origin(Uos)"
+	// aptitude search "?origin(Uos)"
+	origin := "Uos"
+	filter := fmt.Sprintf("?origin(%v)", origin)
+	cmd := exec.Command("/usr/bin/aptitude", "search", filter)
+	data, err := cmd.CombinedOutput()
+	if nil != err {
+		return apps, err
+	}
+	for _, line := range strings.Split(string(data), "\n") {
+		fields := strings.Fields(line)
+		if len(fields) < 2 {
+			continue
+		}
+		packageName := fields[1]
+		apps[packageName] = &cacheAppInfo{
+			PackageName: packageName,
+		}
+	}
+	return apps, err
 }
 
 // GetPackageApplicationCache 获取上架的apt缓存信息

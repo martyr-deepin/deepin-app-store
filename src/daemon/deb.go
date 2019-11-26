@@ -290,8 +290,9 @@ func (b *Backend) ListInstalled() (result []PackageInstalledInfo, busErr *dbus.E
 		}
 	}()
 
-	apps, err := b.metadata.GetPackageApplicationCache()
+	apps, err := b.metadata.ListStorePackages()
 	if nil != err {
+		log.Println(err)
 		return nil, dbusutil.ToError(err)
 	}
 
@@ -332,6 +333,7 @@ func (b *Backend) ListInstalled() (result []PackageInstalledInfo, busErr *dbus.E
 	if err != nil {
 		return nil, dbusutil.ToError(err)
 	}
+	// TODO: find icon of desktop
 	return result, nil
 }
 
