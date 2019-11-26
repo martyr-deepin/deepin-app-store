@@ -34,7 +34,7 @@ namespace dstore {
 namespace {
 
 const int kBorderSize = 12;
-const int kCloseBtnSize = 48;
+const int kBtnSize = 48;
 
 }  // namespace
 
@@ -86,10 +86,6 @@ void ImageViewer::openPixmap(QPixmap pixmap) {
   spinner_->hide();
   spinner_->stop();
 
-  const int button_width = static_cast<int>(screen_rect.width() * 0.01);
-  previous_button_->setFixedWidth(button_width);
-  next_button_->setFixedWidth(button_width);
-
   // Update pixmap of image label.
   img_label_->setPixmap(pixmap);
   img_label_->setFixedSize(pixmap.width()/ratio, pixmap.height()/ratio);
@@ -101,10 +97,10 @@ void ImageViewer::openPixmap(QPixmap pixmap) {
 
   // Move close button to top-right corner of image.
   const QPoint top_right_point = img_rect.topRight();
-  close_button_->move(top_right_point.x() - kCloseBtnSize / 2,
-                      top_right_point.y() - kCloseBtnSize / 2);
-  //close_button_->show();
-  //close_button_->raise();
+  close_button_->move(top_right_point.x() - kBtnSize / 2,
+                      top_right_point.y() - kBtnSize / 2);
+  close_button_->show();
+  close_button_->raise();
 }
 
 void ImageViewer::showIndicator() {
@@ -112,9 +108,6 @@ void ImageViewer::showIndicator() {
   this->move(screen_rect.topLeft());
   this->resize(screen_rect.size());
   this->showFullScreen();
-  const int button_width = static_cast<int>(screen_rect.width() * 0.1);
-  previous_button_->setFixedWidth(button_width);
-  next_button_->setFixedWidth(button_width);
 
   // Show spinner, moving to center of screen.
   spinner_->show();
@@ -147,16 +140,22 @@ void ImageViewer::initUI() {
 
   close_button_ = new Dtk::Widget::DIconButton(this);
   close_button_->setObjectName("CloseButton");
+  close_button_->setFixedSize(kBtnSize,kBtnSize);
   close_button_->raise();
 
   previous_button_ = new Dtk::Widget::DIconButton(this);
   previous_button_->setObjectName("PreviousButton");
+  previous_button_->setFixedSize(kBtnSize,kBtnSize);
   next_button_ = new Dtk::Widget::DIconButton(this);
   next_button_->setObjectName("NextButton");
+  next_button_->setFixedSize(kBtnSize,kBtnSize);
 
   spinner_ = new Dtk::Widget::DSpinner(this);
   spinner_->setFixedSize(96, 96);
 
+
+  const QRect screen_rect = qApp->desktop()->screenGeometry(QCursor::pos());
+  auto margin = screen_rect.width()*4/100;
   QHBoxLayout* layout = new QHBoxLayout();
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setSpacing(10);
@@ -164,7 +163,7 @@ void ImageViewer::initUI() {
   layout->addWidget(img_label_, 1, Qt::AlignCenter);
   layout->addWidget(next_button_);
 
-  this->setContentsMargins(0, 0, 0, 0);
+  this->setContentsMargins(margin, 0, margin, 0);
   this->setLayout(layout);
   this->setWindowFlags(Qt::FramelessWindowHint |
                        Qt::BypassWindowManagerHint |
