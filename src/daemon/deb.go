@@ -276,11 +276,11 @@ func (b *Backend) ListInstalled() (result []PackageInstalledInfo, busErr *dbus.E
 		"${binary:Package}\\t${db:Status-Abbrev}\\t${Version}\\t${Installed-Size}\\n")
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
-		return nil, dbusutil.ToError(err)
+		return result, dbusutil.ToError(err)
 	}
 	err = cmd.Start()
 	if err != nil {
-		return nil, dbusutil.ToError(err)
+		return result, dbusutil.ToError(err)
 	}
 	defer func() {
 		err = cmd.Wait()
@@ -293,7 +293,7 @@ func (b *Backend) ListInstalled() (result []PackageInstalledInfo, busErr *dbus.E
 	apps, err := b.metadata.ListStorePackages()
 	if nil != err {
 		log.Println(err)
-		return nil, dbusutil.ToError(err)
+		return result, dbusutil.ToError(err)
 	}
 
 	scanner := bufio.NewScanner(stdout)
@@ -331,7 +331,7 @@ func (b *Backend) ListInstalled() (result []PackageInstalledInfo, busErr *dbus.E
 	}
 	err = scanner.Err()
 	if err != nil {
-		return nil, dbusutil.ToError(err)
+		return result, dbusutil.ToError(err)
 	}
 	// TODO: find icon of desktop
 	return result, nil
