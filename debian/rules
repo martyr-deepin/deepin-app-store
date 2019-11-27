@@ -10,7 +10,9 @@ CONFIG_VERSION = $(_PACK_VER)
 %:
 	dh $@  --parallel
 
-ifeq ($(DEB_BUILD_ARCH), amd64)
+BUILD_ARCH_LIST := amd64 aarch64
+
+ifneq ($(filter $(DEB_BUILD_ARCH),$(BUILD_ARCH_LIST)),)
 override_dh_auto_configure:
 	dh_auto_configure -- -DCMAKE_BUILD_TYPE=Release -DUSE_SYSTEM_RESOURCES=ON -DCONFIG_VERSION=$(CONFIG_VERSION)
 else
