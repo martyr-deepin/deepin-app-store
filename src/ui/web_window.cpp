@@ -339,6 +339,7 @@ void WebWindow::initUI()
     this->titlebar()->setSeparatorVisible(false);
     tool_bar_menu_ = new TitleBarMenu(SettingsManager::instance()->supportSignIn(), this);
     this->titlebar()->setMenu(tool_bar_menu_);
+    this->titlebar()->setSwitchThemeMenuVisible(false);
 
     // Disable web security.
     auto settings = web_view_->page()->settings();
