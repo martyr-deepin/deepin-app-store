@@ -4,30 +4,14 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
-        <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
-        <source>Search &quot;%1&quot; in Deepin Store</source>
-        <translation>在商店中搜索“%1”</translation>
-    </message>
-    <message>
         <location filename="../src/ui/widgets/title_bar.cpp" line="220"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="55"/>
-        <source>Recommend App</source>
-        <translation>推荐应用</translation>
-    </message>
-    <message>
         <location filename="../src/ui/widgets/title_bar_menu.cpp" line="60"/>
         <source>Clear cache</source>
         <translation>清除缓存</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="64"/>
-        <source>Dark theme</source>
-        <translation>深色主题</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/title_bar_menu.cpp" line="70"/>
@@ -71,14 +55,20 @@
         <translation>全选</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="110"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="111"/>
         <source>App Store</source>
         <translation>应用商店</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="111"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="112"/>
         <source>App Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
         <translation>商店是一款品质精良、内容丰富的应用商店。精选热门推荐、新品应用和专题介绍。支持一键式下载安装、更新、卸载等功能。</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
+        <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
+        <source>Search &quot;%1&quot; in Store</source>
+        <translation>在商店中搜索“%1”</translation>
     </message>
 </context>
 <context>
@@ -92,11 +82,6 @@
         <location filename="../src/ui/widgets/user_menu.cpp" line="16"/>
         <source>My comments</source>
         <translation>我的评论</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/user_menu.cpp" line="20"/>
-        <source>My donations</source>
-        <translation>我的赞赏</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="24"/>

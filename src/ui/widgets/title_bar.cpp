@@ -216,16 +216,16 @@ void TitleBar::initUI(bool support_sign_in)
 
     search_edit_ = new SearchEdit();
     search_edit_->setObjectName("SearchEdit");
-    search_edit_->setFixedSize(242, 26);
+    search_edit_->setFixedWidth(354);
     search_edit_->setPlaceHolder(QObject::tr("Search"));
 
     QHBoxLayout *main_layout = new QHBoxLayout();
     main_layout->setSpacing(0);
-    main_layout->setContentsMargins(0, 0, 0, 0);
     main_layout->addWidget(left_buttons);
     main_layout->addStretch();
     main_layout->addWidget(search_edit_, 1, Qt::AlignCenter);
     main_layout->addStretch();
+    main_layout->addSpacing(50);
     main_layout->addWidget(avatar_button_, 0, Qt::AlignVCenter | Qt::AlignRight);
     main_layout->addSpacing(buttonReserve);
     this->setLayout(main_layout);

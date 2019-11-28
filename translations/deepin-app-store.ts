@@ -1,43 +1,17 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="en">
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
-        <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
-        <source>Search &quot;%1&quot; in Deepin Store</source>
-        <translation>Search &quot;%1&quot; in Deepin Store</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar.cpp" line="206"/>
+        <location filename="../src/ui/widgets/title_bar.cpp" line="220"/>
         <source>Search</source>
         <translation>Search</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="55"/>
-        <source>Recommend App</source>
-        <translation>Recommend App</translation>
-    </message>
-    <message>
-        <source>Select region</source>
-        <translation type="vanished">Select region</translation>
-    </message>
-    <message>
-        <source>China</source>
-        <translation type="vanished">China</translation>
-    </message>
-    <message>
-        <source>International</source>
-        <translation type="vanished">International</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/title_bar_menu.cpp" line="60"/>
         <source>Clear cache</source>
         <translation>Clear cache</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="64"/>
-        <source>Dark theme</source>
-        <translation>Dark theme</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/title_bar_menu.cpp" line="70"/>
@@ -81,14 +55,20 @@
         <translation>Select all</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app-store.cpp" line="107"/>
-        <source>Deepin Store</source>
-        <translation>Deepin Store</translation>
+        <location filename="../src/app/deepin_app_store.cpp" line="111"/>
+        <source>App Store</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app-store.cpp" line="108"/>
-        <source>Deepin Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
-        <translation>Deepin Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</translation>
+        <location filename="../src/app/deepin_app_store.cpp" line="112"/>
+        <source>App Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
+        <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
+        <source>Search &quot;%1&quot; in Store</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -102,11 +82,6 @@
         <location filename="../src/ui/widgets/user_menu.cpp" line="16"/>
         <source>My comments</source>
         <translation>My comments</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/user_menu.cpp" line="20"/>
-        <source>My donations</source>
-        <translation>My donations</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="24"/>

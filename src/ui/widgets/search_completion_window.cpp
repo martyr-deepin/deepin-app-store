@@ -112,7 +112,7 @@ void SearchCompletionWindow::setKeyword(const QString& keyword) {
   QFontMetrics metrics = search_button_->fontMetrics();
   search_button_->setText(
       metrics.elidedText(
-          QObject::tr("Search \"%1\" in Deepin Store").arg(keyword),
+          QObject::tr("Search \"%1\" in Store").arg(keyword),
           Qt::ElideRight,
           search_button_->width() - 14));
   model_->setStringList(QStringList());
@@ -160,8 +160,8 @@ void SearchCompletionWindow::initUI() {
   search_button_ = new SearchButton();
   search_button_->setObjectName("SearchButton");
   search_button_->setCheckable(true);
-  search_button_->setFixedHeight(25);
-  search_button_->setText(QObject::tr("Search \"%1\" in Deepin Store"));
+  search_button_->setFixedHeight(kItemHeight);
+  search_button_->setText(QObject::tr("Search \"%1\" in Store"));
 
   QVBoxLayout* main_layout = new QVBoxLayout();
   main_layout->setContentsMargins(0, 4, 0, 3);
@@ -174,7 +174,7 @@ void SearchCompletionWindow::initUI() {
   this->setLayout(main_layout);
   this->setContentsMargins(0, 0, 0, 0);
   this->setMinimumHeight(kItemHeight);
-  this->setFixedWidth(242);
+  this->setFixedWidth(354);
   this->setWindowFlags(Qt::FramelessWindowHint |
                        Qt::CustomizeWindowHint |
                        Qt::BypassWindowManagerHint);
