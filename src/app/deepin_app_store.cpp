@@ -20,6 +20,7 @@
 #include <QIcon>
 #include <qcef_context.h>
 #include <qcef_web_settings.h>
+#include <DGuiApplicationHelper>
 #include <DPlatformWindowHandle>
 
 #include "base/consts.h"
@@ -117,6 +118,12 @@ int main(int argc, char **argv)
 
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
+
+    if (!DGuiApplicationHelper::setSingleInstance("com.deepin.AppStore")) {
+        qWarning() << "another store is running";
+        return 0;
+    }
+    app.setAutoActivateWindows(true);
 
     // fix error for cutelogger
     // No appenders associated with category js
