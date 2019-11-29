@@ -82,6 +82,10 @@ int main(int argc, char **argv)
     settings.addCommandLineSwitch("--use-views", "");
 
     auto themName = dstore::SettingsManager::instance()->themeName();
+    if (themName.isEmpty()) {
+        themName = "light";
+        dstore::SettingsManager::instance()->setThemeName(themName);
+    }
     settings.setCustomSchemeHandler(dstore::RccSchemeHandler);
     settings.addCustomScheme(QUrl("rcc://web"));
     settings.setBackgroundColor(dstore::BackgroundColor(themName));
