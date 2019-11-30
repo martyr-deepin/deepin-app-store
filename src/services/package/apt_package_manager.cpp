@@ -278,11 +278,13 @@ PMResult AptPackageManager::ListInstalled(const QList<QString> &/*packageIDs*/)
         pkg.appName = info.appName;
         auto packageID =   pkg.packageName.split(":").first();
         pkg.localVersion = info.version;
+        pkg.desktop = info.desktop;
         pkg.size = info.size;
         pkg.packageURI = "dpk://deb/" + packageID;
-        for (auto k : info.localeNames.keys()) {
+        for (const auto& k : info.localeNames.keys()) {
             pkg.allLocalName[k] = info.localeNames[k];
         }
+        pkg.icon = dstore::GetThemeIconData(dstore::GetIconFromDesktop(pkg.desktop),48);
         pkg.installedTime = info.installationTime;
         // TODO: remove name
 //        if (apps.contains(packageID)) {

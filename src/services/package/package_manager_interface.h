@@ -25,6 +25,8 @@ public:
     QString packageURI;
     QString packageName;
     QString appName;
+    QString desktop;
+    QString icon;
     QString localVersion;
     QString remoteVersion;
     qlonglong installedTime;

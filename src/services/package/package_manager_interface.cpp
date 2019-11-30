@@ -52,6 +52,8 @@ Package Package::fromVariantMap(const QVariantMap &obj)
     pkg.downloadSize = static_cast<qlonglong>(obj.value("downloadSize").toInt());
     pkg.upgradable = obj.value("upgradable").toBool();
     pkg.allLocalName = obj.value("allLocalName").toMap();
+    pkg.desktop = obj.value("desktop").toString();
+    pkg.icon = obj.value("icon").toString();
     return pkg;
 }
 
@@ -69,6 +71,8 @@ QVariantMap Package::toVariantMap() const
     obj.insert("downloadSize", downloadSize);
     obj.insert("localName", localName);
     obj.insert("allLocalName", allLocalName);
+    obj.insert("desktop", desktop);
+    obj.insert("icon", icon);
     return obj;
 }
 

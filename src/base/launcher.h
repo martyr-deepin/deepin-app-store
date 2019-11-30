@@ -19,15 +19,27 @@
 #define DEEPIN_APPSTORE_BASE_LAUNCHER_H
 
 #include <QString>
+#include <QPixmap>
 
 namespace dstore {
+
+QPixmap GetThemeIcon(const QString &iconName,  int size);
+
+QString GetThemeIconData(const QString &iconName,  int size);
 
 /**
  * Get "Exec" field in a desktop file.
  * @param filepath absolute filepath to desktop file.
  * @return empty string if failed to parse.
  */
-const QString GetExecFromDesktop(const QString& filepath);
+QString GetExecFromDesktop(const QString& filepath);
+
+/**
+ * Get "Icon" field in a desktop file.
+ * @param filepath absolute filepath to desktop file.
+ * @return empty string if failed to parse.
+ */
+QString GetIconFromDesktop(const QString& desktop);
 
 /**
  * Execute an application defined in a desktop file.

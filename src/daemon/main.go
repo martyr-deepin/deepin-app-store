@@ -40,6 +40,8 @@ func init() {
 	}
 	configFolder += "/deepin/deepin-app-store"
 	os.MkdirAll(configFolder, 0755)
+
+	InitDB()
 }
 
 func main() {

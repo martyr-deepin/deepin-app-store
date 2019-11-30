@@ -318,6 +318,8 @@ func (b *Backend) ListInstalled() (result []PackageInstalledInfo, busErr *dbus.E
 			// unit of size is KiB, 1KiB = 1024Bytes
 
 			t, _ := getInstallationTime(fuzzyPackageName)
+			// get desktop
+			desktop := QueryDesktopFile(fuzzyPackageName)
 
 			result = append(result, PackageInstalledInfo{
 				ID:               string(parts[0]),
@@ -325,6 +327,7 @@ func (b *Backend) ListInstalled() (result []PackageInstalledInfo, busErr *dbus.E
 				Version:          string(parts[2]),
 				InstalledSize:    size * 1024,
 				LocaleName:       app.LocaleName,
+				Desktop:          desktop,
 				InstallationTime: t,
 			})
 		}
@@ -342,6 +345,7 @@ type PackageInstalledInfo struct {
 	ID               string
 	Name             string
 	Version          string
+	Desktop          string
 	InstalledSize    int64 // unit byte
 	InstallationTime int64
 	LocaleName       map[string]string

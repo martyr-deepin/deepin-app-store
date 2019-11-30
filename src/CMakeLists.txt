@@ -35,6 +35,7 @@ find_package(PkgConfig REQUIRED)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5DBus REQUIRED)
 find_package(Qt5Gui REQUIRED)
+find_package(Qt5Svg REQUIRED)
 find_package(Qt5LinguistTools)
 find_package(Qt5Sql REQUIRED)
 find_package(Qt5WebChannel REQUIRED)
@@ -48,8 +49,9 @@ pkg_search_module(LibQCef REQUIRED libqcef)
 include_directories(${DtkFrameWorkDBus_INCLUDE_DIRS})
 include_directories(${DtkWidget_INCLUDE_DIRS})
 include_directories(${LibQCef_INCLUDE_DIRS})
+include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 
-set(Qt_LIBS Qt5::Core Qt5::DBus Qt5::Sql Qt5::Widgets Qt5::WebChannel)
+set(Qt_LIBS Qt5::Core Qt5::DBus Qt5::Svg Qt5::Sql Qt5::Widgets Qt5::WebChannel)
 
 set(LINK_LIBS
     ${Qt_LIBS}
@@ -186,7 +188,7 @@ add_custom_command(
   OUTPUT deepin-app-store-daemon
   COMMAND
     sh -c
-    "GO111MODULE=off GOPATH=\"${CMAKE_CURRENT_SOURCE_DIR}/daemon/vendor:/usr/share/gocode\" go build -o deepin-app-store-daemon ."
+    "GO111MODULE=off GOPATH=\"${CMAKE_CURRENT_SOURCE_DIR}/daemon:${CMAKE_CURRENT_SOURCE_DIR}/daemon/vendor:/usr/share/gocode\" go build -o deepin-app-store-daemon ."
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/daemon")
 
 add_custom_target(app-store-daemon DEPENDS deepin-app-store-daemon)
