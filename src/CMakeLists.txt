@@ -220,6 +220,9 @@ else()
   add_dependencies(deepin-app-store app-store-daemon)
 endif()
 
+add_executable(deepin-app-store-tool app/tool.cpp)
+target_link_libraries(deepin-app-store-tool ${LINK_LIBS})
+
 if(CMAKE_BUILD_TYPE MATCHES Debug)
   add_executable(test-launcher app/test_launcher.cpp base/launcher.cpp
                                base/launcher.h)
@@ -242,6 +245,8 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
 endif()
 
 install(TARGETS deepin-app-store DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+
+install(TARGETS deepin-app-store-tool DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/deepin-app-store-daemon
         DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
