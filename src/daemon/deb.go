@@ -360,6 +360,16 @@ func (b *Backend) QueryVersion(idList []string) (result []PackageVersionInfo,
 		return
 	}
 
+	apps, err := b.metadata.ListStorePackages()
+	var filterList []string
+	for _, id := range idList {
+		_, ok := apps[id]
+		if ok {
+			filterList = append(filterList, id)
+		}
+	}
+	idList = filterList
+
 	args := append([]string{"policy", "--"}, idList...)
 	cmd := exec.Command("/usr/bin/apt-cache", args...)
 	cmd.Env = []string{"LC_ALL=C"}
