@@ -35,6 +35,8 @@ const QVariantMap SettingsProxy::getSettings()
     auto settings = QVariantMap {
         // user settings
         { "themeName", SettingsManager::instance()->themeName() },
+        { "fontFamily", SettingsManager::instance()->fontFamily() },
+        { "fontPixelSize", SettingsManager::instance()->fontPixelSize() },
         { "autoInstall",  SettingsManager::instance()->autoInstall() },
         { "allowShowPackageName", SettingsManager::instance()->allowShowPackageName() },
 

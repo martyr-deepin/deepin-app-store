@@ -18,9 +18,11 @@
 #include "services/settings_manager.h"
 
 #include <QDebug>
+#include <QFont>
 #include <QSettings>
 #include <QDBusReply>
 #include <QDBusInterface>
+#include <QApplication>
 
 #include <qcef_global_settings.h>
 
@@ -227,6 +229,16 @@ void SettingsManager::setSettings(const QString &key, const QVariant &value) con
     if (reply.error().isValid()) {
         qWarning() << "setSettings failed" << key << reply.error() << value;
     }
+}
+
+QString SettingsManager::fontFamily() const
+{
+    return QApplication::font().family();
+}
+
+int SettingsManager::fontPixelSize() const
+{
+    return QApplication::font().pixelSize();
 }
 
 }  // namespace dstore
