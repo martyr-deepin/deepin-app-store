@@ -17,6 +17,9 @@ type Metadata struct {
 	debBackend *Backend
 	settings   *Settings
 
+	lastRepoUpdated time.Time
+	repoApps        map[string]*cacheAppInfo
+
 	mutex sync.Mutex
 	apps  map[string]*AppBody
 
@@ -64,6 +67,19 @@ type cacheAppInfo struct {
 }
 
 func (m *Metadata) ListStorePackages() (apps map[string]*cacheAppInfo, err error) {
+	stat, err := os.Stat("/var/cache/apt/pkgcache.bin")
+	if nil == err {
+		if stat.ModTime().Unix() < m.lastRepoUpdated.Unix() {
+			return m.repoApps, nil
+		}
+	} else {
+		// cannot get apt pkgcache file
+		// just return last
+		if m.lastRepoUpdated.Unix() > 0 {
+			return m.repoApps, nil
+		}
+	}
+
 	apps = make(map[string]*cacheAppInfo)
 
 	// aptitude search "?installed?origin(Uos)"
@@ -85,6 +101,8 @@ func (m *Metadata) ListStorePackages() (apps map[string]*cacheAppInfo, err error
 			PackageName: packageName,
 		}
 	}
+	m.lastRepoUpdated = time.Now()
+	m.repoApps = apps
 	return apps, err
 }
 
