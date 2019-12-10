@@ -103,7 +103,6 @@ int main(int argc, char **argv)
         app.setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     }
 
-    app.setTheme(themName);
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setWindowIcon(QIcon(dstore::kImageDeepinAppStore));
     app.setProductIcon(QIcon(dstore::kImageDeepinAppStore));

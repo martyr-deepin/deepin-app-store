@@ -139,9 +139,9 @@ void TitleBar::refreshAvatar()
 
 void TitleBar::initConnections()
 {
-    connect(back_button_, &Dtk::Widget::DIconButton::clicked,
+    connect(back_button_, &Dtk::Widget::DButtonBoxButton::clicked,
             this, &TitleBar::backwardButtonClicked);
-    connect(forward_button_, &Dtk::Widget::DIconButton::clicked,
+    connect(forward_button_, &Dtk::Widget::DButtonBoxButton::clicked,
             this, &TitleBar::forwardButtonClicked);
     connect(search_edit_, &SearchEdit::textChanged,
             this, &TitleBar::onSearchTextChanged);
@@ -179,17 +179,31 @@ void TitleBar::initConnections()
 
 void TitleBar::initUI(bool support_sign_in)
 {
-    QLabel *app_icon = new QLabel();
-    app_icon->setObjectName("AppIcon");
-    app_icon->setFixedSize(26, 26);
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->setMargin(0);
+    buttonLayout->setSpacing(0);
 
-    back_button_ = new Dtk::Widget::DIconButton(this);
-    back_button_->setObjectName("BackButton");
-    back_button_->setFixedSize(26, 26);
+    back_button_ = new DButtonBoxButton(DStyle::SP_ArrowLeave);
+    back_button_->setDisabled(true);
+    back_button_->setFixedSize(36, 36);
 
-    forward_button_ = new Dtk::Widget::DIconButton(this);
-    forward_button_->setObjectName("ForwardButton");
-    forward_button_->setFixedSize(26, 26);
+    forward_button_ = new DButtonBoxButton(DStyle::SP_ArrowEnter);
+    forward_button_->setDisabled(true);
+    forward_button_->setFixedSize(36, 36);
+
+    back_button_->setShortcut(Qt::Key_Left);
+    forward_button_->setShortcut(Qt::Key_Right);
+
+    QList<DButtonBoxButton *> buttonList;
+    buttonList << back_button_ << forward_button_;
+
+    buttonBox = new Dtk::Widget::DButtonBox(this);
+    buttonBox->setButtonList(buttonList, false);
+    buttonBox->setFocusPolicy(Qt::NoFocus);
+
+    buttonLayout->addWidget(buttonBox);
+    buttonLayout->setSpacing(0);
+    buttonLayout->setContentsMargins(13, 0, 0, 0);
 
     avatar_button_ = new QPushButton();
     avatar_button_->setObjectName("AvatarButton");
@@ -202,10 +216,8 @@ void TitleBar::initUI(bool support_sign_in)
     left_layout->setSpacing(0);
     left_layout->setContentsMargins(0, 0, 0, 0);
     left_layout->addSpacing(10);
-    left_layout->addWidget(app_icon);
     left_layout->addSpacing(10);
-    left_layout->addWidget(back_button_);
-    left_layout->addWidget(forward_button_);
+    left_layout->addLayout(buttonLayout);
     left_layout->addStretch();
 
     const auto buttonReserve = 220;
