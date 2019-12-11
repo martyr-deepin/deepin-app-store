@@ -32,26 +32,15 @@ class TitleBarMenu : public QMenu {
 
  signals:
   void switchThemeRequested(QString themeName);
-  //void recommendAppRequested();
   void clearCacheRequested();
   void privacyAgreementRequested();
-
- public slots:
-  void setThemeName(QString themeName);
 
  private:
   void initActions();
 
-  bool support_sign_in_ = false;
-
-  QString theme_name_ = "light";
-  // QAction* switch_theme_action_ = nullptr;
   QAction* privacy_agreement_action_ = nullptr;
-
- private slots:
-  //void onThemeActionTriggered();
 };
 
-}  // namespace dman
+}  // namespace dstore
 
 #endif // DEEPIN_APPSTORE_UI_WIDGETS_TOOL_BAR_MENU_H

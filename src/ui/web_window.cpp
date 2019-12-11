@@ -272,6 +272,19 @@ void WebWindow::initConnections()
 
     connect(settings_proxy_, &SettingsProxy::raiseWindowRequested,
             this, &WebWindow::raiseWindow);
+
+    connect(DGuiApplicationHelper::instance(),&DGuiApplicationHelper::themeTypeChanged,
+        this, [=](DGuiApplicationHelper::ColorType themeType) {
+        switch (themeType) {
+            case DGuiApplicationHelper::DarkType:
+                Q_EMIT this->menu_proxy_->switchThemeRequested("dark");
+                break;
+            case DGuiApplicationHelper::UnknownType:
+            case DGuiApplicationHelper::LightType:
+            default:
+                Q_EMIT this->menu_proxy_->switchThemeRequested("light");
+        }
+    });
 }
 
 void WebWindow::initProxy()

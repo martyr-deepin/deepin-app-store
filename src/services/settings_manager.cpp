@@ -23,6 +23,7 @@
 #include <QDBusReply>
 #include <QDBusInterface>
 #include <QApplication>
+#include <DGuiApplicationHelper>
 
 #include <qcef_global_settings.h>
 
@@ -132,7 +133,17 @@ void SettingsManager::setAutoInstall(bool autoinstall)
 
 QString SettingsManager::themeName() const
 {
-    return getSettings(kThemeName).toString();
+    auto themeType = Dtk::Gui::DGuiApplicationHelper::instance()->themeType();
+
+    switch (themeType) {
+        case Dtk::Gui::DGuiApplicationHelper::UnknownType:
+            return getSettings(kThemeName).toString();
+        case Dtk::Gui::DGuiApplicationHelper::DarkType:
+            return "dark";
+        case Dtk::Gui::DGuiApplicationHelper::LightType:
+        default:
+            return "light";
+    }
 }
 
 void SettingsManager::setThemeName(const QString &themeName) const
