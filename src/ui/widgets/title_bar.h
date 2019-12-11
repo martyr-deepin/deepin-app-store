@@ -20,7 +20,7 @@
 
 #include <QFrame>
 #include <QLabel>
-#include <QPushButton>
+#include <DIconButton>
 #include <QStackedLayout>
 #include <dbuttonbox.h>
 
@@ -76,7 +76,8 @@ private:
     SearchEdit *search_edit_ = nullptr;
     QString user_name_ = "";
     UserMenu *user_menu_ = nullptr;
-    QPushButton *avatar_button_ = nullptr;
+    DIconButton *avatar_button_ = nullptr;
+    QIcon *avatar_icon = nullptr;
 
 private slots:
     void onSearchTextChanged();

@@ -54,5 +54,11 @@
         <file>dark/images/login_hover.svg</file>
         <file>dark/images/login_normal.svg</file>
         <file>dark/images/login_press.svg</file>
+        <file>icons/deepin/builtin/dark/icons/deepin-app-store_login_hover_32px.svg</file>
+        <file>icons/deepin/builtin/dark/icons/deepin-app-store_login_normal_32px.svg</file>
+        <file>icons/deepin/builtin/dark/icons/deepin-app-store_login_press_32px.svg</file>
+        <file>icons/deepin/builtin/light/icons/deepin-app-store_login_normal_32px.svg</file>
+        <file>icons/deepin/builtin/light/icons/deepin-app-store_login_press_32px.svg</file>
+        <file>icons/deepin/builtin/light/icons/deepin-app-store_login_hover_32px.svg</file>
     </qresource>
 </RCC>

@@ -81,8 +81,9 @@ void TitleBar::setUserInfo(const QVariantMap &info)
     auto imageData = QByteArray::fromBase64(base64Data);
     auto image = QImage::fromData(imageData);
     saveUserAvatar(image, avatarPath);
-    auto style = QString("#AvatarButtonUser {border-image: url(%1);}").arg(avatarPath);
-    avatar_button_->setStyleSheet(style);
+    avatar_button_->setIcon(QIcon::fromTheme(avatarPath));
+//    auto style = QString("#AvatarButtonUser {border-image: url(%1);}").arg(avatarPath);
+//    avatar_button_->setStyleSheet(style);
 }
 
 void TitleBar::saveUserAvatar(const QImage &image, const QString &filePath)
@@ -114,7 +115,7 @@ void TitleBar::saveUserAvatar(const QImage &image, const QString &filePath)
     contentImage = contentImage.scaled(avatar_button_->size());
     contentImage.save(filePath);
 
-    QPixmap pixmap = QPixmap::fromImage(contentImage);
+    //QPixmap pixmap = QPixmap::fromImage(contentImage);
 
 //    QPalette palette;
 //    palette.setBrush(avatar_button_->backgroundRole(),
@@ -154,7 +155,7 @@ void TitleBar::initConnections()
     connect(search_edit_, &SearchEdit::upKeyPressed,
             this, &TitleBar::upKeyPressed);
 
-    connect(avatar_button_, &QPushButton::clicked,
+    connect(avatar_button_, &DIconButton::clicked,
     this, [&]() {
         if (user_name_.isEmpty()) {
             Q_EMIT loginRequested(true);
@@ -165,9 +166,23 @@ void TitleBar::initConnections()
         }
     });
 
+    connect(avatar_button_, &DIconButton::pressed,
+            this, [&]() {
+        if (user_name_.isEmpty()) {
+            avatar_button_->setIcon(QIcon::fromTheme("deepin-app-store_login_press"));
+        }
+    });
+    connect(avatar_button_, &DIconButton::released,
+            this, [&]() {
+        if (user_name_.isEmpty()) {
+            avatar_button_->setIcon(QIcon::fromTheme("deepin-app-store_login_normal"));
+        }
+    });
+
     connect(user_menu_, &UserMenu::requestLogout,
     this, [&] {
         Q_EMIT this->loginRequested(false);
+        avatar_button_->setIcon(QIcon::fromTheme("deepin-app-store_login_normal"));
     });
     connect(user_menu_, &UserMenu::commentRequested,
             this, &TitleBar::commentRequested);
@@ -179,10 +194,6 @@ void TitleBar::initConnections()
 
 void TitleBar::initUI(bool support_sign_in)
 {
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
-    buttonLayout->setMargin(0);
-    buttonLayout->setSpacing(0);
-
     back_button_ = new DButtonBoxButton(DStyle::SP_ArrowLeave);
     back_button_->setDisabled(true);
     back_button_->setFixedSize(36, 36);
@@ -197,34 +208,34 @@ void TitleBar::initUI(bool support_sign_in)
     QList<DButtonBoxButton *> buttonList;
     buttonList << back_button_ << forward_button_;
 
-    buttonBox = new Dtk::Widget::DButtonBox(this);
+    buttonBox = new Dtk::Widget::DButtonBox();
     buttonBox->setButtonList(buttonList, false);
     buttonBox->setFocusPolicy(Qt::NoFocus);
 
-    buttonLayout->addWidget(buttonBox);
-    buttonLayout->setSpacing(0);
-    buttonLayout->setContentsMargins(13, 0, 0, 0);
+    QSize avatar_button_size(36,36);
+    avatar_button_ = new DIconButton(this);
 
-    avatar_button_ = new QPushButton();
-    avatar_button_->setObjectName("AvatarButton");
-    avatar_button_->setFixedSize(20, 20);
+    QPalette palette;
+    palette.setBrush(avatar_button_->backgroundRole(),Qt::transparent);
+    palette.setColor(avatar_button_->backgroundRole(),Qt::transparent);
+
+    avatar_button_->setPalette(palette);
+    avatar_button_->setFixedSize(36, 36);
+    avatar_button_->setAutoFillBackground(true);
     avatar_button_->setContextMenuPolicy(Qt::CustomContextMenu);
+    avatar_button_->setIcon(QIcon::fromTheme("deepin-app-store_login_normal"));
+    avatar_button_->setFlat(true);
+    avatar_button_->setIconSize(avatar_button_size);
 
     user_menu_ = new UserMenu();
 
     QHBoxLayout *left_layout = new QHBoxLayout();
-    left_layout->setSpacing(0);
     left_layout->setContentsMargins(0, 0, 0, 0);
-    left_layout->addSpacing(10);
-    left_layout->addSpacing(10);
-    left_layout->addLayout(buttonLayout);
+    left_layout->addSpacing(20);
+    left_layout->addWidget(buttonBox);
     left_layout->addStretch();
 
-    const auto buttonReserve = 220;
-    QFrame *left_buttons = new QFrame();
-    left_buttons->setFixedWidth(buttonReserve + 26 + 26 + 20);
-    left_buttons->setContentsMargins(0, 0, 0, 0);
-    left_buttons->setLayout(left_layout);
+    const auto buttonReserve = 260;
 
     search_edit_ = new SearchEdit();
     search_edit_->setObjectName("SearchEdit");
@@ -232,13 +243,11 @@ void TitleBar::initUI(bool support_sign_in)
     search_edit_->setPlaceHolder(QObject::tr("Search"));
 
     QHBoxLayout *main_layout = new QHBoxLayout();
-    main_layout->setSpacing(0);
-    main_layout->addWidget(left_buttons);
+    main_layout->addLayout(left_layout);
+    main_layout->addSpacing(200);
+    main_layout->addWidget(search_edit_, 0, Qt::AlignCenter);
     main_layout->addStretch();
-    main_layout->addWidget(search_edit_, 1, Qt::AlignCenter);
-    main_layout->addStretch();
-    main_layout->addSpacing(50);
-    main_layout->addWidget(avatar_button_, 0, Qt::AlignVCenter | Qt::AlignRight);
+    main_layout->addWidget(avatar_button_, 0, Qt::AlignRight);
     main_layout->addSpacing(buttonReserve);
     this->setLayout(main_layout);
     this->setAttribute(Qt::WA_TranslucentBackground, true);

@@ -22,6 +22,7 @@
 #include <qcef_web_settings.h>
 #include <DGuiApplicationHelper>
 #include <DPlatformWindowHandle>
+#include <DApplicationSettings>
 
 #include "base/consts.h"
 #include "resources/images.h"
@@ -149,6 +150,8 @@ int main(int argc, char **argv)
 
 
     QCefBindApp(&app);
+
+    Dtk::Widget::DApplicationSettings savetheme;
 
     dstore::WebWindow window;
 
