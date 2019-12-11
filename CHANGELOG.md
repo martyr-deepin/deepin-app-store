@@ -1,3 +1,28 @@
+<a name="5.6.3.0"></a>
+## 5.6.3.0 (2019-12-11)
+
+
+#### Bug Fixes
+
+*   link glib-2.0 ([051cfb83](https://github.com/linuxdeepin/deepin-app-store/commit/051cfb8359fe9624dcc53d97c5f857c6627880d9))
+*   sync theme between web and shell ([a08d4423](https://github.com/linuxdeepin/deepin-app-store/commit/a08d442367f2f7bfad8a031225c8271a452e6b52))
+*  image show window close/previous/next button fix ([a8a00e58](https://github.com/linuxdeepin/deepin-app-store/commit/a8a00e58cb1950bae95b44e681aef3fcf44154e3))
+*  toolbar avatar icon show;search edit aligncenter ([26f34f74](https://github.com/linuxdeepin/deepin-app-store/commit/26f34f74f8fea884a79f99f58af936e38781906f))
+*   query multiarch failed ([56edd71d](https://github.com/linuxdeepin/deepin-app-store/commit/56edd71d26eca931fd71b03dd24f174811733f3e))
+*   open applications failed ([08a7e8f3](https://github.com/linuxdeepin/deepin-app-store/commit/08a7e8f3b13652d16fc9d0988b25adb444c5bead))
+*   forward button and back button show;app icon show ([4c7c0d1f](https://github.com/linuxdeepin/deepin-app-store/commit/4c7c0d1ffd478e0fd6c0fcf47477058d899f7249))
+*   update size ([34215bb6](https://github.com/linuxdeepin/deepin-app-store/commit/34215bb67ba679245b71e10f1bf478735a4a992f))
+*   add fontFamily/fontPixelSize ([30d669c5](https://github.com/linuxdeepin/deepin-app-store/commit/30d669c5ec7eb568bdf5824714c5868056144abe))
+*   remove app not in store when query version ([e10632cb](https://github.com/linuxdeepin/deepin-app-store/commit/e10632cb2f6c3d44b3bb0f20d2062ee85875e745))
+*   add missing depends ([ea4d6b54](https://github.com/linuxdeepin/deepin-app-store/commit/ea4d6b54f179a225d58cddb9c02e4f7cbc396943))
+
+#### Features
+
+*   app scan tool ([4d0adee4](https://github.com/linuxdeepin/deepin-app-store/commit/4d0adee445dbb44de5ba8c9806ffc9916e58093a))
+*   query local icon ([dee3cb91](https://github.com/linuxdeepin/deepin-app-store/commit/dee3cb9172517287120fcdbdfd2c4eacbaca51e3))
+
+
+
 <a name="5.6.1.0"></a>
 ## 5.6.1.0 (2019-11-19)
 
