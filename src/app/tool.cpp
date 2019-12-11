@@ -67,6 +67,7 @@ void linkApp(const QJsonObject &app)
     linkDir(appEntriesDir.absoluteFilePath("applications"), sysShareDir.absoluteFilePath("applications"));
     linkDir(appEntriesDir.absoluteFilePath("icons"), sysShareDir.absoluteFilePath("icons"));
     linkDir(appEntriesDir.absoluteFilePath("mime"), sysShareDir.absoluteFilePath("mime"));
+    linkDir(appEntriesDir.absoluteFilePath("glib-2.0"), sysShareDir.absoluteFilePath("glib-2.0"));
     linkDir(appEntriesDir.absoluteFilePath("services"), sysShareDir.absoluteFilePath("dbus-1/services"));
 }
 
@@ -84,8 +85,16 @@ void cleanLink()
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("applications"));
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("icons"));
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("mime"));
+    cleanDirBrokenLink(sysShareDir.absoluteFilePath("glib-2.0"));
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("dbus-1/services"));
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("/etc/xdg/autostart"));
+}
+
+void update() {
+    QProcess p;
+    auto cmd = "glib-compile-schemas /usr/share/glib-2.0/schemas/";
+    p.start("bash", QStringList{"-c", cmd});
+    p.waitForFinished();
 }
 
 int main(int argc, char **argv)
@@ -97,6 +106,8 @@ int main(int argc, char **argv)
     // clean
     cleanLink();
 
-    // TODO:trigger
+    // trigger
+    update();
+
     return 0;
 }
