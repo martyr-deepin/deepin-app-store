@@ -418,13 +418,6 @@ func (b *Backend) QueryVersion(idList []string) (result []PackageVersionInfo,
 				return nil, dbusutil.ToError(err)
 			}
 
-			//fullPackageName := strings.Split(id, ":")
-			// fuzzyPackageName 就是应用标识，这是有问题的！！！
-			//fuzzyPackageName := fullPackageName[0]
-			// 			arch := ""
-			// 			if len(fullPackageName)>=2 {
-			// 			    arch = fullPackageName[1]
-			// 			}
 			result = append(result, PackageVersionInfo{
 				ID:            id,
 				LocalVersion:  localVersion,

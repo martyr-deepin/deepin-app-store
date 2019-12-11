@@ -100,6 +100,11 @@ func (m *Metadata) ListStorePackages() (apps map[string]*cacheAppInfo, err error
 		apps[packageName] = &cacheAppInfo{
 			PackageName: packageName,
 		}
+		fullPackageName := strings.Split(packageName, ":")
+		fuzzyPackageName := fullPackageName[0]
+		apps[fuzzyPackageName] = &cacheAppInfo{
+			PackageName: packageName,
+		}
 	}
 	m.lastRepoUpdated = time.Now()
 	m.repoApps = apps
