@@ -21,6 +21,7 @@
 #include <QDialog>
 #include <DSpinner>
 #include <DIconButton>
+using namespace  Dtk::Widget;
 
 class QLabel;
 

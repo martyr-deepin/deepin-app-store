@@ -60,5 +60,11 @@
         <file>icons/deepin/builtin/light/icons/deepin-app-store_login_normal_32px.svg</file>
         <file>icons/deepin/builtin/light/icons/deepin-app-store_login_press_32px.svg</file>
         <file>icons/deepin/builtin/light/icons/deepin-app-store_login_hover_32px.svg</file>
+        <file>icons/deepin/builtin/light/icons/close_normal.svg</file>
+        <file>icons/deepin/builtin/light/icons/close_press.svg</file>
+        <file>icons/deepin/builtin/light/icons/next_normal.svg</file>
+        <file>icons/deepin/builtin/light/icons/previous_press.svg</file>
+        <file>icons/deepin/builtin/light/icons/previous_normal.svg</file>
+        <file>icons/deepin/builtin/light/icons/next_press.svg</file>
     </qresource>
 </RCC>

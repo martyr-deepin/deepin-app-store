@@ -131,6 +131,47 @@ void ImageViewer::initConnection() {
           this, &ImageViewer::previousImageRequested);
   connect(next_button_, &Dtk::Widget::DIconButton::clicked,
           this, &ImageViewer::nextImageRequested);
+
+  connect(close_button_, &DIconButton::pressed,
+          this, [&]() {
+
+      close_button_->setIcon(QIcon::fromTheme(":/icons/deepin/builtin/light/icons/close_press.svg"));
+
+  });
+  connect(close_button_, &DIconButton::released,
+          this, [&]() {
+
+      close_button_->setIcon(QIcon::fromTheme(":/icons/deepin/builtin/light/icons/close_normal.svg"));
+
+  });
+
+
+  connect(previous_button_, &DIconButton::pressed,
+          this, [&]() {
+
+      previous_button_->setIcon(QIcon::fromTheme(":/icons/deepin/builtin/light/icons/previous_press.svg"));
+
+  });
+  connect(previous_button_, &DIconButton::released,
+          this, [&]() {
+
+      previous_button_->setIcon(QIcon::fromTheme(":/icons/deepin/builtin/light/icons/previous_normal.svg"));
+
+  });
+
+
+  connect(next_button_, &DIconButton::pressed,
+          this, [&]() {
+
+      next_button_->setIcon(QIcon::fromTheme(":/icons/deepin/builtin/light/icons/next_press.svg"));
+
+  });
+  connect(next_button_, &DIconButton::released,
+          this, [&]() {
+
+      next_button_->setIcon(QIcon::fromTheme(":/icons/deepin/builtin/light/icons/next_normal.svg"));
+
+  });
 }
 
 void ImageViewer::initUI() {
@@ -138,17 +179,29 @@ void ImageViewer::initUI() {
   img_label_->setObjectName("ImageLabel");
   img_label_->setMinimumSize(640, 480);
 
-  close_button_ = new Dtk::Widget::DIconButton(this);
-  close_button_->setObjectName("CloseButton");
+  QSize icon_size(kBtnSize,kBtnSize);
+  close_button_ = new DIconButton(this);
   close_button_->setFixedSize(kBtnSize,kBtnSize);
+  close_button_->setIconSize(icon_size);
+  close_button_->setIcon(QIcon::fromTheme(":/icons/deepin/builtin/light/icons/close_normal.svg"));
+  close_button_->setFlat(true);
   close_button_->raise();
 
-  previous_button_ = new Dtk::Widget::DIconButton(this);
-  previous_button_->setObjectName("PreviousButton");
+  previous_button_ = new DIconButton(this);
   previous_button_->setFixedSize(kBtnSize,kBtnSize);
-  next_button_ = new Dtk::Widget::DIconButton(this);
-  next_button_->setObjectName("NextButton");
+  previous_button_->setIconSize(icon_size);
+  previous_button_->setIcon(QIcon::fromTheme(":/icons/deepin/builtin/light/icons/previous_normal.svg"));
+  previous_button_->setFlat(true);
+  previous_button_->raise();
+  previous_button_->setShortcut(Qt::Key_Left);
+
+  next_button_ = new DIconButton(this);
   next_button_->setFixedSize(kBtnSize,kBtnSize);
+  next_button_->setIconSize(icon_size);
+  next_button_->setIcon(QIcon::fromTheme(":/icons/deepin/builtin/light/icons/next_normal.svg"));
+  next_button_->setFlat(true);
+  next_button_->raise();
+  next_button_->setShortcut(Qt::Key_Right);
 
   spinner_ = new Dtk::Widget::DSpinner(this);
   spinner_->setFixedSize(96, 96);
