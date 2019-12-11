@@ -45,17 +45,22 @@ void AptUtilWorker::openApp(const QString& app_name) {
 }
 
 void OpenApp(const QString& app_name) {
-  QString output;
-  if (SpawnCmd("lastore-tools", {"querydesktop", app_name}, output)) {
-    const QString desktop_file = output.trimmed();
+  QString desktop_file = "/usr/share/applications/"+app_name+".desktop";
+  QFileInfo fi(desktop_file);
 
-    if(QDBusConnection::sessionBus().isConnected()) {
-        quint32 timestamp = 0;
-        QStringList ars;
-        QDBusInterface manager("com.deepin.SessionManager","/com/deepin/StartManager","com.deepin.StartManager");
-        if(manager.isValid()){
-          manager.call("LaunchApp",QVariant::fromValue(desktop_file),QVariant::fromValue(timestamp),QVariant::fromValue(ars));
-        }
+  if (!fi.exists()) {
+    QString output;
+    if (SpawnCmd("lastore-tools", {"querydesktop", app_name}, output)) {
+        QString desktop_file = output.trimmed();
+    }
+  }
+
+  if(QDBusConnection::sessionBus().isConnected()) {
+    quint32 timestamp = 0;
+    QStringList ars;
+    QDBusInterface manager("com.deepin.SessionManager","/com/deepin/StartManager","com.deepin.StartManager");
+    if(manager.isValid()){
+      auto reply = manager.call("LaunchApp",QVariant::fromValue(desktop_file),QVariant::fromValue(timestamp),QVariant::fromValue(ars));
     }
   }
 }

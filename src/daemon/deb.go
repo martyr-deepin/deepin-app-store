@@ -272,6 +272,7 @@ func (b *Backend) FixError(errType string) (dbus.ObjectPath, *dbus.Error) {
 func (b *Backend) ListInstalled() (result []PackageInstalledInfo, busErr *dbus.Error) {
 	b.service.DelayAutoQuit()
 
+	// /usr/bin/dpkg-query --show -f '${binary:Package}\\t${db:Status-Abbrev}\\t${Version}\\t${Installed-Size}\\n'
 	cmd := exec.Command("/usr/bin/dpkg-query", "--show", "-f",
 		"${binary:Package}\\t${db:Status-Abbrev}\\t${Version}\\t${Installed-Size}\\n")
 	stdout, err := cmd.StdoutPipe()
@@ -295,14 +296,12 @@ func (b *Backend) ListInstalled() (result []PackageInstalledInfo, busErr *dbus.E
 		log.Println(err)
 		return result, dbusutil.ToError(err)
 	}
-
 	scanner := bufio.NewScanner(stdout)
 	for scanner.Scan() {
 		parts := bytes.SplitN(scanner.Bytes(), []byte{'\t'}, 4)
 		if len(parts) != 4 {
 			continue
 		}
-
 		if bytes.HasPrefix(parts[1], []byte("ii")) {
 			id := string(parts[0])
 			fullPackageName := strings.Split(id, ":")
@@ -310,7 +309,10 @@ func (b *Backend) ListInstalled() (result []PackageInstalledInfo, busErr *dbus.E
 			fuzzyPackageName := fullPackageName[0]
 			app, ok := apps[fuzzyPackageName]
 			if !ok {
-				continue
+				app, ok = apps[id]
+				if !ok {
+					continue
+				}
 			}
 
 			sizeStr := string(parts[3])
@@ -396,7 +398,6 @@ func (b *Backend) QueryVersion(idList []string) (result []PackageVersionInfo,
 		if len(line) == 0 {
 			continue
 		}
-
 		if line[0] != ' ' {
 			// is package name line
 			id := string(bytes.TrimRight(line, ":"))
@@ -417,6 +418,13 @@ func (b *Backend) QueryVersion(idList []string) (result []PackageVersionInfo,
 				return nil, dbusutil.ToError(err)
 			}
 
+			//fullPackageName := strings.Split(id, ":")
+			// fuzzyPackageName 就是应用标识，这是有问题的！！！
+			//fuzzyPackageName := fullPackageName[0]
+			// 			arch := ""
+			// 			if len(fullPackageName)>=2 {
+			// 			    arch = fullPackageName[1]
+			// 			}
 			result = append(result, PackageVersionInfo{
 				ID:            id,
 				LocalVersion:  localVersion,
