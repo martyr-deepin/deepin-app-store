@@ -16,7 +16,9 @@ QList<QJsonObject> enumAppInfoList()
     for (auto &appID: list) {
         auto infoPath = apps.absoluteFilePath(appID + "/info");
         QFile infoFile(infoPath);
-        infoFile.open(QIODevice::ReadOnly);
+        if (!infoFile.open(QIODevice::ReadOnly)) {
+           continue;
+        }
         auto doc = QJsonDocument::fromJson(infoFile.readAll());
         appInfoList.push_back(doc.object());
     }
@@ -90,7 +92,8 @@ void cleanLink()
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("/etc/xdg/autostart"));
 }
 
-void update() {
+void update()
+{
     QProcess p;
     auto cmd = "glib-compile-schemas /usr/share/glib-2.0/schemas/";
     p.start("bash", QStringList{"-c", cmd});
