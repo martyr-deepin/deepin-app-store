@@ -235,7 +235,7 @@ void TitleBar::initUI(bool support_sign_in)
     left_layout->addWidget(buttonBox);
     left_layout->addStretch();
 
-    const auto buttonReserve = 260;
+    const auto buttonReserve = 250;
 
     search_edit_ = new SearchEdit();
     search_edit_->setObjectName("SearchEdit");
