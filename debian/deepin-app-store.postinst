@@ -12,6 +12,10 @@ if [ ! -f TRUSTED_PART ]; then
   cp $GPG TRUSTED_PART
 fi
 
+if [ -f /usr/share/keyrings/appstore-keyring.gpg ]; then
+  apt-key add /usr/share/keyrings/appstore-keyring.gpg
+fi
+
 if [ "$1" = "triggered" ]; then
   echo 'begin triggered appstore'
   deepin-app-store-tool
