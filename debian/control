@@ -35,6 +35,7 @@ Depends:${shlibs:Depends}, ${misc:Depends},
  deepin-sync-daemon,
  deepin-deepinid-client,
  apt-transport-https,
+ aptitude,
  deepin-app-store-data (>=5.6),
  gnupg2
 Replaces: dstore-client, deepin-appstore
