@@ -212,7 +212,7 @@ void TitleBar::initUI(bool support_sign_in)
     buttonBox->setButtonList(buttonList, false);
     buttonBox->setFocusPolicy(Qt::NoFocus);
 
-    QSize avatar_button_size(36,36);
+    QSize avatar_button_size(30,30);
     avatar_button_ = new DIconButton(this);
 
     QPalette palette;
@@ -220,7 +220,7 @@ void TitleBar::initUI(bool support_sign_in)
     palette.setColor(avatar_button_->backgroundRole(),Qt::transparent);
 
     avatar_button_->setPalette(palette);
-    avatar_button_->setFixedSize(36, 36);
+    avatar_button_->setFixedSize(30, 30);
     avatar_button_->setAutoFillBackground(true);
     avatar_button_->setContextMenuPolicy(Qt::CustomContextMenu);
     avatar_button_->setIcon(QIcon::fromTheme("deepin-app-store_login_normal"));
@@ -229,26 +229,25 @@ void TitleBar::initUI(bool support_sign_in)
 
     user_menu_ = new UserMenu();
 
-    QHBoxLayout *left_layout = new QHBoxLayout();
-    left_layout->setContentsMargins(0, 0, 0, 0);
-    left_layout->addSpacing(20);
-    left_layout->addWidget(buttonBox);
-    left_layout->addStretch();
-
-    const auto buttonReserve = 250;
-
     search_edit_ = new SearchEdit();
     search_edit_->setObjectName("SearchEdit");
-    search_edit_->setFixedWidth(354);
+    search_edit_->setFixedWidth(300);
     search_edit_->setPlaceHolder(QObject::tr("Search"));
 
     QHBoxLayout *main_layout = new QHBoxLayout();
-    main_layout->addLayout(left_layout);
-    main_layout->addSpacing(200);
-    main_layout->addWidget(search_edit_, 0, Qt::AlignCenter);
+    main_layout->setContentsMargins(0, 0, 0, 0);
+    //left
+    main_layout->addSpacing(20);//Keep the back and forward buttons spaced from the chart
+    main_layout->addWidget(buttonBox,0,Qt::AlignLeft);
+    main_layout->addSpacing(50);//Keep search box centered
+    //center
     main_layout->addStretch();
-    main_layout->addWidget(avatar_button_, 0, Qt::AlignRight);
-    main_layout->addSpacing(buttonReserve);
+    main_layout->addWidget(search_edit_,0,Qt::AlignCenter);
+    main_layout->addStretch();
+    //right
+    main_layout->addWidget(avatar_button_,0,Qt::AlignRight);
+    main_layout->addSpacing(260);
+
     this->setLayout(main_layout);
     this->setAttribute(Qt::WA_TranslucentBackground, true);
 

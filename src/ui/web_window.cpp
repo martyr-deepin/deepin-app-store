@@ -410,6 +410,20 @@ void WebWindow::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
     title_bar_->setFixedWidth(event->size().width());
+
+    //if completion_window_ is visible and resizeEvent happened ,redisplay completion_window_
+    if(completion_window_->isVisible())
+    {
+        completion_window_->show();
+        completion_window_->raise();
+        completion_window_->autoResize();
+        // Move to below of search edit.
+        const QPoint local_point(this->rect().width() / 2 - 176, 42);
+        const QPoint global_point(this->mapToGlobal(local_point));
+        completion_window_->move(global_point);
+        completion_window_->setFocusPolicy(Qt::NoFocus);
+        completion_window_->setFocusPolicy(Qt::StrongFocus);
+    }
 }
 
 void WebWindow::focusInEvent(QFocusEvent *event)
