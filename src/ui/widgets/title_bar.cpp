@@ -212,7 +212,7 @@ void TitleBar::initUI(bool support_sign_in)
     buttonBox->setButtonList(buttonList, false);
     buttonBox->setFocusPolicy(Qt::NoFocus);
 
-    QSize avatar_button_size(30,30);
+    QSize avatar_button_size(20,20);
     avatar_button_ = new DIconButton(this);
 
     QPalette palette;
@@ -220,7 +220,7 @@ void TitleBar::initUI(bool support_sign_in)
     palette.setColor(avatar_button_->backgroundRole(),Qt::transparent);
 
     avatar_button_->setPalette(palette);
-    avatar_button_->setFixedSize(30, 30);
+    avatar_button_->setFixedSize(20, 20);
     avatar_button_->setAutoFillBackground(true);
     avatar_button_->setContextMenuPolicy(Qt::CustomContextMenu);
     avatar_button_->setIcon(QIcon::fromTheme("deepin-app-store_login_normal"));
