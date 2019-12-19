@@ -112,7 +112,7 @@ void SearchCompletionWindow::setKeyword(const QString& keyword) {
   QFontMetrics metrics = search_button_->fontMetrics();
   search_button_->setText(
       metrics.elidedText(
-          QObject::tr("Search \"%1\" in Store").arg(keyword),
+          QObject::tr("Search for \"%1\" in Store").arg(keyword),
           Qt::ElideRight,
           search_button_->width() - 14));
   model_->setStringList(QStringList());

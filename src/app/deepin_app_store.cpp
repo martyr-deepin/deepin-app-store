@@ -114,9 +114,8 @@ int main(int argc, char **argv)
     app.loadTranslator();
     app.setApplicationDisplayName(QObject::tr("App Store"));
     app.setApplicationDescription(QObject::tr(
-        "App Store is an App Store with diverse and quality applications. "
-        "It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, "
-        "updating and uninstalling."));
+        "App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click."
+        ));
     app.setApplicationAcknowledgementPage(
         "https://www.deepin.org/acknowledgments/deepin-app-store/");
 

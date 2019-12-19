@@ -4,17 +4,17 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/ui/widgets/title_bar.cpp" line="220"/>
+        <location filename="../src/ui/widgets/title_bar.cpp" line="235"/>
         <source>Search</source>
         <translation>Search</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="60"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="41"/>
         <source>Clear cache</source>
         <translation>Clear cache</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="70"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="44"/>
         <source>Privacy Policy</source>
         <translation>Privacy Policy</translation>
     </message>
@@ -55,17 +55,21 @@
         <translation>Select all</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="111"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="115"/>
         <source>App Store</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="112"/>
-        <source>App Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
+        <location filename="../src/app/deepin_app_store.cpp" line="116"/>
+        <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
+        <source>Search for &quot;%1&quot; in Store</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
         <source>Search &quot;%1&quot; in Store</source>
         <translation type="unfinished"></translation>
