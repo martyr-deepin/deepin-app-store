@@ -82,14 +82,14 @@ int main(int argc, char **argv)
     settings.addCommandLineSwitch(kLogLevel, "0");
     settings.addCommandLineSwitch("--use-views", "");
 
-    auto themName = dstore::SettingsManager::instance()->themeName();
-    if (themName.isEmpty()) {
-        themName = "light";
-        dstore::SettingsManager::instance()->setThemeName(themName);
-    }
+//    auto themName = dstore::SettingsManager::instance()->themeName();
+//    if (themName.isEmpty()) {
+//        themName = "light";
+//        dstore::SettingsManager::instance()->setThemeName(themName);
+//    }
     settings.setCustomSchemeHandler(dstore::RccSchemeHandler);
     settings.addCustomScheme(QUrl("rcc://web"));
-    settings.setBackgroundColor(dstore::BackgroundColor(themName));
+//    settings.setBackgroundColor(dstore::BackgroundColor(themName));
 
     if (QCefInit(argc, argv, settings) >= 0) {
         return 0;
