@@ -71,6 +71,7 @@ void linkApp(const QJsonObject &app)
     linkDir(appEntriesDir.absoluteFilePath("mime"), sysShareDir.absoluteFilePath("mime"));
     linkDir(appEntriesDir.absoluteFilePath("glib-2.0"), sysShareDir.absoluteFilePath("glib-2.0"));
     linkDir(appEntriesDir.absoluteFilePath("services"), sysShareDir.absoluteFilePath("dbus-1/services"));
+    linkDir(appEntriesDir.absoluteFilePath("GConf"), sysShareDir.absoluteFilePath("GConf"));
 }
 
 void cleanLink()
