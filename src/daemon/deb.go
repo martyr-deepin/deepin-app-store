@@ -327,7 +327,7 @@ func (b *Backend) ListInstalled() (result []PackageInstalledInfo, busErr *dbus.E
 				ID:               string(parts[0]),
 				Name:             fuzzyPackageName,
 				Version:          string(parts[2]),
-				InstalledSize:    size,
+				InstalledSize:    size * 1024,
 				LocaleName:       app.LocaleName,
 				Desktop:          desktop,
 				InstallationTime: t,
