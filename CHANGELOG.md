@@ -1,3 +1,22 @@
+<a name="5.6.3.2"></a>
+## 5.6.3.2 (2019-12-25)
+
+
+#### Bug Fixes
+
+*  login window exit exception ([47737fe7](https://github.com/linuxdeepin/deepin-app-store/commit/47737fe7eb921d439e7c269ff606a233347276fd))
+*   InstalledSize unit is KiB ([27b48f93](https://github.com/linuxdeepin/deepin-app-store/commit/27b48f935eb176c03a21e140778899165906c3f3))
+*  theme sync ([1a0272ee](https://github.com/linuxdeepin/deepin-app-store/commit/1a0272eeeb0e807ed7885022a5b25022dc723ec5))
+*  theme sync ([aea7d07d](https://github.com/linuxdeepin/deepin-app-store/commit/aea7d07d3ede42f85406302e011f0928ba756e40))
+*  set avatar icon 20px ([8837f89b](https://github.com/linuxdeepin/deepin-app-store/commit/8837f89bb1e243081faefb8d8af31f1b3adb18c0))
+*   addjust avatar size ([9b187195](https://github.com/linuxdeepin/deepin-app-store/commit/9b1871957412554dc64544f4291dc506fdcd3963))
+
+#### Features
+
+*   link GConf dir ([c5ff976f](https://github.com/linuxdeepin/deepin-app-store/commit/c5ff976fef8508f9c418911a496ccb2937ef178a))
+
+
+
 <a name="5.6.3.0"></a>
 ## 5.6.3.0 (2019-12-11)
 
