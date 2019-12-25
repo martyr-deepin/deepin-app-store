@@ -82,6 +82,10 @@ int main(int argc, char **argv)
     settings.addCommandLineSwitch(kLogLevel, "0");
     settings.addCommandLineSwitch("--use-views", "");
 
+    if (QCefInit(argc, argv, settings) >= 0) {
+        return 0;
+    }
+
 #ifndef DSTORE_NO_DXCB
     Dtk::Widget::DApplication::loadDXcbPlugin();
 #endif
@@ -99,10 +103,6 @@ int main(int argc, char **argv)
     settings.setCustomSchemeHandler(dstore::RccSchemeHandler);
     settings.addCustomScheme(QUrl("rcc://web"));
     settings.setBackgroundColor(dstore::BackgroundColor(themName));
-
-    if (QCefInit(argc, argv, settings) >= 0) {
-        return 0;
-    }
 
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setWindowIcon(QIcon(dstore::kImageDeepinAppStore));
