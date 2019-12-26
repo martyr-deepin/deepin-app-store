@@ -146,6 +146,12 @@ QString SettingsManager::themeName() const
     }
 }
 
+//get the initial theme name when the program start,avoid DGuiApplicationHelper executing before DApplication
+QString SettingsManager::appThemeName() const
+{
+    return getSettings(kThemeName).toString();
+}
+
 void SettingsManager::setThemeName(const QString &themeName) const
 {
     setSettings(kThemeName, themeName);

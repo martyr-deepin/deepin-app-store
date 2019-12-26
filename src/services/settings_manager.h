@@ -54,6 +54,7 @@ public Q_SLOTS:
 
     QString themeName() const;
     void setThemeName(const QString &themeName) const;
+    QString appThemeName() const;
 
     QString fontFamily() const;
     int fontPixelSize() const;
