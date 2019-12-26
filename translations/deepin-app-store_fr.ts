@@ -2,45 +2,17 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
-        <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
-        <source>Search &quot;%1&quot; in Deepin Store</source>
-        <translation>Recherche &quot;%1&quot; dans le Deepin Store</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar.cpp" line="206"/>
+        <location filename="../src/ui/widgets/title_bar.cpp" line="235"/>
         <source>Search</source>
         <translation>Rechercher</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="55"/>
-        <source>Recommend App</source>
-        <translation>Applications recommandées</translation>
-    </message>
-    <message>
-        <source>Select region</source>
-        <translation type="vanished">Sélectionner la région</translation>
-    </message>
-    <message>
-        <source>China</source>
-        <translation type="vanished">Chine</translation>
-    </message>
-    <message>
-        <source>International</source>
-        <translation type="vanished">International</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="60"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="41"/>
         <source>Clear cache</source>
         <translation> Vider le cache</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="64"/>
-        <source>Dark theme</source>
-        <translation> Thème sombre</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="70"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="44"/>
         <source>Privacy Policy</source>
         <translation>Politique de confidentialité</translation>
     </message>
@@ -81,14 +53,24 @@
         <translation>Tout sélectionner </translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app-store.cpp" line="107"/>
-        <source>Deepin Store</source>
-        <translation>Deepin Store</translation>
+        <location filename="../src/app/deepin_app_store.cpp" line="115"/>
+        <source>App Store</source>
+        <translation>Magasin d&apos;applications</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app-store.cpp" line="108"/>
-        <source>Deepin Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
-        <translation>Deepin Store est un magasin proposant de nombreuses applications de qualité. Il propose des recommandations populaires, des applications récemment mises à jour et des sujets d&apos;actualité et prend en charge l&apos;installation, la mise à jour et la désinstallation en un clic.</translation>
+        <location filename="../src/app/deepin_app_store.cpp" line="116"/>
+        <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
+        <translation>L&apos;App Store est un centre logiciel avec des applications diverses et de qualité, prenant en charge l&apos;installation et la désinstallation en un seul clic.</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
+        <source>Search for &quot;%1&quot; in Store</source>
+        <translation>Rechercher &quot;%1&quot; dans la boutique</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
+        <source>Search &quot;%1&quot; in Store</source>
+        <translation>Rechercher &quot;%1&quot; dans la boutique</translation>
     </message>
 </context>
 <context>
@@ -102,11 +84,6 @@
         <location filename="../src/ui/widgets/user_menu.cpp" line="16"/>
         <source>My comments</source>
         <translation>Mes commentaires</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/user_menu.cpp" line="20"/>
-        <source>My donations</source>
-        <translation>Mes donations</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="24"/>

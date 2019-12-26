@@ -2,45 +2,17 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
-        <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
-        <source>Search &quot;%1&quot; in Deepin Store</source>
-        <translation>Претражи &quot;%1&quot; у Дипин Продавници</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar.cpp" line="206"/>
+        <location filename="../src/ui/widgets/title_bar.cpp" line="235"/>
         <source>Search</source>
         <translation>Претражи</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="55"/>
-        <source>Recommend App</source>
-        <translation>Препоручи програм</translation>
-    </message>
-    <message>
-        <source>Select region</source>
-        <translation type="vanished">Изабери регион</translation>
-    </message>
-    <message>
-        <source>China</source>
-        <translation type="vanished">Кина</translation>
-    </message>
-    <message>
-        <source>International</source>
-        <translation type="vanished">Интернационално</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="60"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="41"/>
         <source>Clear cache</source>
         <translation>Очисти кеш</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="64"/>
-        <source>Dark theme</source>
-        <translation>Тамна тема</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="70"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="44"/>
         <source>Privacy Policy</source>
         <translation>Политика приватности</translation>
     </message>
@@ -81,14 +53,24 @@
         <translation>Изабери све</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app-store.cpp" line="107"/>
-        <source>Deepin Store</source>
-        <translation>Дипин Продавница</translation>
+        <location filename="../src/app/deepin_app_store.cpp" line="115"/>
+        <source>App Store</source>
+        <translation>Продавница</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app-store.cpp" line="108"/>
-        <source>Deepin Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
-        <translation>Дипин Продавница је софтверски центар са квалитетним и разноврсним програмима. У првом плану су популарне препоуке, нови ажурирани програми и вруће теме. Једним кликом пружа преузимање, инсталацију, ажурирање, уклањање итд.</translation>
+        <location filename="../src/app/deepin_app_store.cpp" line="116"/>
+        <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
+        <translation>Продавница је софтверси центар са разноврсним и квалитетним програмима. Подржава инсталирање и деинсталирање једним кликом.</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
+        <source>Search for &quot;%1&quot; in Store</source>
+        <translation>Потражи &quot;%1&quot; у Продавници</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
+        <source>Search &quot;%1&quot; in Store</source>
+        <translation>Потражи &quot;%1&quot; у Продавници</translation>
     </message>
 </context>
 <context>
@@ -102,11 +84,6 @@
         <location filename="../src/ui/widgets/user_menu.cpp" line="16"/>
         <source>My comments</source>
         <translation>Моји коментари</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/user_menu.cpp" line="20"/>
-        <source>My donations</source>
-        <translation>Моје донације</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="24"/>
