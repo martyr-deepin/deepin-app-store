@@ -324,7 +324,7 @@ func (b *Backend) ListInstalled() (result []PackageInstalledInfo, busErr *dbus.E
 			desktop := QueryDesktopFile(fuzzyPackageName)
 
 			result = append(result, PackageInstalledInfo{
-				ID:               string(parts[0]),
+				ID:               fuzzyPackageName,
 				Name:             fuzzyPackageName,
 				Version:          string(parts[2]),
 				InstalledSize:    size * 1024,
