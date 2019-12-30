@@ -107,8 +107,7 @@ void RestoreWindowState(QWidget *widget)
 
 WebWindow::WebWindow(QWidget *parent)
     : DMainWindow(parent),
-      search_timer_(new QTimer(this)),
-      search_re_(QRegularExpression("[\\+\\$\\.\\^!@#%&\\(\\)]"))
+      search_timer_(new QTimer(this))
 {
     this->setObjectName("WebWindow");
     // 使用 redirectContent 模式，用于内嵌 x11 窗口时能有正确的圆角效果
@@ -478,7 +477,7 @@ void WebWindow::prepareSearch(bool entered)
 {
     const QString text = title_bar_->getSearchText();
     // Filters special chars.
-    if (text.size() <= 1 || text.contains(search_re_)) {
+    if (text.size() <= 1) {
         qCritical() << "Invalid regexp:" << text;
         return;
     }

@@ -98,8 +98,6 @@ private:
     WebEventDelegate *web_event_delegate_ = nullptr;
     TitleBarMenu *tool_bar_menu_ = nullptr;
 
-    QRegularExpression search_re_;
-
 private slots:
     void onSearchAppResult(const SearchMetaList &result);
 
