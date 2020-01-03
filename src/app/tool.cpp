@@ -99,6 +99,10 @@ void update()
     auto cmd = "glib-compile-schemas /usr/share/glib-2.0/schemas/";
     p.start("bash", QStringList{"-c", cmd});
     p.waitForFinished();
+
+    cmd = "update-icon-caches /usr/share/icons/*";
+    p.start("bash", QStringList{"-c", cmd});
+    p.waitForFinished();
 }
 
 int main(int argc, char **argv)

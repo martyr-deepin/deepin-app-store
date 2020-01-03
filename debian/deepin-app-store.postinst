@@ -1,19 +1,21 @@
 #!/bin/sh
 
+if [ "$1" = "configure" ] ; then
 # the keyring in /var that gets fetched by apt-key net-update
 # if it does not yet exist, copy it to avoid uneeded net copy
-GPGGDIR="/usr/share/deepin-app-store"
-GPG="${GPGGDIR}/appstore.gpg"
+  GPGGDIR="/usr/share/deepin-app-store"
+  GPG="${GPGGDIR}/appstore.gpg"
 
-eval $(apt-config shell APT_TRUSTED_PARTS Dir::Etc::trustedparts/d)
-TRUSTED_PART=${APT_TRUSTED_PARTS}appstore.gpg
+  eval $(apt-config shell APT_TRUSTED_PARTS Dir::Etc::trustedparts/d)
+  TRUSTED_PART=${APT_TRUSTED_PARTS}appstore.gpg
 
-if [ ! -f TRUSTED_PART ]; then
-  cp $GPG TRUSTED_PART
-fi
+  if [ ! -f TRUSTED_PART ]; then
+    cp $GPG TRUSTED_PART
+  fi
 
-if [ -f /usr/share/keyrings/appstore-keyring.gpg ]; then
-  apt-key add /usr/share/keyrings/appstore-keyring.gpg
+  if [ -f /usr/share/keyrings/appstore-keyring.gpg ]; then
+    apt-key add /usr/share/keyrings/appstore-keyring.gpg
+  fi
 fi
 
 if [ "$1" = "triggered" ]; then
