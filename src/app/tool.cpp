@@ -103,6 +103,10 @@ void update()
     cmd = "update-icon-caches /usr/share/icons/*";
     p.start("bash", QStringList{"-c", cmd});
     p.waitForFinished();
+
+    cmd = "update-desktop-database -q";
+    p.start("bash", QStringList{"-c", cmd});
+    p.waitForFinished();
 }
 
 int main(int argc, char **argv)
