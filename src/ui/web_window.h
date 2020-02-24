@@ -23,7 +23,6 @@
 #include <QMenu>
 #include <QRegularExpression>
 #include <services/dbus_manager.h>
-
 class QCefWebView;
 class QCefGlobalSettings;
 class QTimer;
