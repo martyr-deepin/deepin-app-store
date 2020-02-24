@@ -24,20 +24,37 @@
 namespace dstore {
 
 QString RccSchemeHandler(const QUrl& url) {
+  QString path = url.path();
   const QString host = url.host();
+
   if (host == "web") {
     const char kAppDefaultLocalDir[] = DSTORE_WEB_DIR;
-    QString app_local_dir = QString("%1/appstore-%2")
-        .arg(DSTORE_WEB_DIR)
-        .arg(QLocale().name());
-    if (!QFileInfo::exists(app_local_dir)) {
-      app_local_dir = kAppDefaultLocalDir;
+
+    QString lang = QLocale().name();
+    lang = lang.replace(QRegExp("\\_"), "-");
+
+    QString app_lang_dir = QString("%1/%2")
+            .arg(DSTORE_WEB_DIR)
+            .arg(lang);
+
+    QString app_en_dir = QString("%1/%2")
+            .arg(DSTORE_WEB_DIR)
+            .arg("en-US");
+
+    QString prefix =QString("%1%2").arg("/").arg(lang);
+    path.remove(prefix);
+
+    if (!QFileInfo::exists(app_lang_dir)) {
+      app_lang_dir = app_en_dir;
+      path.remove("/en-US");
+
+      if(!QFileInfo::exists(app_en_dir)){
+          app_lang_dir = kAppDefaultLocalDir;
+      }
     }
 
-    QString filepath = QString("%1/%2").arg(app_local_dir).arg(url.path());
-    if (!QFileInfo::exists(filepath)) {
-      filepath = QString("%1/%2").arg(app_local_dir).arg("index.html");
-    }
+    QString filepath = QString("%1%2").arg(app_lang_dir).arg(path);
+    qDebug() << "----" << filepath << "----";
     return filepath;
   } else {
     // 404 not found.
