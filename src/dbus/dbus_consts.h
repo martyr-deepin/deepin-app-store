@@ -36,6 +36,10 @@ extern const char kLastoreDebDbusService[];
 
 extern const char kLastoreDebJobService[];
 
+extern const char kLicenseActivatorService[];
+extern const char kLicenseActivatorPath[];
+extern const char kLicenseActivatorInterface[];
+
 }  // namespace dstore
 
 #endif  // DEEPIN_APPSTORE_DBUS_DBUS_CONSTS_H

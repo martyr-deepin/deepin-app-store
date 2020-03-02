@@ -78,6 +78,7 @@ public Q_SLOTS:
     QString arch() const;
     QString product() const;
     QString desktopMode() const;
+    quint32 authorizationState() const;
 
 private:
     // TODO: use interface from dbus to xml
@@ -86,6 +87,7 @@ private:
     void setSettings(const QString &key, const QVariant &value) const;
 
     QDBusInterface *settings_ifc_;
+    QDBusInterface *authorizationState_ifc_;
     QCefGlobalSettings *qcef_settings_;
     SysInfo sysinfo;
 };

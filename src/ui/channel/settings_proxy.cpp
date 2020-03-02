@@ -58,6 +58,9 @@ const QVariantMap SettingsProxy::getSettings()
         {"arch", SettingsManager::instance()->arch()},
         {"product", SettingsManager::instance()->product()},
         {"desktopMode", SettingsManager::instance()->desktopMode()},
+
+        // authorization state
+        {"authorizationState", SettingsManager::instance()->authorizationState()},
     };
     qDebug() << settings;
     return settings;
