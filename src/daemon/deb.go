@@ -513,3 +513,11 @@ func (b *Backend) CleanArchives() *dbus.Error {
 	_, err := b.lastore.CleanArchives(0)
 	return dbusutil.ToError(err)
 }
+
+// updateSourceList
+func (b *Backend) UpdateSource() *dbus.Error {
+	b.service.DelayAutoQuit()
+
+	_, err := b.lastore.UpdateSource(0)
+	return dbusutil.ToError(err)
+}

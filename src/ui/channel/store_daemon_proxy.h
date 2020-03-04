@@ -52,6 +52,11 @@ Q_SIGNALS:
     Q_SCRIPTABLE void clearArchives();
 
     /**
+     * Emitted when apt-get update is called.
+     */
+    Q_SCRIPTABLE void updateSource();
+
+    /**
     * Emitted when JobList property changed.
     * @param jobs
     */
@@ -213,6 +218,14 @@ public Q_SLOTS:
     QVariantMap fixError(const QString &error_type)
     {
         return manager_->fixError(error_type);
+    }
+
+    /**
+     * apt-get update
+     */
+    void requestUpdateSourceList()
+    {
+        emit updateSource();
     }
 
     QString test()

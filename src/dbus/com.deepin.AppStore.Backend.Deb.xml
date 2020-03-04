@@ -1,6 +1,8 @@
 <interface name="com.deepin.AppStore.Backend.Deb">
     <method name="CleanArchives">
     </method>
+    <method name="UpdateSource">
+    </method>
     <method name="Install">
         <arg name="localName" type="s" direction="in"></arg>
         <arg name="id" type="s" direction="in"></arg>

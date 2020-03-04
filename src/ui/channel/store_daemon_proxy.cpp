@@ -57,6 +57,8 @@ void StoreDaemonProxy::initConnections()
             this, &StoreDaemonProxy::jobListChanged);
     connect(this, &StoreDaemonProxy::clearArchives,
             manager_, &StoreDaemonManager::clearArchives);
+    connect(this, &StoreDaemonProxy::updateSource,
+            manager_, &StoreDaemonManager::updateSource);
 }
 
 void StoreDaemonProxy::onRequestFinished(const QVariantMap &result)

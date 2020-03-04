@@ -136,6 +136,12 @@ void StoreDaemonManager::clearArchives()
     d->deb_interface_->CleanArchives();
 }
 
+void StoreDaemonManager::updateSource()
+{
+    Q_D(StoreDaemonManager);
+    d->deb_interface_->UpdateSource();
+}
+
 void StoreDaemonManager::openApp(const QVariant &app)
 {
     Q_D(StoreDaemonManager);

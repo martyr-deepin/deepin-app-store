@@ -52,6 +52,11 @@ public Q_SLOTS:
      */
     void clearArchives();
 
+    /**
+     * @brief update source list
+     */
+    void updateSource();
+
     QVariantMap fixError(const QString &error_type);
 
     /**
