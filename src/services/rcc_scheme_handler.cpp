@@ -54,6 +54,9 @@ QString RccSchemeHandler(const QUrl& url) {
     }
 
     QString filepath = QString("%1%2").arg(app_lang_dir).arg(path);
+    if (!QFileInfo::exists(filepath)) {
+      filepath = QString("%1/%2").arg(app_lang_dir).arg("index.html");
+    }
     return filepath;
   } else {
     // 404 not found.
