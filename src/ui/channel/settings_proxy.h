@@ -45,6 +45,12 @@ public Q_SLOTS:
     const QVariantMap getSettings();
 
     /**
+     * Return authorization state.
+     * @return
+     */
+    quint32 getAuthorizationState();
+
+    /**
      * Allow auto install software
      */
     void setAutoInstall(bool autoinstall);

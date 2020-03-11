@@ -66,6 +66,10 @@ const QVariantMap SettingsProxy::getSettings()
     return settings;
 }
 
+quint32 SettingsProxy::getAuthorizationState()
+{
+    return SettingsManager::instance()->authorizationState();
+}
 
 void SettingsProxy::setAutoInstall(bool autoInstall)
 {
