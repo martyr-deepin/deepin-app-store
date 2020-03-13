@@ -27,7 +27,7 @@ namespace dstore {
 
 namespace {
 
-const int kItemHeight = 25;
+const int kItemHeight = 22;
 
 }  // namespace
 
