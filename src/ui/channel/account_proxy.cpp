@@ -31,4 +31,12 @@ void dstore::AccountProxy::logout()
     manager_->logout();
 }
 
+void AccountProxy::authorizationNotify(const QString& msg,const int& timeOut){
+    if ("" != msg) {
+        auto authNotifySender = Dtk::Core::DUtil::DNotifySender(msg);
+        authNotifySender.timeOut(timeOut);
+        authNotifySender.call();
+    }
+}
+
 } // namespace dstore

@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <QVariantMap>
+#include <DNotifySender>
 
 namespace dstore
 {
@@ -30,6 +31,7 @@ public Q_SLOTS:
                    const QString &callback,
                    const QString &state);
     void logout();
+    void authorizationNotify(const QString& msg,const int& timeOut);
 
 private:
     AccountManager *manager_;
