@@ -41,6 +41,8 @@ QString SysInfo::product() const
             return "community";
         case Dtk::Core::DSysInfo::DeepinProfessional:
             return "professional";
+        case Dtk::Core::DSysInfo::DeepinPersonal:
+            return "personal";
         default:
             return defaultProduct;
     }
