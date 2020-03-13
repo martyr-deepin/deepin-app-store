@@ -74,7 +74,7 @@ SettingsManager::SettingsManager(QObject *parent)
         kLicenseActivatorService,
         kLicenseActivatorPath,
         kLicenseActivatorInterface,
-        QDBusConnection::sessionBus(),
+        QDBusConnection::systemBus(),
         parent);
     qDebug() << "connect" << kLicenseActivatorInterface << authorizationState_ifc_->isValid();
 }
@@ -101,11 +101,11 @@ QString SettingsManager::desktopMode() const
 
 quint32 SettingsManager::authorizationState() const
 {
-    QDBusReply<quint32> reply = authorizationState_ifc_->call(QDBus::AutoDetect,"GetIndicatorData");
-    if (reply.error().isValid()) {
-        qWarning() << "query authorization state failed" << reply.error();
+    quint32 reply = authorizationState_ifc_->property("AuthorizationState").toUInt();
+    if (reply > 4) {
+        qWarning() << "query authorization state is not valid";
     }
-    return reply.value();
+    return reply;
 }
 
 void SettingsManager::setQCefSettings(QCefGlobalSettings *settings)
