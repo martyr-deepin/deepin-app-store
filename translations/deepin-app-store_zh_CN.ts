@@ -74,6 +74,19 @@
     </message>
 </context>
 <context>
+    <name>dstore::AccountProxy</name>
+    <message>
+        <location filename="../src/ui/channel/account_proxy.cpp" line="35"/>
+        <source>Activate</source>
+        <translation>激活</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/channel/account_proxy.cpp" line="44"/>
+        <source>Your system is not activated. Please activate as soon as possible for normal use.</source>
+        <translation>您的系统尚未激活，为确保正常使用，请尽快激活。</translation>
+    </message>
+</context>
+<context>
     <name>dstore::UserMenu</name>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="13"/>

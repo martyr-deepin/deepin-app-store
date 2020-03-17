@@ -75,6 +75,19 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
 </context>
 <context>
+    <name>dstore::AccountProxy</name>
+    <message>
+        <location filename="../src/ui/channel/account_proxy.cpp" line="35"/>
+        <source>Activate</source>
+        <translation>Attiva</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/channel/account_proxy.cpp" line="44"/>
+        <source>Your system is not activated. Please activate as soon as possible for normal use.</source>
+        <translation>Il tuo Sistema non è stato attivato. Ti preghiamo di attivarlo il prima possibile per un utilizzo normale.</translation>
+    </message>
+</context>
+<context>
     <name>dstore::UserMenu</name>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="13"/>

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>QObject</name>
     <message>
@@ -57,22 +55,22 @@
     <message>
         <location filename="../src/app/deepin_app_store.cpp" line="115"/>
         <source>App Store</source>
-        <translation type="unfinished"></translation>
+        <translation>App Store</translation>
     </message>
     <message>
         <location filename="../src/app/deepin_app_store.cpp" line="116"/>
         <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
-        <translation type="unfinished"></translation>
+        <translation>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
         <source>Search for &quot;%1&quot; in Store</source>
-        <translation type="unfinished"></translation>
+        <translation>Search for &quot;%1&quot; in Store</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
         <source>Search &quot;%1&quot; in Store</source>
-        <translation type="unfinished"></translation>
+        <translation>Search &quot;%1&quot; in Store</translation>
     </message>
 </context>
 <context>
@@ -80,12 +78,12 @@
     <message>
         <location filename="../src/ui/channel/account_proxy.cpp" line="35"/>
         <source>Activate</source>
-        <translation type="unfinished"></translation>
+        <translation>Activate</translation>
     </message>
     <message>
         <location filename="../src/ui/channel/account_proxy.cpp" line="44"/>
         <source>Your system is not activated. Please activate as soon as possible for normal use.</source>
-        <translation type="unfinished"></translation>
+        <translation>Your system is not activated. Please activate as soon as possible for normal use.</translation>
     </message>
 </context>
 <context>

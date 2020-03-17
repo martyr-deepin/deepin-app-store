@@ -60,16 +60,29 @@
     <message>
         <location filename="../src/app/deepin_app_store.cpp" line="116"/>
         <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
-        <translation type="unfinished"/>
+        <translation>應用商店是一款品質精良、內容豐富的應用商店。精選熱門推薦、新品應用和專題介紹。支援一鍵式下載安裝、移除等功能。</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
         <source>Search for &quot;%1&quot; in Store</source>
-        <translation type="unfinished"/>
+        <translation>在商店中搜尋「%1」</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
         <source>Search &quot;%1&quot; in Store</source>
+        <translation>在商店中搜尋「%1」</translation>
+    </message>
+</context>
+<context>
+    <name>dstore::AccountProxy</name>
+    <message>
+        <location filename="../src/ui/channel/account_proxy.cpp" line="35"/>
+        <source>Activate</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/ui/channel/account_proxy.cpp" line="44"/>
+        <source>Your system is not activated. Please activate as soon as possible for normal use.</source>
         <translation type="unfinished"/>
     </message>
 </context>

@@ -19,7 +19,7 @@
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="73"/>
         <source>Undo</source>
-        <translation>Pyyhi</translation>
+        <translation>Kumoa</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="78"/>
@@ -71,6 +71,19 @@
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
         <source>Search &quot;%1&quot; in Store</source>
         <translation>Etsi &quot;%1&quot; ohjelmaa</translation>
+    </message>
+</context>
+<context>
+    <name>dstore::AccountProxy</name>
+    <message>
+        <location filename="../src/ui/channel/account_proxy.cpp" line="35"/>
+        <source>Activate</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/ui/channel/account_proxy.cpp" line="44"/>
+        <source>Your system is not activated. Please activate as soon as possible for normal use.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

@@ -2,62 +2,34 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
-        <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
-        <source>Search &quot;%1&quot; in Deepin Store</source>
-        <translation>&quot;%1&quot;の中で検索</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar.cpp" line="206"/>
+        <location filename="../src/ui/widgets/title_bar.cpp" line="235"/>
         <source>Search</source>
         <translation>検索</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="55"/>
-        <source>Recommend App</source>
-        <translation>おすすめアプリ</translation>
-    </message>
-    <message>
-        <source>Select region</source>
-        <translation type="vanished">リージョンセレクト</translation>
-    </message>
-    <message>
-        <source>China</source>
-        <translation type="vanished">中国</translation>
-    </message>
-    <message>
-        <source>International</source>
-        <translation type="vanished">インターナショナル</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="60"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="41"/>
         <source>Clear cache</source>
-        <translation>キャッシュ消し</translation>
+        <translation>キャッシュを消去</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="64"/>
-        <source>Dark theme</source>
-        <translation>ダークテイマー</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="70"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="44"/>
         <source>Privacy Policy</source>
-        <translation type="unfinished"/>
+        <translation>プライバシーポリシー</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="73"/>
         <source>Undo</source>
-        <translation>取り消し</translation>
+        <translation>元に戻す</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="78"/>
         <source>Redo</source>
-        <translation>取り直し</translation>
+        <translation>やり直す</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="84"/>
         <source>Cut</source>
-        <translation>カット</translation>
+        <translation>切り取り</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="89"/>
@@ -68,27 +40,50 @@
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="94"/>
         <source>Paste</source>
-        <translation>ペースト</translation>
+        <translation>貼り付け</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="99"/>
         <source>Delete</source>
-        <translation>デリート</translation>
+        <translation>削除</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="105"/>
         <source>Select all</source>
-        <translation>全て選択</translation>
+        <translation>すべて選択</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app-store.cpp" line="107"/>
-        <source>Deepin Store</source>
-        <translation>Deepinストア</translation>
+        <location filename="../src/app/deepin_app_store.cpp" line="115"/>
+        <source>App Store</source>
+        <translation>アプリストア</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app-store.cpp" line="108"/>
-        <source>Deepin Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
-        <translation>Deepinストアは、Linux Deepin向けに開発された色とりどりのハイクオリティアプリケーションを配信する専用サービスの名称である。いつでもアクセスでき、好きなアプリケーションを見つけたらその場でダウンロードとインストールを行うことができる。ワンクリックでダウンロード、インストール、アップデート、アンインストールなどもできる。</translation>
+        <location filename="../src/app/deepin_app_store.cpp" line="116"/>
+        <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
+        <translation>多様で高品質なアプリケーションを提供するソフトウェアセンターです。アプリのインストールやアンインストールを1クリックで実行できます。</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
+        <source>Search for &quot;%1&quot; in Store</source>
+        <translation>ストアで &quot;%1&quot; を検索</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
+        <source>Search &quot;%1&quot; in Store</source>
+        <translation>ストアで &quot;%1&quot; を検索</translation>
+    </message>
+</context>
+<context>
+    <name>dstore::AccountProxy</name>
+    <message>
+        <location filename="../src/ui/channel/account_proxy.cpp" line="35"/>
+        <source>Activate</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/ui/channel/account_proxy.cpp" line="44"/>
+        <source>Your system is not activated. Please activate as soon as possible for normal use.</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -104,19 +99,14 @@
         <translation>マイコメント</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/user_menu.cpp" line="20"/>
-        <source>My donations</source>
-        <translation>寄付情報</translation>
-    </message>
-    <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="24"/>
         <source>My apps</source>
-        <translation>購入済アプリ</translation>
+        <translation>購入済みアプリ</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="30"/>
         <source>Sign out</source>
-        <translation>ログアウト</translation>
+        <translation>サインアウト</translation>
     </message>
 </context>
 </TS>
