@@ -31,12 +31,25 @@ void dstore::AccountProxy::logout()
     manager_->logout();
 }
 
-void AccountProxy::authorizationNotify(const QString& msg,const int& timeOut){
-    if ("" != msg) {
-        auto authNotifySender = Dtk::Core::DUtil::DNotifySender(msg);
-        authNotifySender.timeOut(timeOut);
-        authNotifySender.call();
-    }
+void AccountProxy::authorizationNotify(const int& timeOut){
+    QStringList actions = QStringList() << "_open" << tr("Activate");
+    QVariantMap hints;
+    hints["x-deepin-action-_open"] = "dbus-send,--print-reply,--dest=com.deepin.license.activator,/com/deepin/license/activator,com.deepin.license.activator.Show";
+
+    QList<QVariant> argumentList;
+    argumentList << "uos-activator";
+    argumentList << static_cast<uint>(0);
+    argumentList << "uos-activator";
+    argumentList << "";
+    argumentList << tr("Your system is not activated. Please activate as soon as possible for normal use.");
+    argumentList << actions;
+    argumentList << hints;
+    argumentList << static_cast<int>(timeOut);
+
+    static QDBusInterface notifyApp("org.freedesktop.Notifications",
+                                    "/org/freedesktop/Notifications",
+                                    "org.freedesktop.Notifications");
+    notifyApp.asyncCallWithArgumentList("Notify", argumentList);
 }
 
 } // namespace dstore
