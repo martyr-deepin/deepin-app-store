@@ -35,8 +35,8 @@ const char kLastoreDebDbusPath[] = "/com/deepin/AppStore/Backend";
 const char kLastoreDebDbusService[] = "com.deepin.AppStore.Daemon";
 const char kLastoreDebJobService[] = "com.deepin.AppStore.Daemon";
 
-const char kLicenseActivatorService[] = "com.deepin.license";
-const char kLicenseActivatorPath[] = "/com/deepin/license/Info";
-const char kLicenseActivatorInterface[] = "com.deepin.license.Info";
+const char kLicenseService[] = "com.deepin.license";
+const char kLicenseInfoPath[] = "/com/deepin/license/Info";
+const char kLicenseInfoInterface[] = "com.deepin.license.Info";
 
 }  // namespace dstore

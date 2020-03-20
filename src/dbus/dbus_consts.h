@@ -36,9 +36,9 @@ extern const char kLastoreDebDbusService[];
 
 extern const char kLastoreDebJobService[];
 
-extern const char kLicenseActivatorService[];
-extern const char kLicenseActivatorPath[];
-extern const char kLicenseActivatorInterface[];
+extern const char kLicenseService[];
+extern const char kLicenseInfoPath[];
+extern const char kLicenseInfoInterface[];
 
 }  // namespace dstore
 

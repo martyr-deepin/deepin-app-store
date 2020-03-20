@@ -28,6 +28,11 @@ namespace dstore
 SettingsProxy::SettingsProxy(QObject *parent) : QObject(parent)
 {
     this->setObjectName("SettingsProxy");
+    connect(SettingsManager::instance(),&SettingsManager::authStateChanged,
+            this,[&]()
+            {
+                emit this->authStateChanged();
+            });
 }
 
 const QVariantMap SettingsProxy::getSettings()

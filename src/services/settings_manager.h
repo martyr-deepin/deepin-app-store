@@ -44,6 +44,7 @@ private:
     ~SettingsManager() override;
 
 Q_SIGNALS:
+    void authStateChanged();
 
 public Q_SLOTS:
     void setQCefSettings(QCefGlobalSettings *settings);
@@ -78,7 +79,9 @@ public Q_SLOTS:
     QString arch() const;
     QString product() const;
     QString desktopMode() const;
+
     quint32 authorizationState() const;
+    void authStateChange();
 
 private:
     // TODO: use interface from dbus to xml

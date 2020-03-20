@@ -71,12 +71,15 @@ SettingsManager::SettingsManager(QObject *parent)
     qDebug() << "connect" << kAppstoreDaemonInterface << settings_ifc_->isValid();
 
     authorizationState_ifc_ = new  QDBusInterface(
-        kLicenseActivatorService,
-        kLicenseActivatorPath,
-        kLicenseActivatorInterface,
+        kLicenseService,
+        kLicenseInfoPath,
+        kLicenseInfoInterface,
         QDBusConnection::systemBus(),
         parent);
-    qDebug() << "connect" << kLicenseActivatorInterface << authorizationState_ifc_->isValid();
+    qDebug() << "connect" << kLicenseInfoInterface << authorizationState_ifc_->isValid();
+
+    connect(authorizationState_ifc_, SIGNAL(LicenseStateChange()),
+            this, SLOT(authStateChange()));
 }
 
 SettingsManager::~SettingsManager()
@@ -106,6 +109,11 @@ quint32 SettingsManager::authorizationState() const
         qWarning() << "query authorization state is not valid";
     }
     return reply;
+}
+
+void SettingsManager::authStateChange()
+{
+    emit this->authStateChanged();
 }
 
 void SettingsManager::setQCefSettings(QCefGlobalSettings *settings)
