@@ -39,4 +39,8 @@ const char kLicenseService[] = "com.deepin.license";
 const char kLicenseInfoPath[] = "/com/deepin/license/Info";
 const char kLicenseInfoInterface[] = "com.deepin.license.Info";
 
+const char kLoginService[] = "org.freedesktop.login1";
+const char kLoginSessionSelfPath[] = "/org/freedesktop/login1/session/self";
+const char kLoginSessionInterface[] = "org.freedesktop.login1.Session";
+
 }  // namespace dstore

@@ -63,6 +63,7 @@ const QVariantMap SettingsProxy::getSettings()
         {"arch", SettingsManager::instance()->arch()},
         {"product", SettingsManager::instance()->product()},
         {"desktopMode", SettingsManager::instance()->desktopMode()},
+        {"GUIFramework", SettingsManager::instance()->GUIFramework()},
 
         // authorization state
         {"authorizationState", SettingsManager::instance()->authorizationState()},

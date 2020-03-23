@@ -78,6 +78,14 @@ SettingsManager::SettingsManager(QObject *parent)
         parent);
     qDebug() << "connect" << kLicenseInfoInterface << authorizationState_ifc_->isValid();
 
+    GUIFramework_ifc_ = new  QDBusInterface(
+        kLoginService,
+        kLoginSessionSelfPath,
+        kLoginSessionInterface,
+        QDBusConnection::systemBus(),
+        parent);
+    qDebug() << "connect" << kLoginSessionInterface << GUIFramework_ifc_->isValid();
+
     connect(authorizationState_ifc_, SIGNAL(LicenseStateChange()),
             this, SLOT(authStateChange()));
 }
@@ -108,6 +116,12 @@ quint32 SettingsManager::authorizationState() const
     if (reply > 4) {
         qWarning() << "query authorization state is not valid";
     }
+    return reply;
+}
+
+QString SettingsManager::GUIFramework() const
+{
+    QString reply = GUIFramework_ifc_->property("Type").toString();
     return reply;
 }
 

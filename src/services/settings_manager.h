@@ -79,6 +79,7 @@ public Q_SLOTS:
     QString arch() const;
     QString product() const;
     QString desktopMode() const;
+    QString GUIFramework() const;
 
     quint32 authorizationState() const;
     void authStateChange();
@@ -91,6 +92,7 @@ private:
 
     QDBusInterface *settings_ifc_;
     QDBusInterface *authorizationState_ifc_;
+    QDBusInterface *GUIFramework_ifc_;
     QCefGlobalSettings *qcef_settings_;
     SysInfo sysinfo;
 };
