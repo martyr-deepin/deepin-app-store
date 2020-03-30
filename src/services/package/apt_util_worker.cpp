@@ -51,7 +51,7 @@ void OpenApp(const QString& app_name) {
   if (!fi.exists()) {
     QString output;
     if (SpawnCmd("lastore-tools", {"querydesktop", app_name}, output)) {
-        QString desktop_file = output.trimmed();
+        desktop_file = output.trimmed();
     }
   }
 
