@@ -23,9 +23,10 @@
 #include <QMenu>
 #include <QRegularExpression>
 #include <services/dbus_manager.h>
-class QCefWebView;
-class QCefGlobalSettings;
+
 class QTimer;
+class QWebEngineView;
+class QThread;
 
 #include "services/search_result.h"
 
@@ -55,7 +56,6 @@ public:
     explicit WebWindow(QWidget *parent = nullptr);
     ~WebWindow() override;
 
-    void setQCefSettings(QCefGlobalSettings *settings);
     /**
      * Load app store main web page.
      */
@@ -83,7 +83,7 @@ private:
     void initServices();
     void prepareSearch(bool entered);
 
-    QCefWebView *web_view_ = nullptr;
+    QWebEngineView* web_view_ = nullptr;
     ImageViewer *image_viewer_ = nullptr;
     ImageViewerProxy *image_viewer_proxy_ = nullptr;
     LogProxy *log_proxy_ = nullptr;
@@ -96,7 +96,6 @@ private:
     SettingsProxy *settings_proxy_ = nullptr;
     StoreDaemonProxy *store_daemon_proxy_ = nullptr;
     TitleBar *title_bar_ = nullptr;
-    WebEventDelegate *web_event_delegate_ = nullptr;
     TitleBarMenu *tool_bar_menu_ = nullptr;
 
 private slots:
@@ -112,11 +111,7 @@ private slots:
     void onThemeChaged(const QString theme_name);
 
     void onWebViewUrlChanged(const QUrl &url);
-    void onFullscreenRequest(bool fullscreen);
-
-    void onLoadingStateChanged(bool is_loading,
-                               bool can_go_back,
-                               bool can_go_forward);
+    void onLoadingStateChanged();
 
     void webViewGoBack();
     void webViewGoForward();

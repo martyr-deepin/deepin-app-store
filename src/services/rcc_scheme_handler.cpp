@@ -20,48 +20,70 @@
 #include <QDebug>
 #include <QFileInfo>
 #include <QLocale>
+#include <QMimeDatabase>
+#include <QWebEngineUrlRequestJob>
 
 namespace dstore {
 
-QString RccSchemeHandler(const QUrl& url) {
-  QString path = url.path();
-  const QString host = url.host();
+void RccSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
+{
+    static QMimeDatabase db;
+    QUrl url = request->requestUrl();
+    qDebug() << url << "----------";
+    QString filepath;
+    //const QString host = url.host();
+    //
+    QString path = url.path();
+    const QString host = url.host();
 
-  if (host == "web") {
-    const char kAppDefaultLocalDir[] = DSTORE_WEB_DIR;
+    if (host == "web") {
+      const char kAppDefaultLocalDir[] = DSTORE_WEB_DIR;
 
-    QString lang = QLocale().name();
-    lang = lang.replace(QRegExp("\\_"), "-");
+      QString lang = QLocale().name();
+      lang = lang.replace(QRegExp("\\_"), "-");
 
-    QString app_lang_dir = QString("%1/%2")
-            .arg(DSTORE_WEB_DIR)
-            .arg(lang);
+      QString app_lang_dir = QString("%1/%2")
+              .arg(DSTORE_WEB_DIR)
+              .arg(lang);
 
         QString app_en_dir = QString("%1/%2")
                 .arg(DSTORE_WEB_DIR)
                 .arg("en");
 
-    QString prefix =QString("%1%2").arg("/").arg(lang);
-    path.remove(prefix);
+      QString prefix =QString("%1%2").arg("/").arg(lang);
+      path.remove(prefix);
 
         if (!QFileInfo::exists(app_lang_dir)) {
             app_lang_dir = app_en_dir;
             path.remove("/en");
 
-      if(!QFileInfo::exists(app_en_dir)){
-          app_lang_dir = kAppDefaultLocalDir;
+        if(!QFileInfo::exists(app_en_dir)){
+            app_lang_dir = kAppDefaultLocalDir;
+        }
       }
-    }
 
-    QString filepath = QString("%1%2").arg(app_lang_dir).arg(path);
-    if (!QFileInfo::exists(filepath)) {
-      filepath = QString("%1/%2").arg(app_lang_dir).arg("index.html");
+      QString filepath = QString("%1%2").arg(app_lang_dir).arg(path);
+      if (!QFileInfo::exists(filepath)) {
+        filepath = QString("%1/%2").arg(app_lang_dir).arg("index.html");
+      }
+
+//    if (host == "web") {
+//        const char kAppDefaultLocalDir[] = DSTORE_WEB_DIR "/appstore";
+//        QString app_local_dir = QString("%1/appstore-%2")
+//                                .arg(DSTORE_WEB_DIR)
+//                                .arg(QLocale().name());
+//        if (!QFileInfo::exists(app_local_dir)) {
+//            app_local_dir = kAppDefaultLocalDir;
+//        }
+//        app_local_dir = "/usr/share/deepin-appstore/web_dist/appstore";
+//        filepath = QString("%1%2").arg(app_local_dir).arg(url.path());
+        auto f = new QFile(filepath);
+        QMimeType type = db.mimeTypeForFile(filepath);
+        f->open(QIODevice::ReadOnly);
+        qDebug() << type.name() << "++++++++";
+        request->reply(type.name().toLatin1(), f);
+        connect(request, &QObject::destroyed, f, &QObject::deleteLater);
     }
-    return filepath;
-  } else {
-    // 404 not found.
-    return "";
-  }
 }
 
 }  // namespace dstore

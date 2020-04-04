@@ -18,12 +18,20 @@
 #ifndef DEEPIN_APPSTORE_SERVICES_RCC_SCHEME_HANDLER_H
 #define DEEPIN_APPSTORE_SERVICES_RCC_SCHEME_HANDLER_H
 
-#include <qcef_scheme_handler.h>
+#include <QUrl>
+#include <QWebEngineUrlSchemeHandler>
 
 namespace dstore {
 
-// Handles rcc:// scheme requests.
-QString RccSchemeHandler(const QUrl& url);
+class RccSchemeHandler : public QWebEngineUrlSchemeHandler
+{
+    Q_OBJECT
+
+public:
+    void requestStarted(QWebEngineUrlRequestJob *request) Q_DECL_OVERRIDE;
+
+    static QByteArray schemeName() {return "rcc";}
+};
 
 }  // namespace dstore
 
