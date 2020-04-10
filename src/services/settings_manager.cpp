@@ -76,7 +76,8 @@ SettingsManager::SettingsManager(QObject *parent)
         kLicenseInfoInterface,
         QDBusConnection::systemBus(),
         parent);
-    qDebug() << "connect" << kLicenseInfoInterface << authorizationState_ifc_->isValid();
+    hasActivatorClient = authorizationState_ifc_->isValid();
+    qDebug() << "connect" << kLicenseInfoInterface << hasActivatorClient;
 
     GUIFramework_ifc_ = new  QDBusInterface(
         kLoginService,
@@ -116,6 +117,11 @@ quint32 SettingsManager::authorizationState() const
     if (reply > 4) {
         qWarning() << "query authorization state is not valid";
     }
+
+    if(!hasActivatorClient) {
+        return AuthorizationState::Authorized;
+    }
+
     return reply;
 }
 

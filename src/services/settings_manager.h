@@ -34,6 +34,15 @@ enum OperationServerRegion {
     RegionInternational = 1,
 };
 
+enum AuthorizationState
+{
+    Notauthorized,
+    Authorized,
+    Expired,
+    TrialAuthorized,
+    TrialExpired
+};
+
 class SettingsManager : public QObject, public Dtk::Core::DSingleton<SettingsManager>
 {
     Q_OBJECT
@@ -95,6 +104,8 @@ private:
     QDBusInterface *GUIFramework_ifc_;
     QCefGlobalSettings *qcef_settings_;
     SysInfo sysinfo;
+
+    bool hasActivatorClient;
 };
 
 }  // namespace dstore
