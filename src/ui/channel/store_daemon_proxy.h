@@ -180,6 +180,11 @@ public Q_SLOTS:
         return manager_->getJobInfo(job);
     }
 
+    QVariantMap getJobStatus(const QString &job)
+    {
+        return manager_->getJobStatus(job);
+    }
+
     QVariantMap getJobsInfo(const QStringList &jobs)
     {
         return manager_->getJobsInfo(jobs);
@@ -227,6 +232,8 @@ public Q_SLOTS:
     {
         emit updateSource();
     }
+
+    QVariantMap updateSourceList();
 
     QString test()
     {

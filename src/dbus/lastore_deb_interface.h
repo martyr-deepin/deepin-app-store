@@ -50,7 +50,7 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("CleanArchives"), argumentList);
     }
 
-    inline QDBusPendingReply<> UpdateSource()
+    inline QDBusPendingReply<QDBusObjectPath> UpdateSource()
     {
         QList<QVariant> argumentList;
         return asyncCallWithArgumentList(QStringLiteral("UpdateSource"), argumentList);

@@ -293,7 +293,7 @@ void WebWindow::initProxy()
 #else
     bool useMultiThread = true;
 #endif
-
+    useMultiThread=false;
     auto parent = this;
     if (useMultiThread) {
         parent = nullptr;

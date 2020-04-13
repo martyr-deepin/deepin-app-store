@@ -55,7 +55,7 @@ public Q_SLOTS:
     /**
      * @brief update source list
      */
-    void updateSource();
+    QVariantMap updateSource();
 
     QVariantMap fixError(const QString &error_type);
 
@@ -135,6 +135,8 @@ public Q_SLOTS:
      * * packages: stringList
      */
     QVariantMap getJobInfo(const QString &job);
+
+    QVariantMap getJobStatus(const QString &job);
 
     QVariantMap getJobsInfo(const QStringList &jobs);
 

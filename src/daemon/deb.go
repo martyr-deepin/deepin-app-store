@@ -50,6 +50,7 @@ type Backend struct {
 		QueryDownloadSize     func() `in:"id" out:"size"`
 		QueryInstallationTime func() `in:"idList" out:"installationTimeList"`
 		FixError              func() `in:"errType" out:"job"`
+		UpdateSource          func() `in:"" out:"job"`
 	}
 
 	// TODO: move to all install
@@ -514,10 +515,12 @@ func (b *Backend) CleanArchives() *dbus.Error {
 	return dbusutil.ToError(err)
 }
 
-// updateSourceList
-func (b *Backend) UpdateSource() *dbus.Error {
+// UpdateSource update apt source list
+func (b *Backend) UpdateSource() (dbus.ObjectPath, *dbus.Error) {
 	b.service.DelayAutoQuit()
-
-	_, err := b.lastore.UpdateSource(0)
-	return dbusutil.ToError(err)
+	jobPath, err := b.lastore.UpdateSource(0)
+	if err != nil {
+		return "/", dbusutil.ToError(err)
+	}
+	return jobPath, nil
 }

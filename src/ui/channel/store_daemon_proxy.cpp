@@ -38,8 +38,8 @@ StoreDaemonProxy::StoreDaemonProxy(QObject *parent)
 
     this->initConnections();
 
-    manager_thread_->start();
-    manager_->moveToThread(manager_thread_);
+//    manager_thread_->start();
+//    manager_->moveToThread(manager_thread_);
 
 }
 
@@ -65,6 +65,12 @@ void StoreDaemonProxy::onRequestFinished(const QVariantMap &result)
 {
     auto reqID = result.value("id").toString();
     Q_EMIT requestFinished(reqID, result);
+}
+
+QVariantMap StoreDaemonProxy::updateSourceList()
+{
+    qDebug() << "StoreDaemonProxy::updateSourceList";
+    return this->manager_->updateSource();
 }
 
 }  // namespace dstore

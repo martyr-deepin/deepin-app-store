@@ -33,7 +33,7 @@ const char kAppstoreDaemonSettingsInterface[] = "com.deepin.AppStore.Settings";
 
 const char kLastoreDebDbusPath[] = "/com/deepin/AppStore/Backend";
 const char kLastoreDebDbusService[] = "com.deepin.AppStore.Daemon";
-const char kLastoreDebJobService[] = "com.deepin.AppStore.Daemon";
+const char kLastoreDebJobService[] = "com.deepin.lastore";
 
 const char kLicenseService[] = "com.deepin.license";
 const char kLicenseInfoPath[] = "/com/deepin/license/Info";

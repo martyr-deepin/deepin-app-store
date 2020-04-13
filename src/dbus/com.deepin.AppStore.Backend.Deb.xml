@@ -2,6 +2,8 @@
     <method name="CleanArchives">
     </method>
     <method name="UpdateSource">
+        <arg name="" type="" direction="in"></arg>
+        <arg name="job" type="o" direction="out"></arg>
     </method>
     <method name="Install">
         <arg name="localName" type="s" direction="in"></arg>

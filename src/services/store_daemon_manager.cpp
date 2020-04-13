@@ -74,6 +74,26 @@ bool ReadJobInfo(LastoreJobInterface &job_interface,
 
     return (!app_names.isEmpty());
 }
+
+bool ReadJobStatus(LastoreJobInterface &job_interface,
+                 const QString &job,
+                 QVariantMap &result)
+{
+    result.insert("id", job_interface.id());
+    result.insert("job", job);
+    result.insert("status", job_interface.status());
+    result.insert("type", job_interface.type());
+    result.insert("speed", job_interface.speed());
+    result.insert("progress", job_interface.progress());
+    result.insert("description", job_interface.description());
+    result.insert("packages", job_interface.packages());
+    result.insert("cancelable", job_interface.cancelable());
+    result.insert("downloadSize", job_interface.downloadSize());
+    result.insert("createTime", job_interface.createTime());
+    result.insert("name", job_interface.name());
+    return (!job_interface.status().isEmpty());
+}
+
 }
 
 class StoreDaemonManagerPrivate
@@ -136,10 +156,16 @@ void StoreDaemonManager::clearArchives()
     d->deb_interface_->CleanArchives();
 }
 
-void StoreDaemonManager::updateSource()
+QVariantMap StoreDaemonManager::updateSource()
 {
     Q_D(StoreDaemonManager);
-    d->deb_interface_->UpdateSource();
+    const QDBusPendingReply<QDBusObjectPath> reply = d->deb_interface_->UpdateSource();
+    return QVariantMap{
+        {kResultOk, (!reply.value().path().isEmpty())},
+        {kResultErrName, ""},
+        {kResultErrMsg, ""},
+        {kResult, reply.value().path()},
+    };
 }
 
 void StoreDaemonManager::openApp(const QVariant &app)
@@ -427,6 +453,46 @@ QVariantMap StoreDaemonManager::getJobInfo(const QString &job)
         };
     }
 }
+
+QVariantMap StoreDaemonManager::getJobStatus(const QString &job)
+{
+    QVariantMap result;
+    LastoreJobInterface job_interface("com.deepin.lastore",
+                                      job,
+                                      QDBusConnection::systemBus(),
+                                      this);
+    if (job_interface.isValid()) {
+        if (ReadJobStatus(job_interface, job, result)) {
+            return QVariantMap{
+                {kResultOk, true},
+                {kResultErrName, ""},
+                {kResultErrMsg, ""},
+                {kResult, result},
+            };
+        }
+        else {
+            return QVariantMap{
+                {kResultOk, false},
+                {kResultErrName, "Invalid job"},
+                {kResultErrMsg, ""},
+                {kResult, job},
+            };
+        }
+    }
+    else {
+        return QVariantMap{
+            {kResultOk, false},
+            {kResultErrName, "Invalid job interface"},
+            {kResultErrMsg, job_interface.lastError().message()},
+            {
+                kResult, QVariantMap{
+                {kResultName, job},
+            }
+            },
+        };
+    }
+}
+
 
 QVariantMap StoreDaemonManager::getJobsInfo(const QStringList &jobs)
 {
