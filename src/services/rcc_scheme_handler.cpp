@@ -39,14 +39,14 @@ QString RccSchemeHandler(const QUrl& url) {
 
     QString app_en_dir = QString("%1/%2")
             .arg(DSTORE_WEB_DIR)
-            .arg("en-US");
+            .arg("en");
 
     QString prefix =QString("%1%2").arg("/").arg(lang);
     path.remove(prefix);
 
     if (!QFileInfo::exists(app_lang_dir)) {
       app_lang_dir = app_en_dir;
-      path.remove("/en-US");
+      path.remove("/en");
 
       if(!QFileInfo::exists(app_en_dir)){
           app_lang_dir = kAppDefaultLocalDir;
