@@ -136,9 +136,9 @@ public Q_SLOTS:
      */
     QVariantMap getJobInfo(const QString &job);
 
-    QVariantMap getJobStatus(const QString &job);
-
     QVariantMap getJobsInfo(const QStringList &jobs);
+
+    QVariantMap getJobStatus(const QString &job);
 
     /**
      * Returns all of jobs existing in backend.

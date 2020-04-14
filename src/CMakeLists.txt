@@ -93,6 +93,8 @@ set(DBUS_FILES
     dbus/dbus_extended_abstract_interface.h
     dbus/lastore_deb_interface.cpp
     dbus/lastore_deb_interface.h
+    dbus/sys_lastore_job_interface.cpp
+    dbus/sys_lastore_job_interface.h
     dbus/lastore_job_interface.cpp
     dbus/lastore_job_interface.h)
 

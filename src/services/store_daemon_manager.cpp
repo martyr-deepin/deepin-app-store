@@ -25,6 +25,7 @@
 #include "dbus/dbus_variant/installed_app_timestamp.h"
 #include "dbus/lastore_deb_interface.h"
 #include "dbus/lastore_job_interface.h"
+#include "dbus/sys_lastore_job_interface.h"
 
 #include "package/package_manager.h"
 #include "package/apt_package_manager.h"
@@ -75,7 +76,7 @@ bool ReadJobInfo(LastoreJobInterface &job_interface,
     return (!app_names.isEmpty());
 }
 
-bool ReadJobStatus(LastoreJobInterface &job_interface,
+bool ReadJobStatus(SysLastoreJobInterface &job_interface,
                  const QString &job,
                  QVariantMap &result)
 {
@@ -457,7 +458,7 @@ QVariantMap StoreDaemonManager::getJobInfo(const QString &job)
 QVariantMap StoreDaemonManager::getJobStatus(const QString &job)
 {
     QVariantMap result;
-    LastoreJobInterface job_interface("com.deepin.lastore",
+    SysLastoreJobInterface job_interface("com.deepin.lastore",
                                       job,
                                       QDBusConnection::systemBus(),
                                       this);
