@@ -69,7 +69,7 @@ void TitleBar::setUserInfo(const QVariantMap &info)
 
     if (user_name_.isEmpty()) {
         avatar_button_->setObjectName("AvatarButton");
-        avatar_button_->setStyleSheet(this->styleSheet());
+        avatar_button_->setIcon(QIcon::fromTheme("deepin-app-store_login_normal"));
         return;
     }
 
