@@ -20,6 +20,8 @@
 #include <QDebug>
 
 #include "services/settings_manager.h"
+#include <QFile>
+#include <QProcess>
 
 namespace dstore
 {
@@ -43,9 +45,43 @@ void TitleBarMenu::initActions()
 
     privacy_agreement_action_ = this->addAction(QObject::tr("Privacy Policy"));
     connect(privacy_agreement_action_, &QAction::triggered,
-            this, &TitleBarMenu::privacyAgreementRequested);
+            this, &TitleBarMenu::privacyAgreementDialogRequested);
 
     this->addSeparator();
+}
+
+void TitleBarMenu::privacyAgreementDialogRequested()
+{
+    QString privacyPolicyPathZH("/usr/share/deepin-deepinid-client/privacy/deepinid-Other-zh_CN.md");
+    QString privacyPolicyPathEN("/usr/share/deepin-deepinid-client/privacy/deepinid-Other-en_US.md");
+
+    if (!QFile::exists(privacyPolicyPathZH)) {
+        qCritical() << "can not find policy text" << privacyPolicyPathZH;
+    }
+
+    if (!QFile::exists(privacyPolicyPathEN)) {
+        qCritical() << "can not find policy text" << privacyPolicyPathEN;
+    }
+
+    QProcess ddeLicenseDialog;
+    QString titleZH = tr("网络账户隐私政策");
+    QString titleEN = tr("Network Account Privacy Policy");
+    ddeLicenseDialog.setProgram("dde-license-dialog");
+    QStringList args;
+    args << "-u" << titleEN
+         << "-t" << titleZH
+         << "-e" << privacyPolicyPathEN
+         << "-c" << privacyPolicyPathZH;
+
+    ddeLicenseDialog.setArguments(args);
+    qDebug() << ddeLicenseDialog.program() << ddeLicenseDialog.arguments().join(" ");
+
+    ddeLicenseDialog.startDetached();
+
+    qDebug() << ddeLicenseDialog.waitForStarted();
+    if (!ddeLicenseDialog.waitForStarted(-1)) {
+        qWarning() << "start dde-license-dialog failed" << ddeLicenseDialog.state();
+    }
 }
 
 

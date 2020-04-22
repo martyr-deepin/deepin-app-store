@@ -30,6 +30,9 @@ class TitleBarMenu : public QMenu {
   explicit TitleBarMenu(bool support_sign_in, QWidget* parent = nullptr);
   ~TitleBarMenu() override;
 
+public slots:
+  void privacyAgreementDialogRequested();
+
  signals:
   void switchThemeRequested(QString themeName);
   void clearCacheRequested();
