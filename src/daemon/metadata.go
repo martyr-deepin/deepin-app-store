@@ -84,8 +84,8 @@ func (m *Metadata) ListStorePackages() (apps map[string]*cacheAppInfo, err error
 
 	// aptitude search "?installed?origin(Uos)"
 	// aptitude search "?origin(Uos)"
-	origin := "Uos"
-	filter := fmt.Sprintf("?origin(%v)", origin)
+	origin := "Uos_eagle"
+	filter := fmt.Sprintf("?Label(%v)", origin)
 	cmd := exec.Command("/usr/bin/aptitude", "search", filter)
 	data, err := cmd.CombinedOutput()
 	if nil != err {
