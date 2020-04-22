@@ -48,6 +48,11 @@ QString TitleBar::getSearchText() const
     return text.remove('\n').remove('\r').remove("\r\n");
 }
 
+void TitleBar::mousePressEvent(QMouseEvent *event)
+{
+    Q_EMIT titlePressed();
+}
+
 void TitleBar::setBackwardButtonActive(bool active)
 {
     back_button_->setEnabled(active);

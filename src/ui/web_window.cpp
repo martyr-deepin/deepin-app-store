@@ -226,6 +226,8 @@ void WebWindow::initConnections()
             completion_window_, &SearchCompletionWindow::goDown);
     connect(title_bar_, &TitleBar::enterPressed,
             this, &WebWindow::onTitleBarEntered);
+    connect(title_bar_, &TitleBar::titlePressed,
+            this, &WebWindow::onTitleBarPressed);
     connect(title_bar_, &TitleBar::upKeyPressed,
             completion_window_, &SearchCompletionWindow::goUp);
     connect(title_bar_, &TitleBar::focusChanged,
@@ -518,6 +520,11 @@ void WebWindow::onTitleBarEntered()
     if (text.size() > 1) {
         completion_window_->onEnterPressed();
     }
+}
+
+void WebWindow::onTitleBarPressed()
+{
+    completion_window_->hide();
 }
 
 void WebWindow::onThemeChaged(const QString theme_name)

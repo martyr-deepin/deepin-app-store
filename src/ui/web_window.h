@@ -107,6 +107,7 @@ private slots:
     void onSearchTextChanged(const QString &text);
     void onSearchTextChangedDelay();
     void onTitleBarEntered();
+    void onTitleBarPressed();
     void onThemeChaged(const QString theme_name);
 
     void onWebViewUrlChanged(const QUrl &url);

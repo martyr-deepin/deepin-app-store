@@ -23,7 +23,7 @@
 #include <DIconButton>
 #include <QStackedLayout>
 #include <dbuttonbox.h>
-
+#include <QMouseEvent>
 using namespace  Dtk::Widget;
 
 namespace dstore
@@ -42,6 +42,7 @@ public:
     ~TitleBar() override;
 
     QString getSearchText() const;
+    void mousePressEvent(QMouseEvent *event) override;
 
 Q_SIGNALS:
     void loginRequested(bool login);
@@ -56,6 +57,7 @@ Q_SIGNALS:
     void searchTextChanged(const QString &text);
     void downKeyPressed();
     void enterPressed();
+    void titlePressed();
     void upKeyPressed();
     void focusChanged(bool onFocus);
 
