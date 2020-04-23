@@ -1,0 +1,3 @@
+#!/bin/sh
+userName=$(who)
+rm -rf /home/${userName%% *}/.cache/deepin/deepin-app-store
