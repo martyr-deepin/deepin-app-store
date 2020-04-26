@@ -34,6 +34,8 @@
 
 int main(int argc, char **argv)
 {
+    qputenv("DTK_FORCE_RASTER_WIDGETS", "FALSE");
+
 #ifndef DSTORE_NO_DXCB
     Dtk::Widget::DApplication::loadDXcbPlugin();
 #endif
