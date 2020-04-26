@@ -74,6 +74,7 @@ protected:
     // Update width of title bar when main window is resized.
     void resizeEvent(QResizeEvent *event) override;
     void focusInEvent(QFocusEvent *event) override;
+    void closeEvent(QCloseEvent *event)  override;
 
 private:
     void initConnections();

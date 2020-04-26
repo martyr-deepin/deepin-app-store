@@ -434,6 +434,12 @@ void WebWindow::focusInEvent(QFocusEvent *event)
     web_view_->setFocus();
 }
 
+void WebWindow::closeEvent(QCloseEvent *event)
+{
+    Q_UNUSED(event);
+    this->completion_window_->close();
+}
+
 void WebWindow::onSearchAppResult(const SearchMetaList &result)
 {
     completion_window_->setSearchResult(result);

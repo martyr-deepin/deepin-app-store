@@ -24,6 +24,7 @@
 #include <QStackedLayout>
 #include <dbuttonbox.h>
 #include <QMouseEvent>
+
 using namespace  Dtk::Widget;
 
 namespace dstore

@@ -84,5 +84,4 @@ void TitleBarMenu::privacyAgreementDialogRequested()
     }
 }
 
-
 }  // namespace dstore
