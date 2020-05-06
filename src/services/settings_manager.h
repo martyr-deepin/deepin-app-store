@@ -24,6 +24,7 @@
 #include <base/sysinfo.h>
 
 class QDBusInterface;
+class QCefGlobalSettings;
 
 namespace dstore
 {
@@ -55,6 +56,7 @@ Q_SIGNALS:
     void authStateChanged();
 
 public Q_SLOTS:
+    void setQCefSettings(QCefGlobalSettings *settings);
     bool remoteDebug();
 
     bool autoInstall() const;
@@ -100,6 +102,7 @@ private:
     QDBusInterface *settings_ifc_;
     QDBusInterface *authorizationState_ifc_;
     QDBusInterface *GUIFramework_ifc_;
+    QCefGlobalSettings *qcef_settings_;
     SysInfo sysinfo;
 
     bool hasActivatorClient;

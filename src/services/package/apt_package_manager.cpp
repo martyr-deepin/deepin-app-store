@@ -255,6 +255,13 @@ PMResult AptPackageManager::QueryInstalledTime(const QList<Package> &packages)
 PMResult AptPackageManager::ListInstalled(const QList<QString> &/*packageIDs*/)
 {
     Q_D(AptPackageManager);
+//    auto packageIDs = getIDs(packages);
+
+    //TODO: remove
+//    QMap<QString, int> apps;
+//    for (auto id : packageIDs) {
+//        apps.insert(id, 1);
+//    }
 
     const QDBusPendingReply<InstalledAppInfoList> reply =
         d->deb_interface_->ListInstalled();
