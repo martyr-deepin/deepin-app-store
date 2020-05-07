@@ -25,8 +25,6 @@
 #include <QApplication>
 #include <DGuiApplicationHelper>
 
-#include <qcef_global_settings.h>
-
 #include "dbus/dbus_consts.h"
 #include "base/file_util.h"
 
@@ -136,14 +134,9 @@ void SettingsManager::authStateChange()
     emit this->authStateChanged();
 }
 
-void SettingsManager::setQCefSettings(QCefGlobalSettings *settings)
-{
-    qcef_settings_ = settings;
-}
-
 bool SettingsManager::remoteDebug()
 {
-    return qcef_settings_->remoteDebug();
+    return true;
 }
 
 QString SettingsManager::server() const
