@@ -164,6 +164,20 @@ set(UI_FILES
     ui/widgets/title_bar_menu.cpp
     ui/widgets/title_bar_menu.h)
 
+set(PACKAGE_FILES
+    daemon/pkgmanager/lastorejobmanager.cpp
+    daemon/pkgmanager/lastorejobmanager.h
+    daemon/pkgmanager/lastorejobservice.cpp
+    daemon/pkgmanager/lastorejobservice.h
+    daemon/pkgmanager/metadatamanager.cpp
+    daemon/pkgmanager/metadatamanager.h
+    daemon/pkgmanager/pkgmanagerservice.cpp
+    daemon/pkgmanager/pkgmanagerservice.h)
+
+set(SETTINGS_FILES
+    daemon/settings/settingservice.cpp
+    daemon/settings/settingservice.h )
+
 # Executable files Generate .qm files from .ts files.
 file(GLOB TRANSLATION_TS
      ${CMAKE_SOURCE_DIR}/translations/deepin-app-store*.ts)
@@ -181,12 +195,12 @@ add_custom_command(
     "deepin-desktop-ts-convert ts2desktop resources/deepin-app-store.desktop ../translations/desktop resources/deepin-app-store.desktop"
   )
 
-add_custom_command(
-  OUTPUT deepin-app-store-daemon
-  COMMAND
-    sh -c
-    "GO111MODULE=off GOPATH=\"${CMAKE_CURRENT_SOURCE_DIR}/daemon:${CMAKE_CURRENT_SOURCE_DIR}/daemon/vendor:/usr/share/gocode\" go build -o deepin-app-store-daemon ."
-  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/daemon")
+add_executable(deepin-app-store-daemon
+               daemon/main.cpp
+               ${PACKAGE_FILES}
+               ${DBUS_FILES}
+               ${SETTINGS_FILES})
+target_link_libraries(deepin-app-store-daemon ${LINK_LIBS})
 
 add_custom_target(app-store-daemon DEPENDS deepin-app-store-daemon)
 add_custom_target(update-desktop DEPENDS deepin-update-desktop)
