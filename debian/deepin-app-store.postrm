@@ -1,3 +1,4 @@
 #!/bin/sh
 userName=$(who)
 rm -rf /home/${userName%% *}/.cache/deepin/deepin-app-store
+rm -rf /home/${userName%% *}/.cache/deepin/deepin-app-store-daemon
