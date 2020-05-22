@@ -227,6 +227,9 @@ endif()
 add_executable(deepin-app-store-tool app/tool.cpp)
 target_link_libraries(deepin-app-store-tool ${LINK_LIBS})
 
+add_executable(deepin-app-store-pkgcache app/pkg_cache.cpp)
+target_link_libraries(deepin-app-store-pkgcache ${LINK_LIBS})
+
 if(CMAKE_BUILD_TYPE MATCHES Debug)
   add_executable(test-launcher app/test_launcher.cpp base/launcher.cpp
                                base/launcher.h)

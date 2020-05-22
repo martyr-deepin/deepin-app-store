@@ -72,6 +72,11 @@ void linkApp(const QJsonObject &app)
     linkDir(appEntriesDir.absoluteFilePath("glib-2.0"), sysShareDir.absoluteFilePath("glib-2.0"));
     linkDir(appEntriesDir.absoluteFilePath("services"), sysShareDir.absoluteFilePath("dbus-1/services"));
     linkDir(appEntriesDir.absoluteFilePath("GConf"), sysShareDir.absoluteFilePath("GConf"));
+    linkDir(appEntriesDir.absoluteFilePath("help"), sysShareDir.absoluteFilePath("help"));
+    linkDir(appEntriesDir.absoluteFilePath("locale"), sysShareDir.absoluteFilePath("locale"));
+    linkDir(appEntriesDir.absoluteFilePath("plugins/fcitx"), sysShareDir.absoluteFilePath("fcitx"));
+    linkDir(appEntriesDir.absoluteFilePath("plugins/fcitxlib"), "/usr/lib/x86_64-linux-gnu/fcitx");
+    linkDir(appEntriesDir.absoluteFilePath("plugins/webbrowser"), "/usr/lib/mozilla/plugins");
 }
 
 void cleanLink()
@@ -91,6 +96,11 @@ void cleanLink()
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("glib-2.0"));
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("dbus-1/services"));
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("/etc/xdg/autostart"));
+    cleanDirBrokenLink(sysShareDir.absoluteFilePath("fcitx"));
+    cleanDirBrokenLink(sysShareDir.absoluteFilePath("help"));
+    cleanDirBrokenLink(sysShareDir.absoluteFilePath("locale"));
+    cleanDirBrokenLink(sysShareDir.absoluteFilePath("/usr/lib/x86_64-linux-gnu/fcitx"));
+    cleanDirBrokenLink(sysShareDir.absoluteFilePath("/usr/lib/mozilla/plugins"));
 }
 
 void update()

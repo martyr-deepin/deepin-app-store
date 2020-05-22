@@ -24,9 +24,9 @@
 
 #include <QDebug>
 #include <QDBusInterface>
-#include "dbus/dbus_variant/app_version.h"
-#include "dbus/dbus_variant/installed_app_info.h"
-#include "dbus/dbus_variant/installed_app_timestamp.h"
+#include "../dbus/dbus_variant/app_version.h"
+#include "../dbus/dbus_variant/installed_app_info.h"
+#include "../dbus/dbus_variant/installed_app_timestamp.h"
 
 typedef struct CacheAppInfo{
     QString      Category;
