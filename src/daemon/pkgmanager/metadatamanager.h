@@ -45,8 +45,10 @@ public:
     AppVersionList queryVersion(const QStringList &idList);
     InstalledAppTimestampList getInstallationTimes(const QStringList &idList);
     qlonglong getAppInstalledTime(QString id);
+    qlonglong queryDownloadSize(const QString &id);
     QDBusObjectPath addJob(QDBusObjectPath);
     QList<QDBusObjectPath> getJobList();
+    void updateCacheList();
 
 signals:
     void jobListChanged();

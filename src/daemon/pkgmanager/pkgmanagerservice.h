@@ -52,6 +52,7 @@ public slots:
     InstalledAppTimestampList QueryInstallationTime(const QStringList &idList);
     AppVersionList QueryVersion(const QStringList &idList);
     QDBusObjectPath Remove(const QString &localName, const QString &id);
+    void updateCacheList();
 
     QList<QDBusObjectPath> jobList();
 

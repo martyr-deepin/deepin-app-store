@@ -8,6 +8,8 @@
 #include <QSqlQuery>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QDBusInterface>
+#include <QtDBus>
 
 bool getInstalledList(QMap<QString,QString> &versionList)
 {
@@ -91,7 +93,7 @@ bool getStoreList(QVariantMap &storeList,QMap<QString,QString> &versionList)
                 if(str.startsWith("Package: ")) {
                     QString appId = str.section("Package: ",1,1);
                     appMap.insert("appID",appId);
-                    appMap.insert("localVer",versionList.value(str.section("Package: ",1,1),"0"));
+                    appMap.insert("localVer",versionList.value(str.section("Package: ",1,1)));
                 }
                 else if(str.startsWith("Version: ")) {
                     appMap.insert("remoteVer",str.section("Version: ",1,1));
@@ -114,21 +116,27 @@ bool getStoreList(QVariantMap &storeList,QMap<QString,QString> &versionList)
 
 bool createDatabase(QVariantMap &storeList)
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    QString dbPath = QString("/usr/share/deepin-app-store/");
 
-    QString dbPath = QDir::homePath()+"/.cache/deepin/deepin-app-store/cache.db";
-    db.setDatabaseName(dbPath);
+    QDir dir(dbPath);
+    if(!dir.exists())
+        dir.mkpath(dbPath);
+    dir.remove("cache.db");
+
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(dbPath+"/cache.db");
     db.setUserName("root");
     db.setPassword("deepin-app-store");
 
     bool isOk = db.open();
     if(!isOk) {
-        qDebug()<<"error info :"<<db.lastError();
+        qDebug()<<db.lastError();
         return false;
     }
     else {
-        QSqlQuery query;
-        query.exec("DELETE FROM Packages");
+        QSqlQuery query(db);
+        query.prepare("DELETE FROM Packages;");
+        query.exec();
         QString creatTableStr = "CREATE TABLE Packages  \
                 (                                       \
                   pkg_id      char(50)  NOT NULL ,      \
@@ -176,7 +184,22 @@ int main(int argc, char **argv)
     getInstalledList(versionList);
     QVariantMap storeList;
     getStoreList(storeList,versionList);
-    qDebug()<<createDatabase(storeList);
+    createDatabase(storeList);
+
+//    QCommandLineParser parser;
+//    QCommandLineOption update({"u", "update"}, QObject::tr("update package cache."));
+//    parser.addOption(update);
+
+    QProcess process;
+    process.start("ps -ef | grep deepin-app-store-daemon | grep -v grep");
+    process.waitForFinished();
+    if(!process.readAll().isEmpty()) {
+        QDBusInterface pkgManager("com.deepin.AppStore.Daemon",
+                                              "/com/deepin/AppStore/Backend",
+                                              "com.deepin.AppStore.Backend.Deb",
+                                              QDBusConnection::sessionBus());
+        pkgManager.call("updateCacheList");
+    }
 
     return 0;
 }

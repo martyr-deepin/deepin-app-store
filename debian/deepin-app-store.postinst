@@ -18,9 +18,12 @@ if [ "$1" = "configure" ] ; then
   fi
 fi
 
+deepin-app-store-pkgcache
+
 if [ "$1" = "triggered" ]; then
   echo 'begin triggered appstore'
   deepin-app-store-tool
+  deepin-app-store-pkgcache
   echo 'end triggered appstore'
 fi
 

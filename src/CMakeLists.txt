@@ -255,8 +255,9 @@ install(TARGETS deepin-app-store DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 install(TARGETS deepin-app-store-tool DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/deepin-app-store-daemon
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+install(TARGETS deepin-app-store-pkgcache DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+
+install(TARGETS deepin-app-store-daemon DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/data/com.deepin.AppStore.json
         DESTINATION /etc/deepin/pusher/handler.d)

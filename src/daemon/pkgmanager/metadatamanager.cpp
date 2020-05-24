@@ -41,6 +41,7 @@ public:
     qint64     lastRepoUpdated;
     QMap<QString,CacheAppInfo> repoApps;
     QVariantMap listApps;
+    InstalledAppInfoList listInstalledInfo;
 
 //    QMap<QString,CacheAppInfo> listStorePackages();
     QString getPackageDesktop(QString packageName);
@@ -84,34 +85,7 @@ MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent)
 {
     Q_D(MetaDataManager);
     d->lastRepoUpdated = 0;
-
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    QString dbPath = QDir::homePath()+"/.cache/deepin/deepin-app-store/cache.db";
-    db.setDatabaseName(dbPath);
-    db.setUserName("root");
-    db.setPassword("deepin-app-store");
-
-    bool isOk = db.open();
-    if(!isOk) {
-        qDebug()<<"error info :"<<db.lastError();
-    }
-    else {
-        QSqlQuery query;
-        query.exec("SELECT * FROM Packages;");
-        while(query.next())
-        {
-            QMap<QString,QVariant> map;
-//            map.insert("appID",query.value(0).toString());
-            map.insert("appLocalVer",query.value(1).toString());
-            map.insert("appRemoteVer",query.value(2).toString());
-            map.insert("appArch",query.value(3).toString());
-            map.insert("appInstallSize",query.value(4).toString());
-            map.insert("appSize",query.value(5).toString());
-            map.insert("appBin",query.value(6).toString());
-            d->listApps.insert(query.value(0).toString(),QVariant(map));
-        }
-    }
-    db.close();
+    updateCacheList();
 }
 
 MetaDataManager::~MetaDataManager()
@@ -150,30 +124,7 @@ AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
 InstalledAppInfoList MetaDataManager::listInstalled()
 {
     Q_D(MetaDataManager);
-    InstalledAppInfoList listInstalledInfo;
-
-    QDateTime current_date_time = QDateTime::currentDateTime();
-    qDebug()<<QDateTime::currentDateTime();
-    QStringList appList = d->listApps.keys();
-    qDebug()<<appList.size();
-    for (int i=0;i<appList.size();i++) {
-        QMap<QString,QVariant> map = d->listApps.value(appList.value(i)).toMap();
-        InstalledAppInfo installInfo;
-        if(!map.value("appLocalVer").toString().isEmpty())
-        {
-            InstalledAppInfo installInfo;
-            installInfo.packageName = appList.value(i);
-            installInfo.appName = appList.value(i);
-            installInfo.version = map.value("appLocalVer").toString();
-            installInfo.size = map.value("appSize").toLongLong();
-//            installInfo.localeNames = installInfo.appName;
-            installInfo.desktop = d->getPackageDesktop(installInfo.packageName);
-            installInfo.installationTime = getAppInstalledTime(installInfo.packageName);
-            listInstalledInfo.append(installInfo);
-        }
-    }
-    qDebug()<<QDateTime::currentDateTime();
-    return  listInstalledInfo;
+    return  d->listInstalledInfo;
 }
 
 
@@ -202,6 +153,12 @@ qlonglong MetaDataManager::getAppInstalledTime(QString id)
     else {
         return  0;
     }
+}
+
+qlonglong MetaDataManager::queryDownloadSize(const QString &id)
+{
+    Q_D(MetaDataManager);
+    return  d->listApps.value(id).toMap().value("appSize").toLongLong();
 }
 
 QDBusObjectPath MetaDataManager::addJob(QDBusObjectPath path)
@@ -237,6 +194,55 @@ QList<QDBusObjectPath> MetaDataManager::getJobList()
 {
     Q_D(MetaDataManager);
     return d->m_jobList;
+}
+
+void MetaDataManager::updateCacheList()
+{
+    Q_D(MetaDataManager);
+    d->lastRepoUpdated = 0;
+
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    QString dbPath = "/usr/share/deepin-app-store/cache.db";
+    db.setDatabaseName(dbPath);
+    db.setUserName("root");
+    db.setPassword("deepin-app-store");
+
+    bool isOk = db.open();
+    if(!isOk) {
+        qDebug()<<"error info :"<<db.lastError();
+    }
+    else {
+        QSqlQuery query(db);
+        query.prepare("SELECT * FROM Packages;");
+        query.exec();
+
+        d->listInstalledInfo.clear();
+        while(query.next())
+        {
+            QMap<QString,QVariant> map;
+//            map.insert("appID",query.value(0).toString());
+            map.insert("appLocalVer",query.value(1).toString());
+            map.insert("appRemoteVer",query.value(2).toString());
+            map.insert("appArch",query.value(3).toString());
+            map.insert("appInstallSize",query.value(4).toString());
+            map.insert("appSize",query.value(5).toString());
+            map.insert("appBin",query.value(6).toString());
+            d->listApps.insert(query.value(0).toString(),QVariant(map));
+            if(!query.value(1).toString().isEmpty())
+            {
+                InstalledAppInfo installInfo;
+                installInfo.packageName = query.value(0).toString();
+                installInfo.appName = query.value(0).toString();
+                installInfo.version = query.value(1).toString();
+                installInfo.size = query.value(5).toLongLong();
+        //            installInfo.localeNames = installInfo.appName;
+                installInfo.desktop = d->getPackageDesktop(installInfo.packageName);
+                installInfo.installationTime = getAppInstalledTime(installInfo.packageName);
+                d->listInstalledInfo.append(installInfo);
+            }
+        }
+    }
+    db.close();
 }
 
 //清理lastore接口对象，注销服务和dbus接口，更新job列表

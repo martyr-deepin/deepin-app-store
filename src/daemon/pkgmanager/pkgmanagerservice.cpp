@@ -92,7 +92,7 @@ InstalledAppInfoList PkgManagerService::ListInstalled()
 
 qlonglong PkgManagerService::QueryDownloadSize(const QString &id)
 {
-    QStringList partsList;
+    /*QStringList partsList;
     partsList.append(id);
     QList<QVariant> argumentList;
     argumentList << partsList;
@@ -105,7 +105,8 @@ qlonglong PkgManagerService::QueryDownloadSize(const QString &id)
         return 0;
     }
     qDebug()<<reply.value();
-    return reply.value();
+    return reply.value();*/
+    return m_pMetaDataManager->queryDownloadSize(id);
 }
 
 InstalledAppTimestampList PkgManagerService::QueryInstallationTime(const QStringList &idList)
@@ -131,6 +132,11 @@ QDBusObjectPath PkgManagerService::Remove(const QString &localName, const QStrin
     }
 
     return m_pMetaDataManager->addJob(reply.value());
+}
+
+void PkgManagerService::updateCacheList()
+{
+    m_pMetaDataManager->updateCacheList();
 }
 
 QList<QDBusObjectPath> PkgManagerService::jobList()
