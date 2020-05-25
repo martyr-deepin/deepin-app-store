@@ -29,6 +29,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QFileSystemWatcher>
 
 class MetaDataManagerPrivate
 {
@@ -50,6 +51,7 @@ public:
     QList<QDBusObjectPath> m_jobList;//joblist
     //使用QString为了方便比较
     QMap<QString,LastoreJobService *> m_jobServiceList;
+    QFileSystemWatcher *m_fileSystemWatcher;
 
     MetaDataManager *q_ptr;
     Q_DECLARE_PUBLIC(MetaDataManager)
@@ -86,11 +88,18 @@ MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent)
     Q_D(MetaDataManager);
     d->lastRepoUpdated = 0;
     updateCacheList();
+
+    d->m_fileSystemWatcher = new QFileSystemWatcher(this);
+    d->m_fileSystemWatcher->addPath("/usr/share/deepin-app-store/update");
+    connect(d->m_fileSystemWatcher,&QFileSystemWatcher::fileChanged,this,[=](){
+        this->updateCacheList();
+    });
 }
 
 MetaDataManager::~MetaDataManager()
 {
-
+    Q_D(MetaDataManager);
+    d->m_fileSystemWatcher->deleteLater();
 }
 
 AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
@@ -201,7 +210,14 @@ void MetaDataManager::updateCacheList()
     Q_D(MetaDataManager);
     d->lastRepoUpdated = 0;
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE","read");
+
+    if (QSqlDatabase::contains("read")) {
+        db = QSqlDatabase::database("read");
+    } else {
+        db = QSqlDatabase::addDatabase("QMYSQL", "read");
+    }
+
     QString dbPath = "/usr/share/deepin-app-store/cache.db";
     db.setDatabaseName(dbPath);
     db.setUserName("root");

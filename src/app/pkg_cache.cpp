@@ -34,7 +34,6 @@ bool getInstalledList(QMap<QString,QString> &versionList)
         if(installedDetialList.value(1).startsWith("ii")) {
             QString id = installedDetialList.value(0);
             QStringList fullPackageName = id.split(':');
-            // fuzzyPackageName 就是应用标识，这是有问题的！！！
             QString fuzzyPackageName = fullPackageName[0];
             versionList.insert(fuzzyPackageName,installedDetialList.value(2));
         }
@@ -123,7 +122,12 @@ bool createDatabase(QVariantMap &storeList)
         dir.mkpath(dbPath);
     dir.remove("cache.db");
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE","create");
+    if (QSqlDatabase::contains("create")) {
+        db = QSqlDatabase::database("create");
+    } else {
+        db = QSqlDatabase::addDatabase("QMYSQL", "create");
+    }
     db.setDatabaseName(dbPath+"/cache.db");
     db.setUserName("root");
     db.setPassword("deepin-app-store");
@@ -135,8 +139,6 @@ bool createDatabase(QVariantMap &storeList)
     }
     else {
         QSqlQuery query(db);
-        query.prepare("DELETE FROM Packages;");
-        query.exec();
         QString creatTableStr = "CREATE TABLE Packages  \
                 (                                       \
                   pkg_id      char(50)  NOT NULL ,      \
@@ -145,34 +147,79 @@ bool createDatabase(QVariantMap &storeList)
                   pkg_arch    char(10)  NULL ,          \
                   pkg_installsize   char(20)   NULL ,   \
                   pkg_size     char(20)  NULL ,         \
-                  pkg_binpath char(100)  NULL           \
+                  pkg_binpath char(100)  NULL  ,         \
+                  PRIMARY KEY (pkg_id)                    \
                 );";
         query.prepare(creatTableStr);
-        if(!query.exec()){
-            qDebug()<<"query error :"<<query.lastError();
+        if(!query.exec()) {
+            qDebug()<<query.lastError();
             return false;
         }
+        query.finish();
+
+        db.transaction();
+        QVariantMap::iterator i;
+        for (i = storeList.begin(); i != storeList.end(); ++i) {
+           QMap<QString,QVariant> map = i.value().toMap();
+           QSqlQuery query(db);
+           query.prepare("INSERT INTO Packages (pkg_id, pkg_localver, pkg_remotever,pkg_arch,pkg_installsize,pkg_size,pkg_binpath) "
+                         "VALUES (?,?,?,?,?,?,?)");
+           query.bindValue(0, map.value("appID").toString());
+           query.bindValue(1, map.value("localVer").toString());
+           query.bindValue(2, map.value("remoteVer").toString());
+           query.bindValue(3, map.value("appArch").toString());
+           query.bindValue(4, map.value("installSize").toString());
+           query.bindValue(5, map.value("debSize").toString());
+           query.bindValue(6, "");
+           query.exec();
+           query.finish();
+        }
+        db.commit();
+        db.close();
     }
 
-    db.transaction();
-    QVariantMap::iterator i;
-    for (i = storeList.begin(); i != storeList.end(); ++i) {
-       QMap<QString,QVariant> map = i.value().toMap();
-       QSqlQuery query;
-       query.prepare("INSERT INTO Packages (pkg_id, pkg_localver, pkg_remotever,pkg_arch,pkg_installsize,pkg_size,pkg_binpath) "
-                     "VALUES (?,?,?,?,?,?,?)");
-       query.bindValue(0, map.value("appID").toString());
-       query.bindValue(1, map.value("localVer").toString());
-       query.bindValue(2, map.value("remoteVer").toString());
-       query.bindValue(3, map.value("appArch").toString());
-       query.bindValue(4, map.value("installSize").toString());
-       query.bindValue(5, map.value("debSize").toString());
-       query.bindValue(6, "");
-       query.exec();
-    }
-    db.commit();
+    return true;
+}
 
-    db.close();
+bool updateDatabase(QVariantMap &storeList)
+{
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE","update");
+
+    if (QSqlDatabase::contains("update")) {
+        db = QSqlDatabase::database("update");
+    } else {
+        db = QSqlDatabase::addDatabase("QMYSQL", "update");
+    }
+    db.setDatabaseName("/usr/share/deepin-app-store/cache.db");
+    db.setUserName("root");
+    db.setPassword("deepin-app-store");
+
+    bool isOk = db.open();
+    if(!isOk) {
+        qDebug()<<db.lastError();
+        return false;
+    }
+    else {
+        db.transaction();
+        QVariantMap::iterator i;
+        for (i = storeList.begin(); i != storeList.end(); ++i) {
+           QMap<QString,QVariant> map = i.value().toMap();
+           QSqlQuery query(db);
+           QString sql = QString("INSERT INTO Packages(pkg_id, pkg_localver, pkg_remotever,pkg_arch,pkg_installsize,pkg_size,pkg_binpath) "
+                                 "VALUES(%1,%2,%3,%4,%5,%6,%7) "
+                                 "ON DUPLICATE KEY "
+                                 "UPDATE pkg_localver=%2, pkg_remotever=%3,pkg_arch=%4,pkg_installsize=%5,pkg_size=%6,pkg_binpath=%7")
+                   .arg(map.value("appID").toString()).arg(map.value("localVer").toString()).arg(map.value("remoteVer").toString())
+                   .arg(map.value("appArch").toString()).arg(map.value("installSize").toString()).arg(map.value("debSize").toString())
+                   .arg("");
+           query.prepare(sql);
+           query.exec();
+           query.finish();
+        }
+        db.commit();
+        db.close();
+    }
+
     return true;
 }
 
@@ -184,22 +231,27 @@ int main(int argc, char **argv)
     getInstalledList(versionList);
     QVariantMap storeList;
     getStoreList(storeList,versionList);
-    createDatabase(storeList);
+    QCommandLineParser parser;
+    QCommandLineOption update({"u", "update"}, QObject::tr("update package cache."));
+    parser.addOption(update);
 
-//    QCommandLineParser parser;
-//    QCommandLineOption update({"u", "update"}, QObject::tr("update package cache."));
-//    parser.addOption(update);
+    QCommandLineOption create({"c", "create"}, QObject::tr("create package cache."));
+    parser.addOption(create);
 
-    QProcess process;
-    process.start("ps -ef | grep deepin-app-store-daemon | grep -v grep");
-    process.waitForFinished();
-    if(!process.readAll().isEmpty()) {
-        QDBusInterface pkgManager("com.deepin.AppStore.Daemon",
-                                              "/com/deepin/AppStore/Backend",
-                                              "com.deepin.AppStore.Backend.Deb",
-                                              QDBusConnection::sessionBus());
-        pkgManager.call("updateCacheList");
+    parser.process(app);
+
+    if(parser.isSet(update)) {
+        updateDatabase(storeList);
     }
+    else {
+        createDatabase(storeList);
+    }
+
+    QFile file("/usr/share/deepin-app-store/update");
+    file.open(QIODevice::WriteOnly);
+    QDataStream out(&file);   // we will serialize the data into the file
+    out << QDateTime::currentDateTime().toString();
+    file.close();
 
     return 0;
 }
