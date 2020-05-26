@@ -110,9 +110,12 @@ void LastoreJobService::lastoreJobListChanged(QString interface, QMap<QString,QV
 {
     Q_UNUSED(interface);
     Q_UNUSED(list);
-    if(map.value("Status").toString().compare("end") == 0)//end
+
+    if(map.contains("Type"))
+        jobType = map.value("Type").toString();
+    if((jobType == "remove" || jobType == "install")
+       &&map.value("Status").toString().compare("end") == 0)//end
     {
-        qDebug()<<map;
         emit destroyService();
     }
 }

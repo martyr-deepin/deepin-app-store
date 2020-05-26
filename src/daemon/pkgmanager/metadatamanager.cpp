@@ -31,6 +31,8 @@
 #include <QSqlQuery>
 #include <QFileSystemWatcher>
 
+#include <QMutex>
+
 class MetaDataManagerPrivate
 {
 public:
@@ -43,6 +45,8 @@ public:
     QMap<QString,CacheAppInfo> repoApps;
     QVariantMap listApps;
     InstalledAppInfoList listInstalledInfo;
+
+    QMutex mutex;
 
 //    QMap<QString,CacheAppInfo> listStorePackages();
     QString getPackageDesktop(QString packageName);
@@ -94,6 +98,8 @@ MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent)
     connect(d->m_fileSystemWatcher,&QFileSystemWatcher::fileChanged,this,[=](){
         this->updateCacheList();
     });
+
+    connect(this,&MetaDataManager::signUpdateJobList,this,&MetaDataManager::updateJobList,Qt::QueuedConnection);
 }
 
 MetaDataManager::~MetaDataManager()
@@ -193,9 +199,9 @@ QDBusObjectPath MetaDataManager::addJob(QDBusObjectPath path)
             QDBusConnection::ExportAllProperties)) {
         qDebug() << "registerObject setting dbus Error" << QDBusConnection::sessionBus().lastError();
     }
-
-    d->m_jobServiceList[servicePath] = lastoreJob;
-    updateJobList();//update JobList
+    d->m_jobServiceList.insert(servicePath,lastoreJob);
+//    updateJobList();//update JobList
+    emit signUpdateJobList();
     return QDBusObjectPath(servicePath);
 }
 
@@ -272,7 +278,8 @@ void MetaDataManager::cleanService()
     QDBusConnection::sessionBus().unregisterObject(servicePath);
 
     d->m_jobServiceList.remove(servicePath);
-    updateJobList();//update JobList
+//    updateJobList();//update JobList
+    emit signUpdateJobList();
     lastoreJob->deleteLater();
     qDebug() << "unregisterObject dbus " << servicePath;
 }

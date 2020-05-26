@@ -58,6 +58,7 @@ public:
 private:
     LastoreJobManager *m_pLastoreJob = nullptr;
     QString m_JobPath;
+    QString jobType;
 
 signals:
     void destroyService();

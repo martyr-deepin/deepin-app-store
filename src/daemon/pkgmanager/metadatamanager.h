@@ -52,16 +52,17 @@ public:
 
 signals:
     void jobListChanged();
+    void signUpdateJobList();
 
 public slots:
     void cleanService();
     void jobController(QString cmd, QString jobId);
+    void updateJobList();
 
 private:
     QScopedPointer<MetaDataManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), MetaDataManager)
 
-    void updateJobList();
     QDBusInterface *m_pLastoreDaemon;
 };
 
