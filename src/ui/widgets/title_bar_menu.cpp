@@ -64,8 +64,8 @@ void TitleBarMenu::privacyAgreementDialogRequested()
     }
 
     QProcess ddeLicenseDialog;
-    QString titleZH = tr("网络账户隐私政策");
-    QString titleEN = tr("Network Account Privacy Policy");
+    QString titleZH = tr("隐 私 政 策");
+    QString titleEN = tr("Privacy Policy");
     ddeLicenseDialog.setProgram("dde-license-dialog");
     QStringList args;
     args << "-u" << titleEN
