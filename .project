@@ -1,0 +1,6 @@
+{
+    "type": "opensource",
+    "3rdparty": [],
+    "ignore": ["src/*.xml","src/*.svg","translations","debian","docs"],
+    "license": ["GPLv3"]
+}
