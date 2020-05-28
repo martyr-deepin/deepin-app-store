@@ -266,3 +266,6 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/translations
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/
         FILES_MATCHING
         PATTERN "*")
+
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/config/pkg-config-hook-config
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/)
