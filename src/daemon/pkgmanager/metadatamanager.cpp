@@ -57,8 +57,6 @@ public:
     QList<QDBusObjectPath> m_jobList;//joblist
     //使用QString为了方便比较
     QMap<QString,LastoreJobService *> m_jobServiceList;
-    //待删除的jobservice
-    QList<LastoreJobService *> m_deleteJobServiceList;
     QFileSystemWatcher *m_fileSystemWatcher;
 
     MetaDataManager *q_ptr;
@@ -67,18 +65,6 @@ public:
 
 QMap<QString,CacheAppInfo> MetaDataManagerPrivate::listStorePackages()
 {
-    QFileInfo info("/var/cache/apt/pkgcache.bin");
-    if (info.exists()) {
-        if(info.lastModified().toSecsSinceEpoch() < lastRepoUpdated){
-            return repoApps;
-        }
-    }
-    else {
-        if(info.lastModified().toSecsSinceEpoch() > 0){
-            return repoApps;
-        }
-    }
-
     QProcess process;
     process.setReadChannel(QProcess::StandardOutput);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -264,7 +250,6 @@ AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
             map.insert("appLocalVer",versionInfo.installed_version);
             map.insert("appRemoteVer",versionInfo.remote_version);
             d->listApps.insert(idList.value(i),QVariant(map));
-            qDebug()<<versionInfo.pkg_name<<versionInfo.installed_version<<versionInfo.remote_version;
         }
 
         listVersionInfo.append(versionInfo);
@@ -323,7 +308,7 @@ QDBusObjectPath MetaDataManager::addJob(QDBusObjectPath path)
         return QDBusObjectPath(QString("/com/deepin/AppStore/Backend/Job") + jobId);
     }
 
-    LastoreJobService *lastoreJob = new  LastoreJobService(jobId);
+    LastoreJobService *lastoreJob = new  LastoreJobService(jobId,this);
     //delete service
     connect(lastoreJob, &LastoreJobService::destroyService, this, &MetaDataManager::cleanService);
     //start、pause、clean job
@@ -416,7 +401,6 @@ void MetaDataManager::cleanService()
     d->m_jobServiceList.remove(servicePath);
 //    updateJobList();//update JobList
     emit signUpdateJobList();
-    delete lastoreJob;
     qDebug() << "unregisterObject dbus " << servicePath;
 }
 
@@ -438,7 +422,10 @@ void MetaDataManager::updateJobList()
 
     qDebug()<<d->m_jobServiceList.keys();
     QString servicePath;
-    foreach (LastoreJobService* lastoreJob, d->m_jobServiceList) {
+    LastoreJobService* lastoreJob;
+    foreach (lastoreJob, d->m_jobServiceList) {
+        if(lastoreJob == nullptr)
+            continue;
         servicePath = QString("/com/deepin/AppStore/Backend/Job") + lastoreJob->id();
         jobList.append(QDBusObjectPath(servicePath));
     }

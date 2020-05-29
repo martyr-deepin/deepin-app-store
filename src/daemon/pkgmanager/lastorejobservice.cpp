@@ -111,10 +111,10 @@ void LastoreJobService::lastoreJobListChanged(QString interface, QMap<QString,QV
     Q_UNUSED(interface);
     Q_UNUSED(list);
 
-    if(map.contains("Type"))
-        jobType = map.value("Type").toString();
-    if((jobType == "remove" || jobType == "install")
-       &&map.value("Status").toString().compare("end") == 0)//end
+//    qDebug()<<map<<"--"<<m_pLastoreJob->status()<<m_pLastoreJob->type();
+    if((m_pLastoreJob->type().isEmpty() && m_pLastoreJob->status().isEmpty()) ||
+      (m_pLastoreJob->status() == "end" && m_pLastoreJob->type() == "download" && map.value("Status").toString() == "paused") ||
+      (m_pLastoreJob->status() == "end" && m_pLastoreJob->type() == "install" && map.value("Status").toString() == "succeed"))//end
     {
         emit destroyService();
     }
