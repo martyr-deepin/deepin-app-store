@@ -21,6 +21,15 @@
 
 #include "pkgmanagerservice.h"
 #include <QtDBus>
+#include <QDBusError>
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusReply>
+
+#include "../../dbus/dbushelper.h"
+
+#define AGENT_INTERFACE_IFC  "com.deepin.appstore.cache"
+#define AGENT_INTERFACE_PATH "/com/deepin/appstore/cache"
 
 PkgManagerService::PkgManagerService(QObject *parent) : QObject(parent)
 {
@@ -30,7 +39,14 @@ PkgManagerService::PkgManagerService(QObject *parent) : QObject(parent)
                                    QDBusConnection::systemBus());
 
     m_pMetaDataManager = new MetaDataManager(lastoreDaemon,this);
+    auto bus = QDBusConnection::systemBus();
+    if (!bus.registerObject(AGENT_INTERFACE_PATH,  m_pMetaDataManager,
+                            QDBusConnection::ExportScriptableSlots)) {
+        qDebug() << "registerObject Error" << bus.lastError();
+        exit(0x0003);
+    }
     connect(m_pMetaDataManager,SIGNAL(jobListChanged()),this,SIGNAL(jobListChanged()));
+
 
     //注册自定义dbus数据类型
     AppVersion::registerMetaType();

@@ -27,6 +27,7 @@
 #include "../dbus/dbus_variant/app_version.h"
 #include "../dbus/dbus_variant/installed_app_info.h"
 #include "../dbus/dbus_variant/installed_app_timestamp.h"
+#include <QTimer>
 
 typedef struct CacheAppInfo{
     QString      Category;
@@ -48,7 +49,7 @@ public:
     qlonglong queryDownloadSize(const QString &id);
     QDBusObjectPath addJob(QDBusObjectPath);
     QList<QDBusObjectPath> getJobList();
-    void updateCacheList();
+
 
 signals:
     void jobListChanged();
@@ -58,11 +59,14 @@ public slots:
     void cleanService();
     void jobController(QString cmd, QString jobId);
     void updateJobList();
+    void queryJobList();
+    void updateCacheList();
 
 private:
     QScopedPointer<MetaDataManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), MetaDataManager)
 
+    QTimer *timer;
     QDBusInterface *m_pLastoreDaemon;
 };
 

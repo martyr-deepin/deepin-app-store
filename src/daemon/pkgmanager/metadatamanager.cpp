@@ -215,6 +215,10 @@ MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent)
     });
 
     connect(this,&MetaDataManager::signUpdateJobList,this,&MetaDataManager::updateJobList,Qt::QueuedConnection);
+
+    timer = new QTimer(this);
+    connect(timer,SIGNAL(timeout()),this,SLOT(queryJobList()));
+    timer->start(800);
 }
 
 MetaDataManager::~MetaDataManager()
@@ -385,6 +389,7 @@ void MetaDataManager::updateCacheList()
             }
         }
     }
+    qDebug()<<"update";
     db.close();
 }
 
@@ -431,4 +436,15 @@ void MetaDataManager::updateJobList()
     }
     d->m_jobList = jobList;
     emit jobListChanged();//通知界面更新
+}
+
+void MetaDataManager::queryJobList()
+{
+//    qDebug()<<m_pLastoreDaemon->property("JobList").toMap();
+    QDBusMessage myDBusMessage;
+    QVariant reply =  m_pLastoreDaemon->property("JobList");
+    QList<QVariant> list ;
+    list.append(reply);
+    qDebug()<<reply;
+    myDBusMessage.setArguments(list);
 }

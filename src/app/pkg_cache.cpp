@@ -8,8 +8,126 @@
 #include <QSqlQuery>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QCommandLineParser>
+#include <QDBusError>
+#include <QDBusConnection>
 #include <QDBusInterface>
-#include <QtDBus>
+#include <QDBusReply>
+
+#define AGENT_INTERFACE_IFC  "com.deepin.appstore.cache"
+#define AGENT_INTERFACE_PATH "/com/deepin/appstore/cache"
+
+#include <pwd.h>
+#include <unistd.h>
+#include <fstream>
+
+#include <QDBusError>
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusReply>
+#include <QDebug>
+
+static std::string getProcIdExe(int id)
+{
+    std::string execName;
+    if (id > 0) {
+        // Read contents of virtual /proc/{pid}/cmdline file
+        auto exeSymlinkPath = std::string("/proc/") + std::to_string(id) + "/exe";
+        char *result = realpath(exeSymlinkPath.c_str(), nullptr);
+        if (result) {
+            execName = std::string(result);
+        } else {
+            const size_t bufferSize = 4096;
+            char buffer[bufferSize] = {0};
+            ssize_t sz = readlink(exeSymlinkPath.c_str(), buffer, bufferSize);
+            QString link = QString(buffer);
+            if (link.endsWith(" (deleted)")) {
+                link = link.left(link.length() - QString(" (deleted)").length());
+            }
+            qDebug() << link;
+            if (sz) {
+                execName = link.toStdString();
+            }
+
+        }
+
+    }
+    return execName;
+}
+
+static std::string getUsername(uint32_t uid)
+{
+    auto pw = getpwuid(uid);
+    if (pw && pw->pw_name) {
+        return std::string(pw->pw_name);
+    }
+    return "";
+}
+
+namespace DBusHelper
+{
+
+uint32_t findDBusUid(const QString &name)
+{
+    auto bus = QDBusConnection::systemBus();
+
+    static QDBusInterface interface("org.freedesktop.DBus",
+                                        "/org/freedesktop/DBus",
+                                        "org.freedesktop.DBus",
+                                        bus);
+    QDBusReply<uint32_t> reply = interface.call(
+                                     "GetConnectionUnixUser",
+                                     name);
+    if (!reply.isValid()) {
+        qDebug() << "D-Bus Error:" << reply.error();
+    }
+    return reply.value();
+}
+
+uint32_t findDBusPid(const QString &name)
+{
+    auto bus = QDBusConnection::systemBus();
+
+    static QDBusInterface interface("org.freedesktop.DBus",
+                                        "/org/freedesktop/DBus",
+                                        "org.freedesktop.DBus",
+                                        bus);
+    QDBusReply<uint32_t> reply = interface.call(
+                                     "GetConnectionUnixProcessID",
+                                     name);
+    if (!reply.isValid()) {
+        qDebug() << "D-Bus Error:" << reply.error();
+    }
+    return reply.value();
+}
+
+std::string findByUserExec(const std::string exec, const std::string username)
+{
+    auto bus = QDBusConnection::systemBus();
+
+    static QDBusInterface interface("org.freedesktop.DBus",
+                                        "/org/freedesktop/DBus",
+                                        "org.freedesktop.DBus",
+                                        bus);
+    QDBusReply<QStringList> reply = interface.call("ListNames");
+    if (!reply.isValid()) {
+        qDebug() << "D-Bus Error:" << reply.error();
+    }
+
+    for (auto name : reply.value()) {
+        if (name.startsWith(":")) {
+            auto pid = findDBusPid(name);
+            auto uid = findDBusUid(name);
+            auto owner = getUsername(uid);
+            auto path = getProcIdExe(static_cast<int>(pid));
+            if (path == exec && !exec.empty() && username == owner) {
+                return name.toStdString();
+            }
+        }
+    }
+    return std::string();
+}
+}
 
 bool getInstalledList(QMap<QString,QString> &versionList)
 {
@@ -41,6 +159,7 @@ bool getInstalledList(QMap<QString,QString> &versionList)
 
     return true;
 }
+
 
 bool getStoreList(QVariantMap &storeList,QMap<QString,QString> &versionList)
 {
@@ -247,11 +366,26 @@ int main(int argc, char **argv)
         createDatabase(storeList);
     }
 
-    QFile file("/usr/share/deepin-app-store/update");
+    /*QFile file("/usr/share/deepin-app-store/update");
     file.open(QIODevice::WriteOnly);
     QDataStream out(&file);   // we will serialize the data into the file
     out << QDateTime::currentDateTime().toString();
-    file.close();
+    file.close();*/
+
+    QString user("zt");
+    auto name = DBusHelper::findByUserExec("/usr/bin/deepin-app-store-daemon", user.toStdString());
+
+    qDebug() << "findByUserExec find" << name.c_str();
+    auto bus = QDBusConnection::systemBus();
+    QDBusInterface interface(QString::fromStdString(name),
+                                 AGENT_INTERFACE_PATH,
+                                 AGENT_INTERFACE_IFC,
+                                 bus);
+
+    QDBusReply<QString> reply = interface.call("updateCacheList"/*,address*/);
+    if (!reply.isValid()) {
+        qDebug() << "RequestInputAuthcode D-Bus Error:" << reply.error();
+    }
 
     return 0;
 }
