@@ -33,6 +33,7 @@
 #include <QDebug>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QLocalServer>
 
 class MetaDataManagerPrivate
 {
@@ -130,14 +131,12 @@ void MetaDataManagerPrivate::insertJobServiceList(QString key, LastoreJobService
 {
     QMutexLocker locker(&mutex);
     m_jobServiceList.insert(key,job);
-//    return m_jobServiceList;
 }
 
 void MetaDataManagerPrivate::removeJobServiceList(QString key/*, LastoreJobService *job*/)
 {
     QMutexLocker locker(&mutex);
     m_jobServiceList.remove(key);
-//    return m_jobServiceList;
 }
 
 QString MetaDataManagerPrivate::getPackageDesktop(QString packageName)
@@ -236,6 +235,17 @@ MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent)
     d->m_fileSystemWatcher = new QFileSystemWatcher(this);
     d->m_fileSystemWatcher->addPath("/usr/share/deepin-app-store/update");
     connect(d->m_fileSystemWatcher,&QFileSystemWatcher::fileChanged,this,[=](){
+//        this->updateCacheList();
+    });
+
+    QLocalServer *m_server = new QLocalServer(this);
+    QLocalServer::removeServer("ServerName");
+    bool ok = m_server->listen("ServerName");
+    if (!ok)
+    {
+        // TODO:
+    }
+    connect(m_server,&QLocalServer::newConnection, this,[=](){
         this->updateCacheList();
     });
 }
@@ -425,10 +435,7 @@ void MetaDataManager::cleanService(QStringList jobList)
             QString servicePath = QString("/com/deepin/AppStore/Backend/Job") + lastoreJob->id();
             //unregisterObject
             QDBusConnection::sessionBus().unregisterObject(servicePath);
-
             deleteJob.append(servicePath);
-            lastoreJob = nullptr;
-            qDebug() << "unregisterObject dbus " << servicePath;
         }
     }
 

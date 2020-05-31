@@ -14,6 +14,8 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 
+#include <QLocalSocket>
+
 #define AGENT_INTERFACE_IFC  "com.deepin.appstore.cache"
 #define AGENT_INTERFACE_PATH "/com/deepin/appstore/cache"
 
@@ -372,20 +374,22 @@ int main(int argc, char **argv)
     out << QDateTime::currentDateTime().toString();
     file.close();*/
 
-    QString user("zt");
+    /*QString user("zhoutao");
     auto name = DBusHelper::findByUserExec("/usr/bin/deepin-app-store-daemon", user.toStdString());
 
     qDebug() << "findByUserExec find" << name.c_str();
-    auto bus = QDBusConnection::systemBus();
+    auto bus = QDBusConnection::sessionBus();
     QDBusInterface interface(QString::fromStdString(name),
                                  AGENT_INTERFACE_PATH,
                                  AGENT_INTERFACE_IFC,
                                  bus);
 
-    QDBusReply<QString> reply = interface.call("updateCacheList"/*,address*/);
+    QDBusReply<QString> reply = interface.call("updateCacheList");
     if (!reply.isValid()) {
         qDebug() << "RequestInputAuthcode D-Bus Error:" << reply.error();
-    }
+    }*/
+    QLocalSocket localSocket;
+    localSocket.connectToServer("ServerName");
 
     return 0;
 }

@@ -37,12 +37,13 @@ PkgManagerService::PkgManagerService(QObject *parent) : QObject(parent)
                                    QDBusConnection::systemBus());
 
     m_pMetaDataManager = new MetaDataManager(lastoreDaemon,this);
-    /*auto bus = QDBusConnection::systemBus();
+    /*auto bus = QDBusConnection::sessionBus();
     if (!bus.registerObject(AGENT_INTERFACE_PATH,  m_pMetaDataManager,
                             QDBusConnection::ExportScriptableSlots)) {
         qDebug() << "registerObject Error" << bus.lastError();
         exit(0x0003);
     }*/
+
     connect(m_pMetaDataManager,SIGNAL(jobListChanged()),this,SIGNAL(jobListChanged()));
 
 
