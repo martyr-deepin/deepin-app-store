@@ -26,9 +26,6 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 
-#define AGENT_INTERFACE_IFC  "com.deepin.appstore.cache"
-#define AGENT_INTERFACE_PATH "/com/deepin/appstore/cache"
-
 PkgManagerService::PkgManagerService(QObject *parent) : QObject(parent)
 {
     lastoreDaemon = new QDBusInterface("com.deepin.lastore",
@@ -37,12 +34,6 @@ PkgManagerService::PkgManagerService(QObject *parent) : QObject(parent)
                                    QDBusConnection::systemBus());
 
     m_pMetaDataManager = new MetaDataManager(lastoreDaemon,this);
-    /*auto bus = QDBusConnection::sessionBus();
-    if (!bus.registerObject(AGENT_INTERFACE_PATH,  m_pMetaDataManager,
-                            QDBusConnection::ExportScriptableSlots)) {
-        qDebug() << "registerObject Error" << bus.lastError();
-        exit(0x0003);
-    }*/
 
     connect(m_pMetaDataManager,SIGNAL(jobListChanged()),this,SIGNAL(jobListChanged()));
 

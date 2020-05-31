@@ -428,11 +428,12 @@ void MetaDataManager::cleanService(QStringList jobList)
     LastoreJobService *lastoreJob;
     QStringList deleteJob;
     QMap<QString,LastoreJobService *> jobServiceList = d->getJobServiceList();
+//    qDebug()<<jobList<<jobServiceList;
     foreach (lastoreJob, jobServiceList) {
-        QString job = QString("/com/deepin/lastore/Job") + lastoreJob->id();
+        QString job = QString("/com/deepin/lastore/Job") + lastoreJob->getJobPath();
 
         if(!jobList.contains(job)) {
-            QString servicePath = QString("/com/deepin/AppStore/Backend/Job") + lastoreJob->id();
+            QString servicePath = QString("/com/deepin/AppStore/Backend/Job") + lastoreJob->getJobPath();
             //unregisterObject
             QDBusConnection::sessionBus().unregisterObject(servicePath);
             deleteJob.append(servicePath);
@@ -471,7 +472,6 @@ void MetaDataManager::updateJobList()
     LastoreJobService* lastoreJob;
     QMap<QString,LastoreJobService *> jobServiceList = d->getJobServiceList();
 
-    qDebug()<<jobServiceList.keys();
     foreach (lastoreJob, jobServiceList) {
         servicePath = QString("/com/deepin/AppStore/Backend/Job") + lastoreJob->id();
         jobList.append(QDBusObjectPath(servicePath));

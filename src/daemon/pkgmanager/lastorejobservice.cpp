@@ -27,7 +27,6 @@ LastoreJobService::LastoreJobService(QString path, QObject *parent) :
     m_JobPath(path)
 {
     m_pLastoreJob = new LastoreJobManager(path,this);
-    idDelete = false;
 }
 
 bool LastoreJobService::cancelable()
@@ -85,14 +84,9 @@ QString LastoreJobService::type()
     return m_pLastoreJob->type();
 }
 
-void LastoreJobService::setDeleteStatus(bool del)
+QString LastoreJobService::getJobPath()
 {
-    idDelete = del;
-}
-
-bool LastoreJobService::getDeleteStatus()
-{
-    return idDelete;
+    return m_JobPath;
 }
 
 void LastoreJobService::Clean()

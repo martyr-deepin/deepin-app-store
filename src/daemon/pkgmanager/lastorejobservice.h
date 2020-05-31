@@ -54,14 +54,12 @@ public:
     qlonglong speed();
     QString status();
     QString type();
-    void setDeleteStatus(bool del);
-    bool getDeleteStatus();
+    QString getJobPath();
 
 private:
     LastoreJobManager *m_pLastoreJob = nullptr;
     QString m_JobPath;
     QString jobType;
-    bool idDelete;
 
 signals:
     void jobController(QString cmd,QString jobId);
