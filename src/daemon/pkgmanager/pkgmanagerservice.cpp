@@ -57,14 +57,6 @@ PkgManagerService::PkgManagerService(QObject *parent) : QObject(parent)
     AppVersion::registerMetaType();
     InstalledAppInfo::registerMetaType();
     InstalledAppTimestamp::registerMetaType();
-
-    //初始化获取任务列表缓存
-//    QDBusMessage myDBusMessage;
-//    QVariant reply =  lastoreDaemon->property("JobList");
-//    QList<QVariant> list ;
-//    list.append(reply);
-//    qDebug()<<reply;
-//    myDBusMessage.setArguments(list);
 }
 
 void PkgManagerService::CleanArchives()
