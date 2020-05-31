@@ -50,7 +50,6 @@ public:
     QDBusObjectPath addJob(QDBusObjectPath);
     QList<QDBusObjectPath> getJobList();
 
-
 signals:
     void jobListChanged();
 
