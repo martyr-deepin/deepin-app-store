@@ -54,6 +54,8 @@ public slots:
     QDBusObjectPath Remove(const QString &localName, const QString &id);
     void updateCacheList();
 
+    void lastoreJobListChanged(QString,QMap<QString,QVariant> ,QStringList);
+
     QList<QDBusObjectPath> jobList();
 
 private:

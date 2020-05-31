@@ -53,13 +53,11 @@ public:
 
 signals:
     void jobListChanged();
-    void signUpdateJobList();
 
 public slots:
-    void cleanService();
+    void cleanService(QStringList jobList);
     void jobController(QString cmd, QString jobId);
     void updateJobList();
-    void queryJobList();
     void updateCacheList();
 
 private:

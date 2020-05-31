@@ -54,21 +54,22 @@ public:
     qlonglong speed();
     QString status();
     QString type();
+    void setDeleteStatus(bool del);
+    bool getDeleteStatus();
 
 private:
     LastoreJobManager *m_pLastoreJob = nullptr;
     QString m_JobPath;
     QString jobType;
+    bool idDelete;
 
 signals:
-    void destroyService();
     void jobController(QString cmd,QString jobId);
 
 public slots:
     void Clean();
     void Pause();
     void Start();
-    void lastoreJobListChanged(QString,QMap<QString,QVariant> ,QStringList);
 };
 
 #endif // LASTOREJOBSERVICE_H

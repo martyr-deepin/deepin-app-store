@@ -27,13 +27,7 @@ LastoreJobService::LastoreJobService(QString path, QObject *parent) :
     m_JobPath(path)
 {
     m_pLastoreJob = new LastoreJobManager(path,this);
-
-    QDBusConnection::systemBus().connect("com.deepin.lastore",
-                                         path.prepend("/com/deepin/lastore/Job"),
-                                         "org.freedesktop.DBus.Properties",
-                                         QLatin1String("PropertiesChanged"),
-                                         this,
-                                         SLOT(lastoreJobListChanged(QString,QMap<QString,QVariant> ,QStringList)));
+    idDelete = false;
 }
 
 bool LastoreJobService::cancelable()
@@ -91,6 +85,16 @@ QString LastoreJobService::type()
     return m_pLastoreJob->type();
 }
 
+void LastoreJobService::setDeleteStatus(bool del)
+{
+    idDelete = del;
+}
+
+bool LastoreJobService::getDeleteStatus()
+{
+    return idDelete;
+}
+
 void LastoreJobService::Clean()
 {
     emit jobController("CleanJob",m_JobPath);
@@ -104,18 +108,4 @@ void LastoreJobService::Pause()
 void LastoreJobService::Start()
 {
     emit jobController("StartJob",m_JobPath);
-}
-
-void LastoreJobService::lastoreJobListChanged(QString interface, QMap<QString,QVariant> map, QStringList list)
-{
-    Q_UNUSED(interface);
-    Q_UNUSED(list);
-
-//    qDebug()<<map<<"--"<<m_pLastoreJob->status()<<m_pLastoreJob->type();
-    if((m_pLastoreJob->type().isEmpty() && m_pLastoreJob->status().isEmpty()) ||
-      (m_pLastoreJob->status() == "end" && m_pLastoreJob->type() == "download" && map.value("Status").toString() == "paused") ||
-      (m_pLastoreJob->status() == "end" && m_pLastoreJob->type() == "install" && map.value("Status").toString() == "succeed"))//end
-    {
-        emit destroyService();
-    }
 }

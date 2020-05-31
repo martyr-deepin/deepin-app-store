@@ -32,6 +32,7 @@
 #include <QFileSystemWatcher>
 #include <QDebug>
 #include <QMutex>
+#include <QMutexLocker>
 
 class MetaDataManagerPrivate
 {
@@ -53,6 +54,10 @@ public:
     QDBusObjectPath addJob(QDBusObjectPath);
     AppVersion queryAppVersion(const QString &id, AppVersion &versionInfo);
     QMap<QString,CacheAppInfo> listStorePackages();
+
+    QMap<QString,LastoreJobService *> getJobServiceList();
+    void insertJobServiceList(QString key, LastoreJobService *job);
+    void removeJobServiceList(QString key);
 
     QList<QDBusObjectPath> m_jobList;//joblist
     //使用QString为了方便比较
@@ -113,6 +118,26 @@ QMap<QString,CacheAppInfo> MetaDataManagerPrivate::listStorePackages()
     lastRepoUpdated = QDateTime::currentSecsSinceEpoch();
     repoApps = apps;
     return  apps;
+}
+
+QMap<QString, LastoreJobService *> MetaDataManagerPrivate::getJobServiceList()
+{
+    QMutexLocker locker(&mutex);
+    return m_jobServiceList;
+}
+
+void MetaDataManagerPrivate::insertJobServiceList(QString key, LastoreJobService *job)
+{
+    QMutexLocker locker(&mutex);
+    m_jobServiceList.insert(key,job);
+//    return m_jobServiceList;
+}
+
+void MetaDataManagerPrivate::removeJobServiceList(QString key/*, LastoreJobService *job*/)
+{
+    QMutexLocker locker(&mutex);
+    m_jobServiceList.remove(key);
+//    return m_jobServiceList;
 }
 
 QString MetaDataManagerPrivate::getPackageDesktop(QString packageName)
@@ -213,12 +238,6 @@ MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent)
     connect(d->m_fileSystemWatcher,&QFileSystemWatcher::fileChanged,this,[=](){
         this->updateCacheList();
     });
-
-    connect(this,&MetaDataManager::signUpdateJobList,this,&MetaDataManager::updateJobList,Qt::QueuedConnection);
-
-    timer = new QTimer(this);
-    connect(timer,SIGNAL(timeout()),this,SLOT(queryJobList()));
-    timer->start(800);
 }
 
 MetaDataManager::~MetaDataManager()
@@ -307,14 +326,14 @@ QDBusObjectPath MetaDataManager::addJob(QDBusObjectPath path)
     qDebug()<<"addJob "<<path.path();
     QString jobId = path.path().section('/',4,4).remove(0,3);
     QString servicePath = QString("/com/deepin/AppStore/Backend/Job") + jobId;
+
+    QMap<QString,LastoreJobService *> jobServiceList = d->getJobServiceList();
     //dbus has registed
-    if(d->m_jobServiceList.contains(servicePath)) {
+    if(jobServiceList.contains(servicePath)) {
         return QDBusObjectPath(QString("/com/deepin/AppStore/Backend/Job") + jobId);
     }
 
     LastoreJobService *lastoreJob = new  LastoreJobService(jobId,this);
-    //delete service
-    connect(lastoreJob, &LastoreJobService::destroyService, this, &MetaDataManager::cleanService);
     //start、pause、clean job
     connect(lastoreJob, &LastoreJobService::jobController, this,&MetaDataManager::jobController);
     qDebug()<<"servicePath "<<servicePath<<lastoreJob->id();
@@ -324,9 +343,8 @@ QDBusObjectPath MetaDataManager::addJob(QDBusObjectPath path)
             QDBusConnection::ExportAllProperties)) {
         qDebug() << "registerObject setting dbus Error" << QDBusConnection::sessionBus().lastError();
     }
-    d->m_jobServiceList.insert(servicePath,lastoreJob);
-//    updateJobList();//update JobList
-    emit signUpdateJobList();
+    d->insertJobServiceList(servicePath,lastoreJob);
+    updateJobList();
     return QDBusObjectPath(servicePath);
 }
 
@@ -394,19 +412,36 @@ void MetaDataManager::updateCacheList()
 }
 
 //清理lastore接口对象，注销服务和dbus接口，更新job列表
-void MetaDataManager::cleanService()
+void MetaDataManager::cleanService(QStringList jobList)
 {
     Q_D(MetaDataManager);
-    LastoreJobService *lastoreJob = static_cast<LastoreJobService *> (sender());
+    LastoreJobService *lastoreJob;
+    QStringList deleteJob;
+    QMap<QString,LastoreJobService *> jobServiceList = d->getJobServiceList();
+    foreach (lastoreJob, jobServiceList) {
+        QString job = QString("/com/deepin/lastore/Job") + lastoreJob->id();
 
-    QString servicePath = QString("/com/deepin/AppStore/Backend/Job") + lastoreJob->id();
-    //unregisterObject
-    QDBusConnection::sessionBus().unregisterObject(servicePath);
+        if(!jobList.contains(job)) {
+            QString servicePath = QString("/com/deepin/AppStore/Backend/Job") + lastoreJob->id();
+            //unregisterObject
+            QDBusConnection::sessionBus().unregisterObject(servicePath);
 
-    d->m_jobServiceList.remove(servicePath);
-//    updateJobList();//update JobList
-    emit signUpdateJobList();
-    qDebug() << "unregisterObject dbus " << servicePath;
+            deleteJob.append(servicePath);
+            lastoreJob = nullptr;
+            qDebug() << "unregisterObject dbus " << servicePath;
+        }
+    }
+
+    while (!deleteJob.isEmpty())
+    {
+        QMap<QString,LastoreJobService *> jobServiceList = d->getJobServiceList();
+        QString servicePath = deleteJob.takeFirst();
+        LastoreJobService *lastoreJob = jobServiceList.value(servicePath);
+        d->removeJobServiceList(servicePath);
+        delete lastoreJob;
+        lastoreJob = nullptr;
+    }
+    updateJobList();
 }
 
 void MetaDataManager::jobController(QString cmd, QString jobId)
@@ -425,26 +460,15 @@ void MetaDataManager::updateJobList()
     Q_D(MetaDataManager);
     QList<QDBusObjectPath> jobList;
 
-    qDebug()<<d->m_jobServiceList.keys();
     QString servicePath;
     LastoreJobService* lastoreJob;
-    foreach (lastoreJob, d->m_jobServiceList) {
-        if(lastoreJob == nullptr)
-            continue;
+    QMap<QString,LastoreJobService *> jobServiceList = d->getJobServiceList();
+
+    qDebug()<<jobServiceList.keys();
+    foreach (lastoreJob, jobServiceList) {
         servicePath = QString("/com/deepin/AppStore/Backend/Job") + lastoreJob->id();
         jobList.append(QDBusObjectPath(servicePath));
     }
     d->m_jobList = jobList;
     emit jobListChanged();//通知界面更新
-}
-
-void MetaDataManager::queryJobList()
-{
-//    qDebug()<<m_pLastoreDaemon->property("JobList").toMap();
-    QDBusMessage myDBusMessage;
-    QVariant reply =  m_pLastoreDaemon->property("JobList");
-    QList<QVariant> list ;
-    list.append(reply);
-    qDebug()<<reply;
-    myDBusMessage.setArguments(list);
 }
