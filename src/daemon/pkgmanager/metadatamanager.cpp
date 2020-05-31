@@ -29,7 +29,6 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QFileSystemWatcher>
 #include <QDebug>
 #include <QMutex>
 #include <QMutexLocker>
@@ -50,10 +49,8 @@ public:
 
     QMutex mutex;
 
-//    QMap<QString,CacheAppInfo> listStorePackages();
     QString getPackageDesktop(QString packageName);
     QDBusObjectPath addJob(QDBusObjectPath);
-    AppVersion queryAppVersion(const QString &id, AppVersion &versionInfo);
     QMap<QString,CacheAppInfo> listStorePackages();
 
     QMap<QString,LastoreJobService *> getJobServiceList();
@@ -63,7 +60,6 @@ public:
     QList<QDBusObjectPath> m_jobList;//joblist
     //使用QString为了方便比较
     QMap<QString,LastoreJobService *> m_jobServiceList;
-    QFileSystemWatcher *m_fileSystemWatcher;
 
     MetaDataManager *q_ptr;
     Q_DECLARE_PUBLIC(MetaDataManager)
@@ -162,11 +158,49 @@ QString MetaDataManagerPrivate::getPackageDesktop(QString packageName)
     return QString("");
 }
 
-AppVersion MetaDataManagerPrivate::queryAppVersion(const QString &id,AppVersion &versionInfo)
+MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent) :
+    QObject(parent),
+    d_ptr(new MetaDataManagerPrivate(this)),
+    m_pLastoreDaemon(lastoreDaemon)
 {
-    QMap<QString,CacheAppInfo> appInfoList = listStorePackages();
+    Q_D(MetaDataManager);
+    d->lastRepoUpdated = 0;
+    updateCacheList();
 
-    qDebug()<<"IDList "<<id;
+    QLocalServer *m_server = new QLocalServer(this);
+    QLocalServer::removeServer("ServerName");
+    bool ok = m_server->listen("ServerName");
+    if (!ok)
+    {
+        // TODO:
+    }
+    connect(m_server,&QLocalServer::newConnection, this,[=](){
+        this->updateCacheList();
+    });
+}
+
+MetaDataManager::~MetaDataManager()
+{
+}
+
+AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
+{
+    Q_D(MetaDataManager);
+    AppVersionList listInstallInfo;
+    if(idList.isEmpty())
+        return listInstallInfo;
+
+    QMap<QString,CacheAppInfo> appInfoList = d->listStorePackages();
+
+    QStringList packageList;
+    foreach (QString package, idList) {
+
+        if(appInfoList.keys().contains(package)) {
+            packageList.append(package);
+        }
+    }
+
+    qDebug()<<"IDList "<<packageList;
 
     QProcess process;
     process.setReadChannel(QProcess::StandardOutput);
@@ -174,7 +208,7 @@ AppVersion MetaDataManagerPrivate::queryAppVersion(const QString &id,AppVersion 
     qputenv("LC_ALL", "C");
     process.setProcessEnvironment(env);
 
-    process.start("/usr/bin/apt-cache",QStringList()<<"policy"<<"--"<<id);
+    process.start("/usr/bin/apt-cache",QStringList()<<"policy"<<"--"<<idList);
 
     QString dpkgInstalledQuery;
     if(process.waitForFinished())
@@ -182,7 +216,7 @@ AppVersion MetaDataManagerPrivate::queryAppVersion(const QString &id,AppVersion 
         dpkgInstalledQuery = QString(process.readAll());
     }
     if(dpkgInstalledQuery.isEmpty())
-        return versionInfo;
+        return listInstallInfo;
 
     QString  packageName;
     QString  localVersion;
@@ -208,6 +242,7 @@ AppVersion MetaDataManagerPrivate::queryAppVersion(const QString &id,AppVersion 
             // get remote version
             if(line.contains("Candidate: ")) {
                 remoteVersion = line.section(QString("Candidate: "),1,1);
+                AppVersion versionInfo;
                 versionInfo.pkg_name = packageName;
                 versionInfo.installed_version = localVersion;
                 versionInfo.remote_version = remoteVersion;
@@ -217,83 +252,74 @@ AppVersion MetaDataManagerPrivate::queryAppVersion(const QString &id,AppVersion 
                 else {
                     versionInfo.upgradable = (QString::compare(localVersion,remoteVersion)<0);
                 }
+
+                listInstallInfo.append(versionInfo);
             }
         }
     }
-    return  versionInfo;
-}
 
-MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent) :
-    QObject(parent),
-    d_ptr(new MetaDataManagerPrivate(this)),
-    m_pLastoreDaemon(lastoreDaemon)
-{
-    Q_D(MetaDataManager);
-    d->lastRepoUpdated = 0;
-    updateCacheList();
-
-    d->m_fileSystemWatcher = new QFileSystemWatcher(this);
-    d->m_fileSystemWatcher->addPath("/usr/share/deepin-app-store/update");
-    connect(d->m_fileSystemWatcher,&QFileSystemWatcher::fileChanged,this,[=](){
-//        this->updateCacheList();
-    });
-
-    QLocalServer *m_server = new QLocalServer(this);
-    QLocalServer::removeServer("ServerName");
-    bool ok = m_server->listen("ServerName");
-    if (!ok)
-    {
-        // TODO:
-    }
-    connect(m_server,&QLocalServer::newConnection, this,[=](){
-        this->updateCacheList();
-    });
-}
-
-MetaDataManager::~MetaDataManager()
-{
-    Q_D(MetaDataManager);
-    d->m_fileSystemWatcher->deleteLater();
-}
-
-AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
-{
-    Q_D(MetaDataManager);
-    AppVersionList listVersionInfo;
-
-    for(int i=0;i<idList.size();i++) {
-        AppVersion versionInfo;
-        if(d->listApps.contains(idList.value(i)))
-        {
-            QMap<QString,QVariant> map = d->listApps.value(idList.value(i)).toMap();
-            versionInfo.pkg_name = idList.value(i);
-            versionInfo.installed_version = map.value("appLocalVer").toString();
-            versionInfo.remote_version = map.value("appRemoteVer").toString();
-            if(versionInfo.installed_version.isEmpty()) {
-                versionInfo.upgradable = false;
-            }
-            else {
-                versionInfo.upgradable = (QString::compare(versionInfo.installed_version,versionInfo.remote_version)<0);
-            }
-        }
-        else {
-            d->queryAppVersion(idList.value(i),versionInfo);
-            QMap<QString,QVariant> map;
-//            map.insert("appID",query.value(0).toString());
-            map.insert("appLocalVer",versionInfo.installed_version);
-            map.insert("appRemoteVer",versionInfo.remote_version);
-            d->listApps.insert(idList.value(i),QVariant(map));
-        }
-
-        listVersionInfo.append(versionInfo);
-    }
-    return  listVersionInfo;
+    return  listInstallInfo;
 }
 
 InstalledAppInfoList MetaDataManager::listInstalled()
 {
     Q_D(MetaDataManager);
-    return  d->listInstalledInfo;
+    InstalledAppInfoList listInstalledInfo;
+    QProcess process;
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    qputenv("LC_ALL", "C");
+    process.setProcessEnvironment(env);
+
+    process.start("/usr/bin/dpkg-query",
+                  QStringList()<<"--show"<<"-f"
+                  <<"${binary:Package}\\t${db:Status-Abbrev}\\t${Version}\\t${Installed-Size}\\n");
+    QString dpkgQuery;
+    if(process.waitForFinished()) {
+        dpkgQuery = QString(process.readAll());
+    }
+    else {
+        return listInstalledInfo;
+    }
+
+    QMap<QString,CacheAppInfo> appInfoList = d->listStorePackages();
+
+    //accountsservice\tii \t0.6.45-2\t455\nacl\tii \t2.2.53-4\t206\n
+    QStringList installedList = dpkgQuery.split('\n');
+    foreach (QString line, installedList) {
+        QStringList installedDetialList = line.split('\t');
+
+        if(installedDetialList.value(1).startsWith("ii")) {
+            QString id = installedDetialList.value(0);
+            QStringList fullPackageName = id.split(':');
+            // fuzzyPackageName 就是应用标识，这是有问题的！！！
+            QString fuzzyPackageName = fullPackageName[0];
+            CacheAppInfo apps;
+            if(! appInfoList.keys().contains(fuzzyPackageName)) {
+                if (! appInfoList.keys().contains(id)) {
+                    continue;
+                }
+                else {
+                    apps = appInfoList.value(id);
+                }
+            }
+            apps = appInfoList.value(fuzzyPackageName);
+
+            // unit of size is KiB, 1KiB = 1024Bytes;
+            qint64 size = installedDetialList.value(3).toInt() * 1024;
+
+            InstalledAppInfo installInfo;
+            installInfo.packageName = fuzzyPackageName;
+            installInfo.appName = fuzzyPackageName;
+            installInfo.version = installedDetialList.value(2);
+            installInfo.size = size;
+            installInfo.localeNames = apps.LocaleName;
+            installInfo.desktop = d->getPackageDesktop(fuzzyPackageName);
+            installInfo.installationTime = getAppInstalledTime(id);
+            listInstalledInfo.append(installInfo);
+
+        }
+    }
+    return  listInstalledInfo;
 }
 
 

@@ -26,9 +26,6 @@
 #include <QDBusInterface>
 #include <QDBusReply>
 
-#define AGENT_INTERFACE_IFC  "com.deepin.appstore.cache"
-#define AGENT_INTERFACE_PATH "/com/deepin/appstore/cache"
-
 PkgManagerService::PkgManagerService(QObject *parent) : QObject(parent)
 {
     lastoreDaemon = new QDBusInterface("com.deepin.lastore",
@@ -37,15 +34,8 @@ PkgManagerService::PkgManagerService(QObject *parent) : QObject(parent)
                                    QDBusConnection::systemBus());
 
     m_pMetaDataManager = new MetaDataManager(lastoreDaemon,this);
-    /*auto bus = QDBusConnection::sessionBus();
-    if (!bus.registerObject(AGENT_INTERFACE_PATH,  m_pMetaDataManager,
-                            QDBusConnection::ExportScriptableSlots)) {
-        qDebug() << "registerObject Error" << bus.lastError();
-        exit(0x0003);
-    }*/
 
     connect(m_pMetaDataManager,SIGNAL(jobListChanged()),this,SIGNAL(jobListChanged()));
-
 
     QDBusConnection::systemBus().connect("com.deepin.lastore",
                                          "/com/deepin/lastore",
@@ -106,25 +96,20 @@ InstalledAppInfoList PkgManagerService::ListInstalled()
 
 qlonglong PkgManagerService::QueryDownloadSize(const QString &id)
 {
-    qlonglong size = m_pMetaDataManager->queryDownloadSize(id);
-    if(size == 0) {
-        QStringList partsList;
-        partsList.append(id);
-        QList<QVariant> argumentList;
-        argumentList << partsList;
-        qDebug()<<partsList;
+    QStringList partsList;
+    partsList.append(id);
+    QList<QVariant> argumentList;
+    argumentList << partsList;
+    qDebug()<<partsList;
 
-        const QDBusPendingReply<qlonglong> reply = lastoreDaemon->callWithArgumentList(QDBus::AutoDetect,
-                             "PackagesDownloadSize", argumentList);
-        if (reply.isError()) {
-            qDebug() << reply.error();
-            return 0;
-        }
-        qDebug()<<reply.value();
-        return reply.value();
-    }else {
-        return size;
+    const QDBusPendingReply<qlonglong> reply = lastoreDaemon->callWithArgumentList(QDBus::AutoDetect,
+                         "PackagesDownloadSize", argumentList);
+    if (reply.isError()) {
+        qDebug() << reply.error();
+        return 0;
     }
+    qDebug()<<reply.value();
+    return reply.value();
 }
 
 InstalledAppTimestampList PkgManagerService::QueryInstallationTime(const QStringList &idList)
