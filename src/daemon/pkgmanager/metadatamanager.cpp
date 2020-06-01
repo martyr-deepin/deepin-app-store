@@ -50,6 +50,7 @@ public:
     QMutex mutex;
 
     QString getPackageDesktop(QString packageName);
+    AppVersion queryAppVersion(const QString &id,AppVersion &versionInfo);
     QDBusObjectPath addJob(QDBusObjectPath);
     QMap<QString,CacheAppInfo> listStorePackages();
 
@@ -158,6 +159,67 @@ QString MetaDataManagerPrivate::getPackageDesktop(QString packageName)
     return QString("");
 }
 
+AppVersion MetaDataManagerPrivate::queryAppVersion(const QString &id,AppVersion &versionInfo)
+{
+    QMap<QString,CacheAppInfo> appInfoList = listStorePackages();
+
+    qDebug()<<"IDList "<<id;
+
+    QProcess process;
+    process.setReadChannel(QProcess::StandardOutput);
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    qputenv("LC_ALL", "C");
+    process.setProcessEnvironment(env);
+
+    process.start("/usr/bin/apt-cache",QStringList()<<"policy"<<"--"<<id);
+
+    QString dpkgInstalledQuery;
+    if(process.waitForFinished())
+    {
+        dpkgInstalledQuery = QString(process.readAll());
+    }
+    if(dpkgInstalledQuery.isEmpty())
+        return versionInfo;
+
+    QString  packageName;
+    QString  localVersion;
+    QString  remoteVersion;
+    //uos-browser-stable:
+    //  Installed: 5.1.1001.7-1
+    //  Candidate: 5.1.1001.7-1
+
+    QStringList parseInstallList = dpkgInstalledQuery.split('\n');
+
+    foreach (QString line, parseInstallList) {
+        if(!line.isEmpty()) {
+            // is package name line,if find space
+            if(! line.contains(" ")) {
+                packageName = line.chopped(1);
+            }
+            // get local version
+            if(line.contains("Installed: ")) {
+                localVersion = line.section(QString("Installed: "),1,1);
+                if(QString::compare(localVersion,QString("(none)")) == 0)
+                        localVersion = "";
+            }
+            // get remote version
+            if(line.contains("Candidate: ")) {
+                remoteVersion = line.section(QString("Candidate: "),1,1);
+                versionInfo.pkg_name = packageName;
+                versionInfo.installed_version = localVersion;
+                versionInfo.remote_version = remoteVersion;
+                if(localVersion.isEmpty()) {
+                    versionInfo.upgradable = false;
+                }
+                else {
+                    versionInfo.upgradable = (QString::compare(localVersion,remoteVersion)<0);
+                }
+            }
+        }
+    }
+    return  versionInfo;
+}
+
 MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent) :
     QObject(parent),
     d_ptr(new MetaDataManagerPrivate(this)),
@@ -183,7 +245,7 @@ MetaDataManager::~MetaDataManager()
 {
 }
 
-AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
+/*AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
 {
     Q_D(MetaDataManager);
     AppVersionList listInstallInfo;
@@ -320,6 +382,45 @@ InstalledAppInfoList MetaDataManager::listInstalled()
         }
     }
     return  listInstalledInfo;
+}*/
+AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
+{
+    Q_D(MetaDataManager);
+    AppVersionList listVersionInfo;
+
+    for(int i=0;i<idList.size();i++) {
+        AppVersion versionInfo;
+        if(d->listApps.contains(idList.value(i)))
+        {
+            QMap<QString,QVariant> map = d->listApps.value(idList.value(i)).toMap();
+            versionInfo.pkg_name = idList.value(i);
+            versionInfo.installed_version = map.value("appLocalVer").toString();
+            versionInfo.remote_version = map.value("appRemoteVer").toString();
+            if(versionInfo.installed_version.isEmpty()) {
+                versionInfo.upgradable = false;
+            }
+            else {
+                versionInfo.upgradable = (QString::compare(versionInfo.installed_version,versionInfo.remote_version)<0);
+            }
+        }
+        else {
+            d->queryAppVersion(idList.value(i),versionInfo);
+            QMap<QString,QVariant> map;
+//            map.insert("appID",query.value(0).toString());
+            map.insert("appLocalVer",versionInfo.installed_version);
+            map.insert("appRemoteVer",versionInfo.remote_version);
+            d->listApps.insert(idList.value(i),QVariant(map));
+        }
+
+        listVersionInfo.append(versionInfo);
+    }
+    return  listVersionInfo;
+}
+
+InstalledAppInfoList MetaDataManager::listInstalled()
+{
+    Q_D(MetaDataManager);
+    return  d->listInstalledInfo;
 }
 
 

@@ -227,8 +227,8 @@ endif()
 add_executable(deepin-app-store-tool app/tool.cpp)
 target_link_libraries(deepin-app-store-tool ${LINK_LIBS})
 
-#add_executable(deepin-app-store-pkgcache app/pkg_cache.cpp)
-#target_link_libraries(deepin-app-store-pkgcache ${LINK_LIBS})
+add_executable(deepin-app-store-pkgcache app/pkg_cache.cpp)
+target_link_libraries(deepin-app-store-pkgcache ${LINK_LIBS})
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
   add_executable(test-launcher app/test_launcher.cpp base/launcher.cpp
@@ -255,7 +255,7 @@ install(TARGETS deepin-app-store DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 install(TARGETS deepin-app-store-tool DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
-#install(TARGETS deepin-app-store-pkgcache DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+install(TARGETS deepin-app-store-pkgcache DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 install(TARGETS deepin-app-store-daemon DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 

@@ -96,20 +96,25 @@ InstalledAppInfoList PkgManagerService::ListInstalled()
 
 qlonglong PkgManagerService::QueryDownloadSize(const QString &id)
 {
-    QStringList partsList;
-    partsList.append(id);
-    QList<QVariant> argumentList;
-    argumentList << partsList;
-    qDebug()<<partsList;
+    qlonglong size = m_pMetaDataManager->queryDownloadSize(id);
+    if(size == 0) {
+        QStringList partsList;
+        partsList.append(id);
+        QList<QVariant> argumentList;
+        argumentList << partsList;
+        qDebug()<<partsList;
 
-    const QDBusPendingReply<qlonglong> reply = lastoreDaemon->callWithArgumentList(QDBus::AutoDetect,
-                         "PackagesDownloadSize", argumentList);
-    if (reply.isError()) {
-        qDebug() << reply.error();
-        return 0;
+        const QDBusPendingReply<qlonglong> reply = lastoreDaemon->callWithArgumentList(QDBus::AutoDetect,
+                             "PackagesDownloadSize", argumentList);
+        if (reply.isError()) {
+            qDebug() << reply.error();
+            return 0;
+        }
+        qDebug()<<reply.value();
+        return reply.value();
+    }else {
+        return size;
     }
-    qDebug()<<reply.value();
-    return reply.value();
 }
 
 InstalledAppTimestampList PkgManagerService::QueryInstallationTime(const QStringList &idList)
@@ -144,6 +149,8 @@ void PkgManagerService::updateCacheList()
 
 void PkgManagerService::lastoreJobListChanged(QString str, QMap<QString, QVariant> map, QStringList list)
 {
+    Q_UNUSED(str);
+    Q_UNUSED(list);
     if(!map.contains("JobList"))
         return;
     QVariant value;
@@ -164,6 +171,5 @@ void PkgManagerService::lastoreJobListChanged(QString str, QMap<QString, QVarian
 
 QList<QDBusObjectPath> PkgManagerService::jobList()
 {
-    qDebug()<<"get JobList....";
     return m_pMetaDataManager->getJobList();
 }
