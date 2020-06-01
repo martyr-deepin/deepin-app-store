@@ -600,7 +600,7 @@ void MetaDataManager::updateJobList()
     QMap<QString,LastoreJobService *> jobServiceList = d->getJobServiceList();
 
     foreach (lastoreJob, jobServiceList) {
-        servicePath = QString("/com/deepin/AppStore/Backend/Job") + lastoreJob->id();
+        servicePath = QString("/com/deepin/AppStore/Backend/Job") + lastoreJob->getJobPath();
         jobList.append(QDBusObjectPath(servicePath));
     }
     d->m_jobList = jobList;
