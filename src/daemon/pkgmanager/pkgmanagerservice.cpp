@@ -96,7 +96,7 @@ InstalledAppInfoList PkgManagerService::ListInstalled()
 
 qlonglong PkgManagerService::QueryDownloadSize(const QString &id)
 {
-    qlonglong size = m_pMetaDataManager->queryDownloadSize(id);
+    /*qlonglong size = m_pMetaDataManager->queryDownloadSize(id);
     if(size == 0) {
         QStringList partsList;
         partsList.append(id);
@@ -114,7 +114,20 @@ qlonglong PkgManagerService::QueryDownloadSize(const QString &id)
         return reply.value();
     }else {
         return size;
+    }*/
+    QStringList partsList;
+    partsList.append(id);
+    QList<QVariant> argumentList;
+    argumentList << partsList;
+
+    const QDBusPendingReply<qlonglong> reply = lastoreDaemon->callWithArgumentList(QDBus::AutoDetect,
+                         "PackagesDownloadSize", argumentList);
+    if (reply.isError()) {
+        qDebug() << reply.error();
+        return 0;
     }
+
+    return reply.value();
 }
 
 InstalledAppTimestampList PkgManagerService::QueryInstallationTime(const QStringList &idList)

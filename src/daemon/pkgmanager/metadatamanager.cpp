@@ -68,6 +68,18 @@ public:
 
 QMap<QString,CacheAppInfo> MetaDataManagerPrivate::listStorePackages()
 {
+    QFileInfo info("/var/cache/apt/pkgcache.bin");
+    if (info.exists()) {
+        if(info.lastModified().toSecsSinceEpoch() < lastRepoUpdated){
+            return repoApps;
+        }
+    }
+    else {
+        if(info.lastModified().toSecsSinceEpoch() > 0){
+            return repoApps;
+        }
+    }
+
     QProcess process;
     process.setReadChannel(QProcess::StandardOutput);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -75,8 +87,7 @@ QMap<QString,CacheAppInfo> MetaDataManagerPrivate::listStorePackages()
     process.setProcessEnvironment(env);
     process.start("/bin/bash");
 
-
-    process.write("/usr/bin/aptitude search '?Label(Uos_eagle)'");
+    process.write("/usr/bin/aptitude search '?origin(Uos)'");
     process.closeWriteChannel();
 
     QString dpkgQuery;
@@ -117,6 +128,7 @@ QMap<QString,CacheAppInfo> MetaDataManagerPrivate::listStorePackages()
     repoApps = apps;
     return  apps;
 }
+
 
 QMap<QString, LastoreJobService *> MetaDataManagerPrivate::getJobServiceList()
 {
@@ -245,7 +257,7 @@ MetaDataManager::~MetaDataManager()
 {
 }
 
-/*AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
+AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
 {
     Q_D(MetaDataManager);
     AppVersionList listInstallInfo;
@@ -261,8 +273,6 @@ MetaDataManager::~MetaDataManager()
             packageList.append(package);
         }
     }
-
-    qDebug()<<"IDList "<<packageList;
 
     QProcess process;
     process.setReadChannel(QProcess::StandardOutput);
@@ -378,12 +388,13 @@ InstalledAppInfoList MetaDataManager::listInstalled()
             installInfo.desktop = d->getPackageDesktop(fuzzyPackageName);
             installInfo.installationTime = getAppInstalledTime(id);
             listInstalledInfo.append(installInfo);
-
         }
     }
+
     return  listInstalledInfo;
-}*/
-AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
+}
+
+/*AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
 {
     Q_D(MetaDataManager);
     AppVersionList listVersionInfo;
@@ -421,7 +432,7 @@ InstalledAppInfoList MetaDataManager::listInstalled()
 {
     Q_D(MetaDataManager);
     return  d->listInstalledInfo;
-}
+}*/
 
 
 InstalledAppTimestampList MetaDataManager::getInstallationTimes(const QStringList &idList)
