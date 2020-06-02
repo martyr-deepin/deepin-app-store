@@ -79,14 +79,6 @@ SettingsManager::SettingsManager(QObject *parent)
     hasActivatorClient = authorizationState_ifc_->isValid();
     qDebug() << "connect" << kLicenseInfoInterface << hasActivatorClient;
 
-    GUIFramework_ifc_ = new  QDBusInterface(
-        kLoginService,
-        kLoginSessionSelfPath,
-        kLoginSessionInterface,
-        QDBusConnection::systemBus(),
-        parent);
-    qDebug() << "connect" << kLoginSessionInterface << GUIFramework_ifc_->isValid();
-
     connect(authorizationState_ifc_, SIGNAL(LicenseStateChange()),
             this, SLOT(authStateChange()));
 }
@@ -127,8 +119,7 @@ quint32 SettingsManager::authorizationState() const
 
 QString SettingsManager::GUIFramework() const
 {
-    QString reply = GUIFramework_ifc_->property("Type").toString();
-    return reply;
+    return QProcessEnvironment::systemEnvironment().value("XDG_SESSION_TYPE");;
 }
 
 void SettingsManager::authStateChange()
