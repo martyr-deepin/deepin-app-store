@@ -19,6 +19,7 @@
 #define DEEPIN_APPSTORE_SERVICES_SETTINGS_MANAGER_H
 
 #include <QObject>
+#include <QProcessEnvironment>
 #include <DSingleton>
 
 #include <base/sysinfo.h>
@@ -99,7 +100,6 @@ private:
 
     QDBusInterface *settings_ifc_;
     QDBusInterface *authorizationState_ifc_;
-    QDBusInterface *GUIFramework_ifc_;
     SysInfo sysinfo;
 
     bool hasActivatorClient;
