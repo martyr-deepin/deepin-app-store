@@ -19,12 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "metadatamanager.h"
 #include <QProcess>
 #include <QFileInfo>
 #include <QDateTime>
 #include <QtDBus>
-#include "lastorejobservice.h"
+#include <QSqlTableModel>
+#include <QSqlRecord>
 #include <QVariant>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -33,6 +33,9 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QLocalServer>
+
+#include "metadatamanager.h"
+#include "lastorejobservice.h"
 
 class MetaDataManagerPrivate
 {
@@ -44,7 +47,8 @@ public:
 
     qint64     lastRepoUpdated;
     QMap<QString,CacheAppInfo> repoApps;
-    QVariantMap listApps;
+    QMap<QString,AppVersion> listApps;
+    QMap<QString,qlonglong> listAppsSize;
     InstalledAppInfoList listInstalledInfo;
 
     QMutex mutex;
@@ -245,144 +249,6 @@ MetaDataManager::~MetaDataManager()
 {
 }
 
-/*AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
-{
-    Q_D(MetaDataManager);
-    AppVersionList listInstallInfo;
-    if(idList.isEmpty())
-        return listInstallInfo;
-
-    QMap<QString,CacheAppInfo> appInfoList = d->listStorePackages();
-
-    QStringList packageList;
-    foreach (QString package, idList) {
-
-        if(appInfoList.keys().contains(package)) {
-            packageList.append(package);
-        }
-    }
-
-    qDebug()<<"IDList "<<packageList;
-
-    QProcess process;
-    process.setReadChannel(QProcess::StandardOutput);
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    qputenv("LC_ALL", "C");
-    process.setProcessEnvironment(env);
-
-    process.start("/usr/bin/apt-cache",QStringList()<<"policy"<<"--"<<idList);
-
-    QString dpkgInstalledQuery;
-    if(process.waitForFinished())
-    {
-        dpkgInstalledQuery = QString(process.readAll());
-    }
-    if(dpkgInstalledQuery.isEmpty())
-        return listInstallInfo;
-
-    QString  packageName;
-    QString  localVersion;
-    QString  remoteVersion;
-    //uos-browser-stable:
-    //  Installed: 5.1.1001.7-1
-    //  Candidate: 5.1.1001.7-1
-
-    QStringList parseInstallList = dpkgInstalledQuery.split('\n');
-
-    foreach (QString line, parseInstallList) {
-        if(!line.isEmpty()) {
-            // is package name line,if find space
-            if(! line.contains(" ")) {
-                packageName = line.chopped(1);
-            }
-            // get local version
-            if(line.contains("Installed: ")) {
-                localVersion = line.section(QString("Installed: "),1,1);
-                if(QString::compare(localVersion,QString("(none)")) == 0)
-                        localVersion = "";
-            }
-            // get remote version
-            if(line.contains("Candidate: ")) {
-                remoteVersion = line.section(QString("Candidate: "),1,1);
-                AppVersion versionInfo;
-                versionInfo.pkg_name = packageName;
-                versionInfo.installed_version = localVersion;
-                versionInfo.remote_version = remoteVersion;
-                if(localVersion.isEmpty()) {
-                    versionInfo.upgradable = false;
-                }
-                else {
-                    versionInfo.upgradable = (QString::compare(localVersion,remoteVersion)<0);
-                }
-
-                listInstallInfo.append(versionInfo);
-            }
-        }
-    }
-
-    return  listInstallInfo;
-}
-
-InstalledAppInfoList MetaDataManager::listInstalled()
-{
-    Q_D(MetaDataManager);
-    InstalledAppInfoList listInstalledInfo;
-    QProcess process;
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    qputenv("LC_ALL", "C");
-    process.setProcessEnvironment(env);
-
-    process.start("/usr/bin/dpkg-query",
-                  QStringList()<<"--show"<<"-f"
-                  <<"${binary:Package}\\t${db:Status-Abbrev}\\t${Version}\\t${Installed-Size}\\n");
-    QString dpkgQuery;
-    if(process.waitForFinished()) {
-        dpkgQuery = QString(process.readAll());
-    }
-    else {
-        return listInstalledInfo;
-    }
-
-    QMap<QString,CacheAppInfo> appInfoList = d->listStorePackages();
-
-    //accountsservice\tii \t0.6.45-2\t455\nacl\tii \t2.2.53-4\t206\n
-    QStringList installedList = dpkgQuery.split('\n');
-    foreach (QString line, installedList) {
-        QStringList installedDetialList = line.split('\t');
-
-        if(installedDetialList.value(1).startsWith("ii")) {
-            QString id = installedDetialList.value(0);
-            QStringList fullPackageName = id.split(':');
-            // fuzzyPackageName 就是应用标识，这是有问题的！！！
-            QString fuzzyPackageName = fullPackageName[0];
-            CacheAppInfo apps;
-            if(! appInfoList.keys().contains(fuzzyPackageName)) {
-                if (! appInfoList.keys().contains(id)) {
-                    continue;
-                }
-                else {
-                    apps = appInfoList.value(id);
-                }
-            }
-            apps = appInfoList.value(fuzzyPackageName);
-
-            // unit of size is KiB, 1KiB = 1024Bytes;
-            qint64 size = installedDetialList.value(3).toInt() * 1024;
-
-            InstalledAppInfo installInfo;
-            installInfo.packageName = fuzzyPackageName;
-            installInfo.appName = fuzzyPackageName;
-            installInfo.version = installedDetialList.value(2);
-            installInfo.size = size;
-            installInfo.localeNames = apps.LocaleName;
-            installInfo.desktop = d->getPackageDesktop(fuzzyPackageName);
-            installInfo.installationTime = getAppInstalledTime(id);
-            listInstalledInfo.append(installInfo);
-
-        }
-    }
-    return  listInstalledInfo;
-}*/
 AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
 {
     Q_D(MetaDataManager);
@@ -392,24 +258,12 @@ AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
         AppVersion versionInfo;
         if(d->listApps.contains(idList.value(i)))
         {
-            QMap<QString,QVariant> map = d->listApps.value(idList.value(i)).toMap();
-            versionInfo.pkg_name = idList.value(i);
-            versionInfo.installed_version = map.value("appLocalVer").toString();
-            versionInfo.remote_version = map.value("appRemoteVer").toString();
-            if(versionInfo.installed_version.isEmpty()) {
-                versionInfo.upgradable = false;
-            }
-            else {
-                versionInfo.upgradable = (QString::compare(versionInfo.installed_version,versionInfo.remote_version)<0);
-            }
+            versionInfo = d->listApps.value(idList.value(i));
         }
         else {
             d->queryAppVersion(idList.value(i),versionInfo);
             QMap<QString,QVariant> map;
-//            map.insert("appID",query.value(0).toString());
-            map.insert("appLocalVer",versionInfo.installed_version);
-            map.insert("appRemoteVer",versionInfo.remote_version);
-            d->listApps.insert(idList.value(i),QVariant(map));
+            d->listApps.insert(idList.value(i),versionInfo);
         }
 
         listVersionInfo.append(versionInfo);
@@ -454,7 +308,7 @@ qlonglong MetaDataManager::getAppInstalledTime(QString id)
 qlonglong MetaDataManager::queryDownloadSize(const QString &id)
 {
     Q_D(MetaDataManager);
-    return  d->listApps.value(id).toMap().value("appSize").toLongLong();
+    return  d->listAppsSize.value(id);
 }
 
 QDBusObjectPath MetaDataManager::addJob(QDBusObjectPath path)
@@ -494,49 +348,64 @@ QList<QDBusObjectPath> MetaDataManager::getJobList()
 void MetaDataManager::updateCacheList()
 {
     Q_D(MetaDataManager);
-    d->lastRepoUpdated = 0;
-
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE","read");
-
-    if (QSqlDatabase::contains("read")) {
-        db = QSqlDatabase::database("read");
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE","cache");
+    if (QSqlDatabase::contains("cache")) {
+        db = QSqlDatabase::database("cache");
     } else {
-        db = QSqlDatabase::addDatabase("QMYSQL", "read");
+        db = QSqlDatabase::addDatabase("QSQLITE", "cache");
     }
 
-    QString dbPath = "/usr/share/deepin-app-store/cache.db";
-    db.setDatabaseName(dbPath);
+    db.setDatabaseName("/usr/share/deepin-app-store/cache.db");
     db.setUserName("root");
     db.setPassword("deepin-app-store");
 
     bool isOk = db.open();
     if(!isOk) {
-        qDebug()<<"error info :"<<db.lastError();
-    }
-    else {
-        QSqlQuery query(db);
-        query.prepare("SELECT * FROM Packages;");
-        query.exec();
-
-        d->listInstalledInfo.clear();
-        while(query.next())
+        qDebug()<<db.lastError();
+        exit(-1);
+    } else {
+        QSqlTableModel model(nullptr,db);
+        model.setTable("Packages");
+        model.select();
+        while(model.canFetchMore())
         {
-            QMap<QString,QVariant> map;
-//            map.insert("appID",query.value(0).toString());
-            map.insert("appLocalVer",query.value(1).toString());
-            map.insert("appRemoteVer",query.value(2).toString());
-            map.insert("appArch",query.value(3).toString());
-            map.insert("appInstallSize",query.value(4).toString());
-            map.insert("appSize",query.value(5).toString());
-            map.insert("appBin",query.value(6).toString());
-            d->listApps.insert(query.value(0).toString(),QVariant(map));
-            if(!query.value(1).toString().isEmpty())
+            model.fetchMore();
+        }
+        QString appID;
+        QString appLocalVer;
+        QString appRemoteVer;
+//        QString appArch = ;
+//        QString appInstallSize = ;
+        qlonglong appSize;
+//        QString appBin = ;
+        d->listInstalledInfo.clear();
+        for (int i = 0; i < model.rowCount(); ++i)
+        {
+            appID = model.record(i).value("id").toString();
+            appLocalVer = model.record(i).value("localver").toString();
+            appRemoteVer = model.record(i).value("remotever").toString();
+            appSize = model.record(i).value("debsize").toLongLong();
+
+            AppVersion versionInfo;
+            versionInfo.pkg_name = appID;
+            versionInfo.installed_version = appLocalVer;
+            versionInfo.remote_version = appRemoteVer;
+            if(versionInfo.installed_version == "0") {
+                versionInfo.upgradable = false;
+            }
+            else {
+                versionInfo.upgradable = (QString::compare(versionInfo.installed_version,versionInfo.remote_version)<0);
+            }
+
+            d->listAppsSize.insert(appID,appSize);
+            d->listApps.insert(appID,versionInfo);
+            if(appLocalVer != "0")
             {
                 InstalledAppInfo installInfo;
-                installInfo.packageName = query.value(0).toString();
-                installInfo.appName = query.value(0).toString();
-                installInfo.version = query.value(1).toString();
-                installInfo.size = query.value(5).toLongLong();
+                installInfo.packageName = appID;
+                installInfo.appName = appLocalVer;
+                installInfo.version = appRemoteVer;
+                installInfo.size = appSize;
         //            installInfo.localeNames = installInfo.appName;
                 installInfo.desktop = d->getPackageDesktop(installInfo.packageName);
                 installInfo.installationTime = getAppInstalledTime(installInfo.packageName);
@@ -544,8 +413,8 @@ void MetaDataManager::updateCacheList()
             }
         }
     }
-    qDebug()<<"update";
     db.close();
+    qDebug()<<"update";
 }
 
 //清理lastore接口对象，注销服务和dbus接口，更新job列表

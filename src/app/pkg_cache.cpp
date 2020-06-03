@@ -5,12 +5,15 @@
 #include <QVariantMap>
 #include <QFile>
 #include <QDir>
+#include <QSqlRecord>
+#include <QSqlTableModel>
 #include <QSqlQuery>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QCommandLineParser>
-
 #include <QLocalSocket>
+
+#include <DLog>
 
 bool getInstalledList(QMap<QString,QString> &versionList)
 {
@@ -94,7 +97,7 @@ bool getStoreList(QVariantMap &storeList,QMap<QString,QString> &versionList)
                 if(str.startsWith("Package: ")) {
                     QString appId = str.section("Package: ",1,1);
                     appMap.insert("appID",appId);
-                    appMap.insert("localVer",versionList.value(appId));
+                    appMap.insert("localVer",versionList.value(appId,"0"));
                 }
                 else if(str.startsWith("Version: ")) {
                     appMap.insert("remoteVer",str.section("Version: ",1,1));
@@ -128,7 +131,7 @@ bool createDatabase(QVariantMap &storeList)
     if (QSqlDatabase::contains("create")) {
         db = QSqlDatabase::database("create");
     } else {
-        db = QSqlDatabase::addDatabase("QMYSQL", "create");
+        db = QSqlDatabase::addDatabase("QSQLITE", "create");
     }
     db.setDatabaseName(dbPath+"/cache.db");
     db.setUserName("root");
@@ -142,15 +145,14 @@ bool createDatabase(QVariantMap &storeList)
     else {
         QSqlQuery query(db);
         QString creatTableStr = "CREATE TABLE Packages  \
-                (                                       \
-                  pkg_id      char(50)  NOT NULL ,      \
-                  pkg_localver    char(20)  NULL ,  \
-                  pkg_remotever char(20) NOT NULL ,        \
-                  pkg_arch    char(10)  NULL ,          \
-                  pkg_installsize   char(20)   NULL ,   \
-                  pkg_size     char(20)  NULL ,         \
-                  pkg_binpath char(100)  NULL  ,         \
-                  PRIMARY KEY (pkg_id)                    \
+                ( id      char(50)  NOT NULL ,      \
+                  localver    char(20)  NULL ,  \
+                  remotever char(20)  NULL ,        \
+                  arch    char(10)  NULL ,          \
+                  installsize   char(20)   NULL ,   \
+                  debsize     char(20)  NULL ,         \
+                  binpath char(100)  NULL  ,         \
+                  PRIMARY KEY (id)                    \
                 );";
         query.prepare(creatTableStr);
         if(!query.exec()) {
@@ -159,24 +161,27 @@ bool createDatabase(QVariantMap &storeList)
         }
         query.finish();
 
-        db.transaction();
-        QVariantMap::iterator i;
-        for (i = storeList.begin(); i != storeList.end(); ++i) {
-           QMap<QString,QVariant> map = i.value().toMap();
-           QSqlQuery query(db);
-           query.prepare("INSERT INTO Packages (pkg_id, pkg_localver, pkg_remotever,pkg_arch,pkg_installsize,pkg_size,pkg_binpath) "
-                         "VALUES (?,?,?,?,?,?,?)");
-           query.bindValue(0, map.value("appID").toString());
-           query.bindValue(1, map.value("localVer").toString());
-           query.bindValue(2, map.value("remoteVer").toString());
-           query.bindValue(3, map.value("appArch").toString());
-           query.bindValue(4, map.value("installSize").toString());
-           query.bindValue(5, map.value("debSize").toString());
-           query.bindValue(6, "");
-           query.exec();
-           query.finish();
+        QSqlTableModel model(nullptr,db);
+        model.setTable("Packages");
+        model.setEditStrategy(QSqlTableModel::OnManualSubmit);
+        foreach (const QVariant &var, storeList) {
+           QMap<QString,QVariant> map = var.toMap();
+
+           model.insertRow(0); //在0行添加1条记录
+           model.setData(model.index(0,0),map.value("appID").toString()); //id字段在第0列上
+           model.setData(model.index(0,1),map.value("localVer").toString());
+           model.setData(model.index(0,2),map.value("remoteVer").toString());
+           model.setData(model.index(0,3),map.value("appArch").toString());
+           model.setData(model.index(0,4),map.value("installSize").toString());
+           model.setData(model.index(0,5),map.value("debSize").toString());
+           model.setData(model.index(0,6),"/opt/apps/");
+
+           if(!model.submitAll())
+           {
+               qDebug()<<model.lastError()<<model.rowCount();
+           }
         }
-        db.commit();
+
         db.close();
     }
 
@@ -186,12 +191,12 @@ bool createDatabase(QVariantMap &storeList)
 bool updateDatabase(QVariantMap &storeList)
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE","update");
-
     if (QSqlDatabase::contains("update")) {
         db = QSqlDatabase::database("update");
     } else {
-        db = QSqlDatabase::addDatabase("QMYSQL", "update");
+        db = QSqlDatabase::addDatabase("QSQLITE", "update");
     }
+
     db.setDatabaseName("/usr/share/deepin-app-store/cache.db");
     db.setUserName("root");
     db.setPassword("deepin-app-store");
@@ -199,35 +204,47 @@ bool updateDatabase(QVariantMap &storeList)
     bool isOk = db.open();
     if(!isOk) {
         qDebug()<<db.lastError();
-        return false;
-    }
-    else {
-        db.transaction();
+        exit(-1);
+    } else {
+        QSqlTableModel model(nullptr,db);
+        model.setTable("Packages");
+        model.setEditStrategy(QSqlTableModel::OnManualSubmit);
         QVariantMap::iterator i;
         for (i = storeList.begin(); i != storeList.end(); ++i) {
            QMap<QString,QVariant> map = i.value().toMap();
-           QSqlQuery query(db);
-           QString sql = QString("INSERT INTO Packages(pkg_id, pkg_localver, pkg_remotever,pkg_arch,pkg_installsize,pkg_size,pkg_binpath) "
-                                 "VALUES(%1,%2,%3,%4,%5,%6,%7) "
-                                 "ON DUPLICATE KEY "
-                                 "UPDATE pkg_localver=%2, pkg_remotever=%3,pkg_arch=%4,pkg_installsize=%5,pkg_size=%6,pkg_binpath=%7")
-                   .arg(map.value("appID").toString()).arg(map.value("localVer").toString()).arg(map.value("remoteVer").toString())
-                   .arg(map.value("appArch").toString()).arg(map.value("installSize").toString()).arg(map.value("debSize").toString())
-                   .arg("");
-           query.prepare(sql);
-           query.exec();
-           query.finish();
-        }
-        db.commit();
-        db.close();
-    }
 
+           QString appId = map.value("appID").toString();
+           model.setFilter(QString("id='%1'").arg(appId));
+           model.select();
+           if (model.rowCount() < 1) {
+               model.insertRow(0); //在0行添加1条记录
+               model.setData(model.index(0,0),appId); //id字段在第0列上
+           }
+           model.setData(model.index(0,1),map.value("localVer").toString());
+           model.setData(model.index(0,2),map.value("remoteVer").toString());
+           model.setData(model.index(0,3),map.value("appArch").toString());
+           model.setData(model.index(0,4),map.value("installSize").toString());
+           model.setData(model.index(0,5),map.value("debSize").toString());
+           model.setData(model.index(0,6),"/opt/apps/");
+           if(!model.submitAll())
+           {
+               qDebug()<<model.lastError();
+           }
+        }
+
+
+    }
+    db.close();
     return true;
 }
 
 int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
+    app.setApplicationName("deepin-app-store-pkgcache");
+
+    Dtk::Core::DLogManager::registerConsoleAppender();
+    Dtk::Core::DLogManager::registerFileAppender();
 
     QMap<QString,QString> versionList;
     getInstalledList(versionList);

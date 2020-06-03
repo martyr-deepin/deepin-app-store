@@ -26,10 +26,10 @@
 #include <QDBusObjectPath>
 #include "metadatamanager.h"
 
-#include "../dbus/dbus_variant/app_metadata.h"
-#include "../dbus/dbus_variant/app_version.h"
-#include "../dbus/dbus_variant/installed_app_info.h"
-#include "../dbus/dbus_variant/installed_app_timestamp.h"
+#include "../../dbus/dbus_variant/app_metadata.h"
+#include "../../dbus/dbus_variant/app_version.h"
+#include "../../dbus/dbus_variant/installed_app_info.h"
+#include "../../dbus/dbus_variant/installed_app_timestamp.h"
 
 class QDBusInterface;
 class PkgManagerService : public QObject

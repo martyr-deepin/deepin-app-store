@@ -48,7 +48,8 @@ LastoreJobManager::LastoreJobManager(QString path, QObject *parent) :
     d->jobInterface = new QDBusInterface("com.deepin.lastore",
                                          m_dbusPath.prepend("/com/deepin/lastore/Job"),
                                          "com.deepin.lastore.Job",
-                                         QDBusConnection::systemBus());
+                                         QDBusConnection::systemBus(),
+                                         this);
 }
 
 LastoreJobManager::~LastoreJobManager()

@@ -31,7 +31,8 @@ PkgManagerService::PkgManagerService(QObject *parent) : QObject(parent)
     lastoreDaemon = new QDBusInterface("com.deepin.lastore",
                                    "/com/deepin/lastore",
                                    "com.deepin.lastore.Manager",
-                                   QDBusConnection::systemBus());
+                                   QDBusConnection::systemBus(),
+                                   this);
 
     m_pMetaDataManager = new MetaDataManager(lastoreDaemon,this);
 
