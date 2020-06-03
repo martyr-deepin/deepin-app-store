@@ -23,7 +23,6 @@
 #define SETTINGSERVICE_H
 
 #include <QObject>
-#include "../dbus/daemondbus.h"
 #include <QVariant>
 #include <QSettings>
 #include <QString>
@@ -33,9 +32,13 @@
 #include <QDBusVariant>
 #include <QDebug>
 #include <QBitArray>
+#include <QMetaEnum>
+#include <DSysInfo>
 
+#include "../dbus/daemondbus.h"
 namespace
 {
+
 //settings file path
 const char appStoreConfPath[]        = "/usr/share/deepin-app-store/settings.ini";
 const char appStoreConfPathDefault[] = "/usr/share/deepin-app-store/settings.ini.default";
@@ -51,10 +54,16 @@ const char gWebWindow[]       = "WebWindow";
 
 //lower case key
 const char keyAutoInstall[]          = "autoInstall";
-const char keyCurrentRegion[]        = "currentRegion";
 const char keyThemeName[]            = "themeName";
 const char keyWindowState[]          = "windowState";
 const char keyAllowShowPackageName[] = "allowShowPackageName";
+const char keyCurrentRegion[]        = "currentRegion";
+
+//upper case key
+const char AutoInstall[]          = "AutoInstall";
+const char ThemeName[]            = "ThemeName";
+const char WindowState[]          = "WindowState";
+const char AllowShowPackageName[] = "AllowShowPackageName";
 
 const char keyServer[]             = "Server";
 const char keyMetadataServer[]     = "MetadataServer";
@@ -64,20 +73,6 @@ const char keyAllowSwitchRegion[]  = "AllowSwitchRegion";
 const char keyDefaultRegion[]      = "DefaultRegion";
 const char keyUpyunBannerVisible[] = "UpyunBannerVisible";
 
-//upper case key
-const char AutoInstall[]          = "AutoInstall";
-const char ThemeName[]            = "ThemeName";
-const char WindowState[]          = "WindowState";
-const char AllowShowPackageName[] = "AllowShowPackageName";
-
-const char Server[]              = "Server";
-const char MetadataServer[]      = "MetadataServer";
-const char OperationServerMap[]  = "OperationServerMap";
-const char DefaultRegion[]       = "DefaultRegion";
-const char AllowSwitchRegion[]   = "AllowSwitchRegion";
-const char SupportSignIn[]       = "SupportSignIn";
-const char SupportAot[]          = "SupportAot";
-const char UpyunBannerVisible[]  = "UpyunBannerVisible";
 }
 
 class SettingService : public QObject
@@ -87,6 +82,21 @@ class SettingService : public QObject
 
 public:
     explicit SettingService(QObject *parent = nullptr);
+    enum settingKey{
+        AutoInstall,
+        ThemeName,
+        WindowState,
+        Server,
+        MetadataServer,
+        OperationServerMap,
+        DefaultRegion,
+        SupportSignIn,
+        UpyunBannerVisible,
+        AllowSwitchRegion,
+        AllowShowPackageName,
+        SupportAot
+    };
+    Q_ENUM(settingKey)
 
 private:
     void setUserSettings(QString group, QString key, QString value);

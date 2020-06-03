@@ -40,7 +40,35 @@ SettingService::SettingService(QObject *parent) : QObject(parent)
 }
 
 QVariant SettingService::getServer(){
-    return sysCfg->value(keyServer,"http://store-chinauos.sndu.cn").toString();
+//    QSettings setting("/etc/deepin-version", QSettings::IniFormat);
+//    setting.beginGroup("Release");
+//    QString version = setting.value("Type").toString();
+//    setting.endGroup();
+    qint16 version =  Dtk::Core::DSysInfo::deepinType();
+    QString storeServer;
+
+    switch (version) {
+    case 0:
+        storeServer = "https://store.chinauos.com";
+        break;
+    case 1:
+        storeServer = "http://community-store.deepin.com";
+        break;
+    case 2:
+        storeServer = "https://professional-store.chinauos.com";
+        break;
+    case 3:
+        storeServer = "https://enterprise-store.chinauos.com";
+        break;
+    case 4:
+        storeServer = "https://home-store.chinauos.com";
+        break;
+    default:
+        storeServer = "https://store.chinauos.com";
+        break;
+    }
+
+    return sysCfg->value(keyServer,storeServer).toString();
 }
 
 QVariant SettingService::getMetadataServer(){
@@ -109,9 +137,10 @@ QString SettingService::GetInterfaceName(){
 //TODO: SetSettings update dstore settings
 void SettingService::SetSettings(QString key, QString value)
 {
-    QStringList keyList;
-    keyList << AutoInstall << ThemeName << WindowState;
-    switch (keyList.indexOf(key)) {
+    QMetaEnum metaEnum = QMetaEnum::fromType<settingKey>();
+    int enumValue = metaEnum.keyToValue(key.toStdString().c_str());
+
+    switch (enumValue) {
     case 0:
         userCfg->setValue(keyAutoInstall,value);
         break;
@@ -132,43 +161,40 @@ void SettingService::SetSettings(QString key, QString value)
 //TODO: GetSettings read setting of system and user
 QDBusVariant SettingService::GetSettings(QString key)
 {
-
-    QStringList keyList;
-    keyList << Server << MetadataServer << OperationServerMap << AutoInstall
-            << DefaultRegion << ThemeName << SupportSignIn << UpyunBannerVisible
-            << AllowSwitchRegion << WindowState << AllowShowPackageName << SupportAot;
+    QMetaEnum metaEnum = QMetaEnum::fromType<settingKey>();
+    int enumValue = metaEnum.keyToValue(key.toStdString().c_str());
     QVariant value;
 
-    switch (keyList.indexOf(key)) {
+    switch (enumValue) {
     case 0:
-        value = getServer();
-        break;
-    case 1:
-        value = getMetadataServer();//Not tested
-        break;
-    case 2:
-        value = getOperationServerMap();//Not tested
-        break;
-    case 3:
         value = getAutoInstall();
         break;
-    case 4:
-        value = getDefaultRegion();
-        break;
-    case 5:
+    case 1:
         value = getThemeName();
         break;
+    case 2:
+        value = getWindowState();
+        break;
+    case 3:
+        value = getServer();
+        break;
+    case 4:
+        value = getMetadataServer();//Not tested
+        break;
+    case 5:
+        value = getOperationServerMap();//Not tested
+        break;
     case 6:
-        value = getSupportSignIn();
+        value = getDefaultRegion();
         break;
     case 7:
-        value = getUpyunBannerVisible();
+        value = getSupportSignIn();
         break;
     case 8:
-        value = getAllowSwitchRegion();
+        value = getUpyunBannerVisible();
         break;
     case 9:
-        value = getWindowState();
+        value = getAllowSwitchRegion();
         break;
     case 10:
         value = getAllowShowPackageName();
@@ -180,8 +206,7 @@ QDBusVariant SettingService::GetSettings(QString key)
         qDebug() << "Non-existent key value";
         break;
     }
-
-    qDebug()<<key<<value;
+    qDebug() << key << value;
     return QDBusVariant(value);
 }
 
