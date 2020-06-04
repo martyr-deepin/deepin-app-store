@@ -243,8 +243,7 @@ void WebWindow::initConnections()
                 }
             });
     connect(title_bar_, &TitleBar::titleDoubleClicked,
-            this, [&]()
-            {
+            this, [&](){
                 if (this->windowState() != Qt::WindowMaximized) {
                     this->setWindowState(Qt::WindowMaximized);
                 }
