@@ -19,7 +19,7 @@ if [ "$1" = "configure" ] ; then
 fi
 
 deepin-app-store-pkgcache -c
-cp /usr/share/deepin-app-store/scripts/99appstore.conf /etc/apt/apt.conf.d/
+mv /usr/share/deepin-app-store/pkg-config-hook-config /etc/dpkg/dpkg.cfg.d/pkg-config-hook-config
 
 if [ "$1" = "triggered" ]; then
   echo 'begin triggered appstore'

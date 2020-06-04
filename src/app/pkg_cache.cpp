@@ -231,8 +231,6 @@ bool updateDatabase(QVariantMap &storeList)
                qDebug()<<model.lastError();
            }
         }
-
-
     }
     db.close();
     return true;
@@ -241,8 +239,10 @@ bool updateDatabase(QVariantMap &storeList)
 int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
+    app.setApplicationName("deepin");
     app.setApplicationName("deepin-app-store-pkgcache");
 
+    qDebug()<<"deepin-app-store-pkgcache";
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
 
@@ -268,6 +268,7 @@ int main(int argc, char **argv)
 
     QLocalSocket localSocket;
     localSocket.connectToServer("ServerName");
+    qDebug()<<"deepin-app-store-pkgcache end";
 
     return 0;
 }

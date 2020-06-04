@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
     QCoreApplication app(argc, argv);
-    app.setOrganizationName("deepin-store-daemon");
+    app.setOrganizationName("deepin");
 
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();

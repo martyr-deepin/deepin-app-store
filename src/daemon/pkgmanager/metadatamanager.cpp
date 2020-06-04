@@ -47,6 +47,7 @@ public:
 
     qint64     lastRepoUpdated;
     QMap<QString,CacheAppInfo> repoApps;
+
     QMap<QString,AppVersion> listApps;
     QMap<QString,qlonglong> listAppsSize;
     InstalledAppInfoList listInstalledInfo;
