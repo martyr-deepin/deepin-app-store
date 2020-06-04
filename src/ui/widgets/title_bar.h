@@ -61,6 +61,7 @@ Q_SIGNALS:
     void titlePressed();
     void upKeyPressed();
     void focusChanged(bool onFocus);
+    void titleDoubleClicked();
 
 public Q_SLOTS:
     void setBackwardButtonActive(bool active);
