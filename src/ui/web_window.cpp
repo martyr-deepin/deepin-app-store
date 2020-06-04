@@ -257,6 +257,16 @@ void WebWindow::initConnections()
                     account_proxy_->logout();
                 }
             });
+    connect(title_bar_, &TitleBar::titleDoubleClicked,
+            this, [&]()
+            {
+                if (this->windowState() != Qt::WindowMaximized) {
+                    this->setWindowState(Qt::WindowMaximized);
+                }
+                else {
+                    this->setWindowState(Qt::WindowNoState);
+                }
+            });
     /*connect(tool_bar_menu_, &TitleBarMenu::recommendAppRequested,
             menu_proxy_, &MenuProxy::recommendAppRequested);*/
     connect(tool_bar_menu_, &TitleBarMenu::privacyAgreementRequested,
