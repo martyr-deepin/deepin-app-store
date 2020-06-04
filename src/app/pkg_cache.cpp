@@ -97,7 +97,7 @@ bool getStoreList(QVariantMap &storeList,QMap<QString,QString> &versionList)
                 if(str.startsWith("Package: ")) {
                     QString appId = str.section("Package: ",1,1);
                     appMap.insert("appID",appId);
-                    appMap.insert("localVer",versionList.value(appId,"0"));
+                    appMap.insert("localVer",versionList.value(appId,""));
                 }
                 else if(str.startsWith("Version: ")) {
                     appMap.insert("remoteVer",str.section("Version: ",1,1));

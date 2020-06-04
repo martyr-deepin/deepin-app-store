@@ -390,7 +390,7 @@ void MetaDataManager::updateCacheList()
             versionInfo.pkg_name = appID;
             versionInfo.installed_version = appLocalVer;
             versionInfo.remote_version = appRemoteVer;
-            if(versionInfo.installed_version == "0") {
+            if(versionInfo.installed_version.isEmpty()) {
                 versionInfo.upgradable = false;
             }
             else {
@@ -399,7 +399,7 @@ void MetaDataManager::updateCacheList()
 
             d->listAppsSize.insert(appID,appSize);
             d->listApps.insert(appID,versionInfo);
-            if(appLocalVer != "0")
+            if(!appLocalVer.isEmpty())
             {
                 InstalledAppInfo installInfo;
                 installInfo.packageName = appID;
