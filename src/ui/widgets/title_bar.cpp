@@ -50,7 +50,11 @@ QString TitleBar::getSearchText() const
 
 void TitleBar::mousePressEvent(QMouseEvent *event)
 {
-    Q_EMIT titlePressed();
+    if(event->type() == QEvent::MouseButtonPress){
+        Q_EMIT titlePressed();
+    }else if (event->type() == QEvent::MouseButtonDblClick) {
+        Q_EMIT titleDoubleClicked();
+    }
 }
 
 void TitleBar::setBackwardButtonActive(bool active)
