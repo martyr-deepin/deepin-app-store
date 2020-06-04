@@ -143,15 +143,11 @@ QDBusObjectPath PkgManagerService::Remove(const QString &localName, const QStrin
     return m_pMetaDataManager->addJob(reply.value());
 }
 
-void PkgManagerService::updateCacheList()
-{
-    m_pMetaDataManager->updateCacheList();
-}
-
 void PkgManagerService::lastoreJobListChanged(QString str, QMap<QString, QVariant> map, QStringList list)
 {
     Q_UNUSED(str);
     Q_UNUSED(list);
+
     if(!map.contains("JobList"))
         return;
     QVariant value;
@@ -168,6 +164,8 @@ void PkgManagerService::lastoreJobListChanged(QString str, QMap<QString, QVarian
         dbusArgs.endArray();
     }
     m_pMetaDataManager->cleanService(jobList);
+
+    m_pMetaDataManager->updateCacheList();
 }
 
 QList<QDBusObjectPath> PkgManagerService::jobList()
