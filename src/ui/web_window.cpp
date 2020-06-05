@@ -113,11 +113,13 @@ TWebEngineUrlRequestInterceptor::TWebEngineUrlRequestInterceptor(QObject *parent
     : QWebEngineUrlRequestInterceptor(parent)
 {
 }
+
 //拦截http请求添加跨域http头
 void TWebEngineUrlRequestInterceptor::interceptRequest(QWebEngineUrlRequestInfo &info)
 {
     if(info.resourceType() == QWebEngineUrlRequestInfo::ResourceTypeXhr) {
         info.setHttpHeader("Access-Control-Allow-Origin", "*");
+        info.setHttpHeader("Cache-Control","no-cache");
     }
 }
 
@@ -382,7 +384,6 @@ void WebWindow::initUI()
 
     web_view_ = new QWebEngineView();
     this->setCentralWidget(web_view_);
-    web_view_->page()->settings()->setAttribute(QWebEngineSettings::LocalContentCanAccessRemoteUrls,true);
 
     image_viewer_ = new ImageViewer(this);
 
