@@ -53,25 +53,25 @@ const char gOperationServer[] = "OperationServer";
 const char gWebWindow[]       = "WebWindow";
 
 //lower case key
-const char keyAutoInstall[]          = "autoInstall";
-const char keyThemeName[]            = "themeName";
-const char keyWindowState[]          = "windowState";
-const char keyAllowShowPackageName[] = "allowShowPackageName";
-const char keyCurrentRegion[]        = "currentRegion";
+const char lowAutoInstall[]          = "autoInstall";
+const char lowThemeName[]            = "themeName";
+const char lowWindowState[]          = "windowState";
+const char lowAllowShowPackageName[] = "allowShowPackageName";
+const char lowCurrentRegion[]        = "currentRegion";
 
 //upper case key
-const char AutoInstall[]          = "AutoInstall";
-const char ThemeName[]            = "ThemeName";
-const char WindowState[]          = "WindowState";
-const char AllowShowPackageName[] = "AllowShowPackageName";
+const char upAutoInstall[]          = "AutoInstall";
+const char upThemeName[]            = "ThemeName";
+const char upWindowState[]          = "WindowState";
+const char upAllowShowPackageName[] = "AllowShowPackageName";
 
-const char keyServer[]             = "Server";
-const char keyMetadataServer[]     = "MetadataServer";
-const char keySupportAot[]         = "SupportAot";
-const char keySupportSignIn[]      = "SupportSignIn";
-const char keyAllowSwitchRegion[]  = "AllowSwitchRegion";
-const char keyDefaultRegion[]      = "DefaultRegion";
-const char keyUpyunBannerVisible[] = "UpyunBannerVisible";
+const char upServer[]             = "Server";
+const char upMetadataServer[]     = "MetadataServer";
+const char upSupportAot[]         = "SupportAot";
+const char upSupportSignIn[]      = "SupportSignIn";
+const char upAllowSwitchRegion[]  = "AllowSwitchRegion";
+const char upDefaultRegion[]      = "DefaultRegion";
+const char upUpyunBannerVisible[] = "UpyunBannerVisible";
 
 }
 
@@ -82,7 +82,7 @@ class SettingService : public QObject
 
 public:
     explicit SettingService(QObject *parent = nullptr);
-    enum settingKey{
+    enum SettingKey{
         AutoInstall,
         ThemeName,
         WindowState,
@@ -96,7 +96,7 @@ public:
         AllowShowPackageName,
         SupportAot
     };
-    Q_ENUM(settingKey)
+    Q_ENUM(SettingKey)
 
 private:
     void setUserSettings(QString group, QString key, QString value);

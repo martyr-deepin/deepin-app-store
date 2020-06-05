@@ -48,19 +48,19 @@ QVariant SettingService::getServer(){
     QString storeServer;
 
     switch (version) {
-    case 0:
+    case Dtk::Core::DSysInfo::DeepinType::UnknownDeepin:
         storeServer = "https://store.chinauos.com";
         break;
-    case 1:
+    case Dtk::Core::DSysInfo::DeepinType::DeepinDesktop:
         storeServer = "http://community-store.deepin.com";
         break;
-    case 2:
+    case Dtk::Core::DSysInfo::DeepinType::DeepinProfessional:
         storeServer = "https://professional-store.chinauos.com";
         break;
-    case 3:
+    case Dtk::Core::DSysInfo::DeepinType::DeepinServer:
         storeServer = "https://enterprise-store.chinauos.com";
         break;
-    case 4:
+    case Dtk::Core::DSysInfo::DeepinType::DeepinPersonal:
         storeServer = "https://home-store.chinauos.com";
         break;
     default:
@@ -68,11 +68,11 @@ QVariant SettingService::getServer(){
         break;
     }
 
-    return sysCfg->value(keyServer,storeServer).toString();
+    return sysCfg->value(upServer,storeServer).toString();
 }
 
 QVariant SettingService::getMetadataServer(){
-    return sysCfg->value(keyMetadataServer).toString();
+    return sysCfg->value(upMetadataServer).toString();
 }
 
 QVariantMap SettingService::getOperationServerMap(){
@@ -91,42 +91,42 @@ QVariantMap SettingService::getOperationServerMap(){
 }
 
 QVariant SettingService::getSupportSignIn(){
-    return sysCfg->value(keySupportSignIn,true).toBool();
+    return sysCfg->value(upSupportSignIn,true).toBool();
 }
 
 QVariant SettingService::getUpyunBannerVisible(){
-    return sysCfg->value(keyUpyunBannerVisible,true).toBool();
+    return sysCfg->value(upUpyunBannerVisible,true).toBool();
 }
 
 QVariant SettingService::getAllowSwitchRegion(){
-    return sysCfg->value(keyAllowSwitchRegion,false).toBool();
+    return sysCfg->value(upAllowSwitchRegion,false).toBool();
 }
 
 QVariant SettingService::getWindowState(){
     userCfg->beginGroup(gWebWindow);
-    QString windowState =  userCfg->value(keyWindowState).toString();
+    QString windowState =  userCfg->value(lowWindowState).toString();
     userCfg->endGroup();
     return windowState;
 }
 
 QVariant SettingService::getAutoInstall(){
-    return userCfg->value(keyAutoInstall).toBool();
+    return userCfg->value(lowAutoInstall).toBool();
 }
 
 QVariant SettingService::getDefaultRegion(){
-    return sysCfg->value(keyDefaultRegion,"CN").toString();
+    return sysCfg->value(upDefaultRegion,"CN").toString();
 }
 
 QVariant SettingService::getThemeName(){
-    return userCfg->value(keyThemeName,"light").toString();
+    return userCfg->value(lowThemeName,"light").toString();
 }
 
 QVariant SettingService::getAllowShowPackageName(){
-    return userCfg->value(keyAllowShowPackageName).toBool();
+    return userCfg->value(lowAllowShowPackageName).toBool();
 }
 
 QVariant SettingService::getSupportAot(){
-    return sysCfg->value(keySupportAot,false).toBool();
+    return sysCfg->value(upSupportAot,false).toBool();
 }
 
 // GetInterfaceName return dbus interface name
@@ -137,19 +137,19 @@ QString SettingService::GetInterfaceName(){
 //TODO: SetSettings update dstore settings
 void SettingService::SetSettings(QString key, QString value)
 {
-    QMetaEnum metaEnum = QMetaEnum::fromType<settingKey>();
+    QMetaEnum metaEnum = QMetaEnum::fromType<SettingKey>();
     int enumValue = metaEnum.keyToValue(key.toStdString().c_str());
 
     switch (enumValue) {
-    case 0:
-        userCfg->setValue(keyAutoInstall,value);
+    case SettingKey::AutoInstall:
+        userCfg->setValue(lowAutoInstall,value);
         break;
-    case 1:
-        userCfg->setValue(keyThemeName,value);
+    case SettingKey::ThemeName:
+        userCfg->setValue(lowThemeName,value);
         break;
-    case 2:
+    case SettingKey::WindowState:
         userCfg->beginGroup(gWebWindow);
-        userCfg->setValue(keyWindowState,value);
+        userCfg->setValue(lowWindowState,value);
         userCfg->endGroup();
         break;
     default:
@@ -161,45 +161,45 @@ void SettingService::SetSettings(QString key, QString value)
 //TODO: GetSettings read setting of system and user
 QDBusVariant SettingService::GetSettings(QString key)
 {
-    QMetaEnum metaEnum = QMetaEnum::fromType<settingKey>();
+    QMetaEnum metaEnum = QMetaEnum::fromType<SettingKey>();
     int enumValue = metaEnum.keyToValue(key.toStdString().c_str());
     QVariant value;
 
     switch (enumValue) {
-    case 0:
+    case SettingKey::AutoInstall:
         value = getAutoInstall();
         break;
-    case 1:
+    case SettingKey::ThemeName:
         value = getThemeName();
         break;
-    case 2:
+    case SettingKey::WindowState:
         value = getWindowState();
         break;
-    case 3:
+    case SettingKey::Server:
         value = getServer();
         break;
-    case 4:
+    case SettingKey::MetadataServer:
         value = getMetadataServer();//Not tested
         break;
-    case 5:
+    case SettingKey::OperationServerMap:
         value = getOperationServerMap();//Not tested
         break;
-    case 6:
+    case SettingKey::DefaultRegion:
         value = getDefaultRegion();
         break;
-    case 7:
+    case SettingKey::SupportSignIn:
         value = getSupportSignIn();
         break;
-    case 8:
+    case SettingKey::UpyunBannerVisible:
         value = getUpyunBannerVisible();
         break;
-    case 9:
+    case SettingKey::AllowSwitchRegion:
         value = getAllowSwitchRegion();
         break;
-    case 10:
+    case SettingKey::AllowShowPackageName:
         value = getAllowShowPackageName();
         break;
-    case 11:
+    case SettingKey::SupportAot:
         value = getSupportAot();
         break;
     default:
