@@ -476,7 +476,7 @@ void MetaDataManager::cleanService(QStringList jobList)
     LastoreJobService *lastoreJob;
     QStringList deleteJob;
     QMap<QString,LastoreJobService *> jobServiceList = d->getJobServiceList();
-//    qDebug()<<jobList<<jobServiceList;
+
     foreach (lastoreJob, jobServiceList) {
         QString job = QString("/com/deepin/lastore/Job") + lastoreJob->getJobPath();
 

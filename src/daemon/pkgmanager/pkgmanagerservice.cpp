@@ -98,6 +98,7 @@ InstalledAppInfoList PkgManagerService::ListInstalled()
 qlonglong PkgManagerService::QueryDownloadSize(const QString &id)
 {
     qlonglong size = m_pMetaDataManager->queryDownloadSize(id);
+    qDebug()<<size;
     if(size == 0) {
         QStringList partsList;
         partsList.append(id);
@@ -141,6 +142,14 @@ QDBusObjectPath PkgManagerService::Remove(const QString &localName, const QStrin
     }
 
     return m_pMetaDataManager->addJob(reply.value());
+}
+
+void PkgManagerService::UpdateSource()
+{
+    const QDBusPendingReply<QDBusObjectPath> reply = lastoreDaemon->call("UpdateSource");
+    if (reply.isError()) {
+        qDebug() << reply.error();
+    }
 }
 
 void PkgManagerService::lastoreJobListChanged(QString str, QMap<QString, QVariant> map, QStringList list)

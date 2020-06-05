@@ -29,9 +29,19 @@ class QThread;
 class QTimer;
 
 #include "services/search_result.h"
-
+#include <QWebEngineUrlRequestInterceptor>
 namespace dstore
 {
+
+class TWebEngineUrlRequestInterceptor : public QWebEngineUrlRequestInterceptor
+{
+    Q_OBJECT
+
+public:
+    TWebEngineUrlRequestInterceptor(QObject *parent = Q_NULLPTR);
+    void interceptRequest(QWebEngineUrlRequestInfo &info);
+};
+
 
 class ImageViewer;
 class ImageViewerProxy;
