@@ -9,6 +9,7 @@ Build-Depends:
  libdtkwidget-dev,
  qtwebengine5-dev,
  libqt5webchannel5-dev,
+ libqt5websockets5-dev,
  libsass-dev,
  pkg-config,
  deepin-gettext-tools,

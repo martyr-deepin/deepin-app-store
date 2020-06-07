@@ -42,6 +42,7 @@ class SearchCompletionWindow;
 class SearchProxy;
 class SettingsProxy;
 class StoreDaemonProxy;
+class WebSocketProxy;
 class AccountProxy;
 class TitleBar;
 class TitleBarMenu;
@@ -105,6 +106,7 @@ private:
     QThread *proxy_thread_ = nullptr;
     SettingsProxy *settings_proxy_ = nullptr;
     StoreDaemonProxy *store_daemon_proxy_ = nullptr;
+    WebSocketProxy *websocket_proxy_ = nullptr;
     TitleBar *title_bar_ = nullptr;
     TitleBarMenu *tool_bar_menu_ = nullptr;
 
