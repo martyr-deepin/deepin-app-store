@@ -29,6 +29,7 @@ class QThread;
 class QTimer;
 
 #include "services/search_result.h"
+#include <QWebEngineUrlRequestInterceptor>
 
 namespace dstore
 {
@@ -45,6 +46,15 @@ class AccountProxy;
 class TitleBar;
 class TitleBarMenu;
 class WebEventDelegate;
+
+class TWebEngineUrlRequestInterceptor : public QWebEngineUrlRequestInterceptor
+{
+    Q_OBJECT
+
+public:
+    TWebEngineUrlRequestInterceptor(QObject *parent = Q_NULLPTR);
+    void interceptRequest(QWebEngineUrlRequestInfo &info);
+};
 
 /**
  * Main window of app store.

@@ -108,6 +108,21 @@ void RestoreWindowState(QWidget *widget)
 
 }  // namespace
 
+TWebEngineUrlRequestInterceptor::TWebEngineUrlRequestInterceptor(QObject *parent)
+    : QWebEngineUrlRequestInterceptor(parent)
+{
+}
+
+//拦截http请求添加跨域http头
+void TWebEngineUrlRequestInterceptor::interceptRequest(QWebEngineUrlRequestInfo &info)
+{
+    if(info.resourceType() == QWebEngineUrlRequestInfo::ResourceTypeXhr) {
+        info.setHttpHeader("Access-Control-Allow-Origin", "*");
+        info.setHttpHeader("Cache-Control","no-cache");
+    }
+}
+
+
 WebWindow::WebWindow(QWidget *parent)
     : DMainWindow(parent),
       search_timer_(new QTimer(this))
@@ -128,6 +143,10 @@ WebWindow::WebWindow(QWidget *parent)
 
     dstore::RccSchemeHandler *handler = new dstore::RccSchemeHandler();
     QWebEngineProfile::defaultProfile()->installUrlSchemeHandler(RccSchemeHandler::schemeName(), handler);
+    //拦截http请求添加跨域http头
+    TWebEngineUrlRequestInterceptor *webInterceptor = new TWebEngineUrlRequestInterceptor();
+    QWebEngineProfile::defaultProfile()->setRequestInterceptor(webInterceptor);
+
 
     this->setObjectName("WebWindow");
     // 使用 redirectContent 模式，用于内嵌 x11 窗口时能有正确的圆角效果
