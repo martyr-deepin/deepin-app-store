@@ -155,6 +155,14 @@ QDBusObjectPath PkgManagerService::Remove(const QString &localName, const QStrin
     return m_pMetaDataManager->addJob(reply.value());
 }
 
+void PkgManagerService::UpdateSource()
+{
+    const QDBusPendingReply<QDBusObjectPath> reply = lastoreDaemon->call("UpdateSource");
+    if (reply.isError()) {
+        qDebug() << reply.error();
+    }
+}
+
 void PkgManagerService::updateCacheList()
 {
     m_pMetaDataManager->updateCacheList();
