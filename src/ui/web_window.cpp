@@ -375,6 +375,7 @@ void WebWindow::initUI()
 
     web_view_ = new QWebEngineView();
     this->setCentralWidget(web_view_);
+    web_view_->setContextMenuPolicy(Qt::NoContextMenu);
 
     image_viewer_ = new ImageViewer(this);
 
