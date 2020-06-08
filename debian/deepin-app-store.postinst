@@ -20,6 +20,7 @@ fi
 
 #deepin-app-store-pkgcache -c
 #cp /usr/share/deepin-app-store/pkg-config-hook-config /etc/dpkg/dpkg.cfg.d/
+killall deepin-app-store-daemon
 
 if [ "$1" = "triggered" ]; then
   echo 'begin triggered appstore'
