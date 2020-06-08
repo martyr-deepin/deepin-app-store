@@ -42,6 +42,7 @@ find_package(Qt5WebChannel REQUIRED)
 find_package(Qt5WebEngineWidgets REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
+find_package(Qt5WebSockets REQUIRED)
 
 pkg_search_module(DtkWidget REQUIRED dtkwidget)
 pkg_search_module(DtkFrameWorkDBus REQUIRED dframeworkdbus)
@@ -50,7 +51,7 @@ include_directories(${DtkFrameWorkDBus_INCLUDE_DIRS})
 include_directories(${DtkWidget_INCLUDE_DIRS})
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 
-set(Qt_LIBS Qt5::Core Qt5::DBus Qt5::Svg Qt5::Sql Qt5::Widgets Qt5::WebChannel Qt5::WebEngineWidgets)
+set(Qt_LIBS Qt5::Core Qt5::DBus Qt5::Svg Qt5::Sql Qt5::Widgets Qt5::WebChannel Qt5::WebSockets Qt5::WebEngineWidgets)
 
 set(LINK_LIBS
     ${Qt_LIBS}
@@ -149,6 +150,8 @@ set(UI_FILES
     ui/channel/channel_proxy.h
     ui/channel/account_proxy.h
     ui/channel/account_proxy.cpp
+    ui/channel/websocket_proxy.cpp
+    ui/channel/websocket_proxy.h
     ui/widgets/image_viewer.cpp
     ui/widgets/image_viewer.h
     ui/widgets/search_button.cpp

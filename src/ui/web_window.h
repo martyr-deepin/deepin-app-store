@@ -33,16 +33,6 @@ class QTimer;
 namespace dstore
 {
 
-class TWebEngineUrlRequestInterceptor : public QWebEngineUrlRequestInterceptor
-{
-    Q_OBJECT
-
-public:
-    TWebEngineUrlRequestInterceptor(QObject *parent = Q_NULLPTR);
-    void interceptRequest(QWebEngineUrlRequestInfo &info);
-};
-
-
 class ImageViewer;
 class ImageViewerProxy;
 class LogProxy;
@@ -51,10 +41,20 @@ class SearchCompletionWindow;
 class SearchProxy;
 class SettingsProxy;
 class StoreDaemonProxy;
+class WebSocketProxy;
 class AccountProxy;
 class TitleBar;
 class TitleBarMenu;
 class WebEventDelegate;
+
+class TWebEngineUrlRequestInterceptor : public QWebEngineUrlRequestInterceptor
+{
+    Q_OBJECT
+
+public:
+    TWebEngineUrlRequestInterceptor(QObject *parent = Q_NULLPTR);
+    void interceptRequest(QWebEngineUrlRequestInfo &info);
+};
 
 /**
  * Main window of app store.
@@ -105,6 +105,7 @@ private:
     QThread *proxy_thread_ = nullptr;
     SettingsProxy *settings_proxy_ = nullptr;
     StoreDaemonProxy *store_daemon_proxy_ = nullptr;
+    WebSocketProxy *websocket_proxy_ = nullptr;
     TitleBar *title_bar_ = nullptr;
     TitleBarMenu *tool_bar_menu_ = nullptr;
 

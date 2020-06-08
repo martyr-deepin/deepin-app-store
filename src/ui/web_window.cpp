@@ -50,6 +50,7 @@
 #include "ui/channel/store_daemon_proxy.h"
 #include "ui/channel/account_proxy.h"
 #include "ui/channel/channel_proxy.h"
+#include "ui/channel/websocket_proxy.h"
 #include "ui/widgets/image_viewer.h"
 #include "ui/widgets/search_completion_window.h"
 #include "ui/widgets/title_bar.h"
@@ -353,6 +354,7 @@ void WebWindow::initProxy()
     search_proxy_ = new SearchProxy(parent);
     settings_proxy_ = new SettingsProxy(parent);
     account_proxy_ = new AccountProxy(parent);
+    websocket_proxy_ = new WebSocketProxy(parent);
 
     web_channel->registerObject("imageViewer", image_viewer_proxy_);
     web_channel->registerObject("log", log_proxy_);
@@ -361,6 +363,7 @@ void WebWindow::initProxy()
     web_channel->registerObject("settings", settings_proxy_);
     web_channel->registerObject("storeDaemon", store_daemon_proxy_);
     web_channel->registerObject("account", account_proxy_);
+    web_channel->registerObject("websocket", websocket_proxy_);
 
     if (useMultiThread) {
         proxy_thread_ = new QThread(parent);
