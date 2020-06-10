@@ -172,9 +172,9 @@ void PkgManagerService::lastoreJobListChanged(QString str, QMap<QString, QVarian
         }
         dbusArgs.endArray();
     }
-    m_pMetaDataManager->cleanService(jobList);
-
     m_pMetaDataManager->updateCacheList();
+
+    m_pMetaDataManager->cleanService(jobList);
 }
 
 QList<QDBusObjectPath> PkgManagerService::jobList()

@@ -50,9 +50,13 @@ public:
 
     QMap<QString,AppVersion> listApps;
     QMap<QString,qlonglong> listAppsSize;
-    InstalledAppInfoList listInstalledInfo;
+    QMap<QString,InstalledAppInfo> listInstalledInfo;
+    void insertInstalledInfoList(QString key, InstalledAppInfo info);
+    void clearInstalledInfoList();
+    InstalledAppInfoList getInstalledInfoList();
 
     QMutex mutex;
+    QMutex mutexAppInfo;
 
     QString getPackageDesktop(QString packageName);
     AppVersion queryAppVersion(const QString &id,AppVersion &versionInfo);
@@ -139,6 +143,24 @@ void MetaDataManagerPrivate::removeJobServiceList(QString key/*, LastoreJobServi
 {
     QMutexLocker locker(&mutex);
     m_jobServiceList.remove(key);
+}
+
+void MetaDataManagerPrivate::insertInstalledInfoList(QString key, InstalledAppInfo info)
+{
+    QMutexLocker locker(&mutexAppInfo);
+    listInstalledInfo.insert(key,info);
+}
+
+void MetaDataManagerPrivate::clearInstalledInfoList()
+{
+    QMutexLocker locker(&mutexAppInfo);
+    listInstalledInfo.clear();
+}
+
+InstalledAppInfoList MetaDataManagerPrivate::getInstalledInfoList()
+{
+    QMutexLocker locker(&mutexAppInfo);
+    return  listInstalledInfo.values();
 }
 
 QString MetaDataManagerPrivate::getPackageDesktop(QString packageName)
@@ -233,17 +255,6 @@ MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent)
     Q_D(MetaDataManager);
     d->lastRepoUpdated = 0;
     updateCacheList();
-
-    /*QLocalServer *m_server = new QLocalServer(this);
-    QLocalServer::removeServer("ServerName");
-    bool ok = m_server->listen("ServerName");
-    if (!ok)
-    {
-        // TODO:
-    }
-    connect(m_server,&QLocalServer::newConnection, this,[=](){
-        this->updateCacheList();
-    });*/
 }
 
 MetaDataManager::~MetaDataManager()
@@ -275,7 +286,7 @@ AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
 InstalledAppInfoList MetaDataManager::listInstalled()
 {
     Q_D(MetaDataManager);
-    return  d->listInstalledInfo;
+    return  d->getInstalledInfoList();
 }
 
 
@@ -398,7 +409,7 @@ void MetaDataManager::updateCacheList()
     }
     storeFile.close();
 
-    d->listInstalledInfo.clear();
+    d->clearInstalledInfoList();
 
     //get all package list
     QDir dir("/var/lib/apt/lists/");
@@ -450,8 +461,6 @@ void MetaDataManager::updateCacheList()
                 versionInfo.upgradable = (QString::compare(versionInfo.installed_version,versionInfo.remote_version)<0);
             }
 
-            d->listAppsSize.insert(appID,appSize);
-            d->listApps.insert(appID,versionInfo);
             if(!appLocalVer.isEmpty())
             {
                 InstalledAppInfo installInfo;
@@ -462,8 +471,11 @@ void MetaDataManager::updateCacheList()
         //            installInfo.localeNames = installInfo.appName;
                 installInfo.desktop = d->getPackageDesktop(installInfo.packageName);
                 installInfo.installationTime = getAppInstalledTime(installInfo.packageName);
-                d->listInstalledInfo.append(installInfo);
+                d->insertInstalledInfoList(appID,installInfo);
             }
+            d->listAppsSize.insert(appID,appSize);
+            d->listApps.insert(appID,versionInfo);
+
         }
     }
     qDebug()<<"update";
@@ -475,6 +487,7 @@ void MetaDataManager::cleanService(QStringList jobList)
     Q_D(MetaDataManager);
     LastoreJobService *lastoreJob;
     QStringList deleteJob;
+
     QMap<QString,LastoreJobService *> jobServiceList = d->getJobServiceList();
 
     foreach (lastoreJob, jobServiceList) {
@@ -515,11 +528,9 @@ void MetaDataManager::updateJobList()
 {
     Q_D(MetaDataManager);
     QList<QDBusObjectPath> jobList;
-
     QString servicePath;
     LastoreJobService* lastoreJob;
     QMap<QString,LastoreJobService *> jobServiceList = d->getJobServiceList();
-
     foreach (lastoreJob, jobServiceList) {
         servicePath = QString("/com/deepin/AppStore/Backend/Job") + lastoreJob->getJobPath();
         jobList.append(QDBusObjectPath(servicePath));
