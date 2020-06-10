@@ -255,6 +255,18 @@ MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent)
     Q_D(MetaDataManager);
     d->lastRepoUpdated = 0;
     updateCacheList();
+
+    QLocalServer *m_server = new QLocalServer(this);
+    QLocalServer::removeServer("ServerName");
+    bool ok = m_server->listen("ServerName");
+    if (!ok)
+    {
+        // TODO:
+    }
+    connect(m_server,&QLocalServer::newConnection, this,[=](){
+        this->updateCacheList();
+    });
+
 }
 
 MetaDataManager::~MetaDataManager()
@@ -360,125 +372,73 @@ QList<QDBusObjectPath> MetaDataManager::getJobList()
 void MetaDataManager::updateCacheList()
 {
     Q_D(MetaDataManager);
-    //获取本地应用列表
-    QProcess process;
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    qputenv("LC_ALL", "C");
-    process.setProcessEnvironment(env);
-
-    process.start("/usr/bin/dpkg-query",
-                  QStringList()<<"--show"<<"-f"
-                  <<"${Package}\\t${db:Status-Abbrev}\\t${Version}\\n");
-    QString dpkgQuery;
-    if(process.waitForFinished()) {
-        dpkgQuery = QString(process.readAll());
-    }
-
-    QMap<QString,QString> versionList;
-    //accountsservice\tii \t0.6.45-2\t455\nacl\tii \t2.2.53-4\t206\n
-    QStringList installedList = dpkgQuery.split('\n');
-    foreach (QString line, installedList) {
-        QStringList installedDetialList = line.split('\t');
-
-        if(installedDetialList.value(1).startsWith("ii")) {
-            QString id = installedDetialList.value(0);
-            QStringList fullPackageName = id.split(':');
-            QString fuzzyPackageName = fullPackageName[0];
-            versionList.insert(fuzzyPackageName,installedDetialList.value(2));
+        QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE","cache");
+        if (QSqlDatabase::contains("cache")) {
+            db = QSqlDatabase::database("cache");
+        } else {
+            db = QSqlDatabase::addDatabase("QSQLITE", "cache");
         }
-    }
 
-    //获取所有应用信息
-    //get app store url
-    QString appstore = QString("/etc/apt/sources.list.d/appstore.list");
-    QFile storeFile(appstore);
-    if(!storeFile.exists()) {
-        qDebug()<<"storeFile.exists";
-    }
-    if(!storeFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug()<<"storeFile.open is error";
-    }
+        db.setDatabaseName("/usr/share/deepin-app-store/cache.db");
+        db.setUserName("root");
+        db.setPassword("deepin-app-store");
 
-    QString storeUrl;
-    while (!storeFile.atEnd()) {
-      QString line = storeFile.readLine();
-      if(line.startsWith("deb"))
-      {
-          storeUrl = line.section('/',2,2);
-      }
-    }
-    storeFile.close();
-
-    d->clearInstalledInfoList();
-
-    //get all package list
-    QDir dir("/var/lib/apt/lists/");
-    if(!dir.exists()) {
-        qDebug()<<dir.absolutePath()<<"is not exist";
-    }
-    QStringList filters;
-    filters << storeUrl+"_appstore*_Packages";
-    dir.setNameFilters(filters);
-    QFileInfoList infoList = dir.entryInfoList();
-    for (int i=0;i<infoList.size();i++) {
-        QString cacheFile = infoList.value(i).absoluteFilePath();
-
-        QFile file(cacheFile);
-        if(!file.open(QIODevice::ReadOnly))
-            qDebug()<<"open fail";
-        QString data = file.readAll();
-        file.close();
-        QStringList packageList = data.split("\n\n", QString::SkipEmptyParts);
-
-        QString appID;
-        QString appLocalVer;
-        QString appRemoteVer;
-        qlonglong appSize = 0;
-
-        for (int i = 0; i < packageList.size(); ++i) {
-            QStringList list = packageList.value(i).split('\n');
-            for(int i=0;i<list.size();i++) {
-                QString str = list.value(i);
-                if(str.startsWith("Package: ")) {
-                    appID = str.section("Package: ",1,1);
-                    appLocalVer = versionList.value(appID,"");
-                }
-                else if(str.startsWith("Version: ")) {
-                    appRemoteVer = str.section("Version: ",1,1);
-                }
-                else if(str.startsWith("Size: ")) {
-                    appSize = str.section("Size: ",1,1).toLongLong();
-                }
-            }
-            AppVersion versionInfo;
-            versionInfo.pkg_name = appID;
-            versionInfo.installed_version = appLocalVer;
-            versionInfo.remote_version = appRemoteVer;
-            if(versionInfo.installed_version.isEmpty()) {
-                versionInfo.upgradable = false;
-            }
-            else {
-                versionInfo.upgradable = (QString::compare(versionInfo.installed_version,versionInfo.remote_version)<0);
-            }
-
-            if(!appLocalVer.isEmpty())
+        bool isOk = db.open();
+        if(!isOk) {
+            qDebug()<<db.lastError();
+            exit(-1);
+        } else {
+            QSqlTableModel model(nullptr,db);
+            model.setTable("Packages");
+            model.select();
+            while(model.canFetchMore())
             {
-                InstalledAppInfo installInfo;
-                installInfo.packageName = appID;
-                installInfo.appName = appLocalVer;
-                installInfo.version = appRemoteVer;
-                installInfo.size = appSize;
-        //            installInfo.localeNames = installInfo.appName;
-                installInfo.desktop = d->getPackageDesktop(installInfo.packageName);
-                installInfo.installationTime = getAppInstalledTime(installInfo.packageName);
-                d->insertInstalledInfoList(appID,installInfo);
+                model.fetchMore();
             }
-            d->listAppsSize.insert(appID,appSize);
-            d->listApps.insert(appID,versionInfo);
+            QString appID;
+            QString appLocalVer;
+            QString appRemoteVer;
+    //        QString appArch = ;
+    //        QString appInstallSize = ;
+            qlonglong appSize;
+    //        QString appBin = ;
+            d->listInstalledInfo.clear();
+            for (int i = 0; i < model.rowCount(); ++i)
+            {
+                appID = model.record(i).value("id").toString();
+                appLocalVer = model.record(i).value("localver").toString();
+                appRemoteVer = model.record(i).value("remotever").toString();
+                appSize = model.record(i).value("debsize").toLongLong();
 
+                AppVersion versionInfo;
+                versionInfo.pkg_name = appID;
+                versionInfo.installed_version = appLocalVer;
+                versionInfo.remote_version = appRemoteVer;
+                if(versionInfo.installed_version.isEmpty()) {
+                    versionInfo.upgradable = false;
+                }
+                else {
+                    versionInfo.upgradable = (QString::compare(versionInfo.installed_version,versionInfo.remote_version)<0);
+                }
+
+                d->listAppsSize.insert(appID,appSize);
+                d->listApps.insert(appID,versionInfo);
+                if(!appLocalVer.isEmpty())
+                {
+                    InstalledAppInfo installInfo;
+                    installInfo.packageName = appID;
+                    installInfo.appName = appLocalVer;
+                    installInfo.version = appRemoteVer;
+                    installInfo.size = appSize;
+            //            installInfo.localeNames = installInfo.appName;
+                    installInfo.desktop = d->getPackageDesktop(installInfo.packageName);
+                    installInfo.installationTime = getAppInstalledTime(installInfo.packageName);
+                    d->insertInstalledInfoList(appID,installInfo);
+                }
+            }
         }
-    }
-    qDebug()<<"update";
+        db.close();
+        qDebug()<<"update";
 }
 
 //清理lastore接口对象，注销服务和dbus接口，更新job列表
