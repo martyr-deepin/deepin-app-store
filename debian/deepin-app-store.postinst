@@ -13,6 +13,12 @@ if [ "$1" = "configure" ] ; then
     cp $GPG TRUSTED_PART
   fi
 
+  count=$(ps -ef |grep deepin-app-store-daemon |grep -v grep |wc -l)
+  if [ "$count" -eq "1" ]
+  then
+    killall deepin-app-store-daemon
+  fi
+
   if [ -f /usr/share/keyrings/appstore-keyring.gpg ]; then
     apt-key add /usr/share/keyrings/appstore-keyring.gpg
   fi
