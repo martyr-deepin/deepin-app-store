@@ -55,6 +55,8 @@ void TitleBar::mousePressEvent(QMouseEvent *event)
     }else if (event->type() == QEvent::MouseButtonDblClick) {
         Q_EMIT titleDoubleClicked();
     }
+    //Solve the problem that DTK cannot be dragged when downgrading to version 5.2.0.1+c9, task: 26010
+    QFrame::mousePressEvent(event);
 }
 
 void TitleBar::setBackwardButtonActive(bool active)
