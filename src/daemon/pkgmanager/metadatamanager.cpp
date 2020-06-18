@@ -377,7 +377,7 @@ InstalledAppInfoList MetaDataManager::listInstalled()
             apps = appInfoList.value(fuzzyPackageName);
 
             // unit of size is KiB, 1KiB = 1024Bytes;
-            qint64 size = installedDetialList.value(3).toInt() * 1024;
+            qint64 size = installedDetialList.value(3).toLongLong() * 1024;
 
             InstalledAppInfo installInfo;
             installInfo.packageName = fuzzyPackageName;
