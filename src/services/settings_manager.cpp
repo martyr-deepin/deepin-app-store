@@ -79,6 +79,22 @@ SettingsManager::SettingsManager(QObject *parent)
 
     connect(authorizationState_ifc_, SIGNAL(LicenseStateChange()),
             this, SLOT(authStateChange()));
+
+    appearance_ifc_ = new QDBusInterface(
+        kAppearanceService,
+        kAppearancePath,
+        kAppearanceInterface,
+        QDBusConnection::sessionBus(),
+        parent);
+    qDebug() << "connect" << kAppearanceInterface << appearance_ifc_->isValid();
+
+    QDBusConnection::sessionBus().connect(
+        kAppearanceService,
+        kAppearancePath,
+        "org.freedesktop.DBus.Properties",
+        QLatin1String("PropertiesChanged"),
+        this,
+        SLOT(onActiveColor(QString,QMap<QString,QVariant>,QStringList)));
 }
 
 SettingsManager::~SettingsManager()
@@ -158,6 +174,20 @@ bool SettingsManager::autoInstall() const
 void SettingsManager::setAutoInstall(bool autoinstall)
 {
     setSettings(kAutoInstall, autoinstall);
+}
+
+QString SettingsManager::getActiveColor() const
+{
+    return appearance_ifc_->property("QtActiveColor").toString();
+}
+
+void SettingsManager::onActiveColor(QString str, QMap<QString, QVariant> map, QStringList list)
+{
+    Q_UNUSED(str);
+    Q_UNUSED(list);
+    if(!map.contains("QtActiveColor"))
+        return;
+    Q_EMIT activeColorChanged(map.value("QtActiveColor").toString());
 }
 
 QString SettingsManager::themeName() const

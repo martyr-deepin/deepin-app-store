@@ -40,6 +40,10 @@ extern const char kLicenseService[];
 extern const char kLicenseInfoPath[];
 extern const char kLicenseInfoInterface[];
 
+extern const char kAppearanceService[];
+extern const char kAppearancePath[];
+extern const char kAppearanceInterface[];
+
 }  // namespace dstore
 
 #endif  // DEEPIN_APPSTORE_DBUS_DBUS_CONSTS_H

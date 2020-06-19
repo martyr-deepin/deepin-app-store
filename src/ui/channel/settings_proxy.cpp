@@ -33,6 +33,7 @@ SettingsProxy::SettingsProxy(QObject *parent) : QObject(parent)
             {
                 emit this->authStateChanged();
             });
+    connect(SettingsManager::instance(),&SettingsManager::activeColorChanged,this,&SettingsProxy::activeColorChanged);
 }
 
 const QVariantMap SettingsProxy::getSettings()
@@ -67,6 +68,8 @@ const QVariantMap SettingsProxy::getSettings()
 
         // authorization state
         {"authorizationState", SettingsManager::instance()->authorizationState()},
+        //get personalized settings active color
+        {"activeColor", SettingsManager::instance()->getActiveColor()},
     };
     qDebug() << settings;
     return settings;
