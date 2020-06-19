@@ -109,6 +109,7 @@ private:
     WebSocketProxy *websocket_proxy_ = nullptr;
     TitleBar *title_bar_ = nullptr;
     TitleBarMenu *tool_bar_menu_ = nullptr;
+    QString completionKeyword;
 
 private slots:
     void onSearchAppResult(const SearchMetaList &result);

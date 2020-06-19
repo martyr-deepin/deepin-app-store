@@ -548,11 +548,20 @@ void WebWindow::onSearchResultClicked(const SearchMeta &result)
 {
     // Emit signal to web page.
     completion_window_->hide();
-    emit search_proxy_->openApp(result.name);
+    Q_EMIT search_proxy_->openApp(result.name);
+    // Temporarily store keywords to compare whether the keywords in the search edit come from the completion window
+    completionKeyword = result.local_name;
+    Q_EMIT title_bar_->selectedKeyword(completionKeyword);
 }
 
 void WebWindow::onSearchTextChanged(const QString &text)
 {
+    // If the keyword comes from the completion window, the completion window will no longer pop up
+    if(text == completionKeyword){
+        completionKeyword.clear();
+        return;
+    }
+
     if (text.size() > 1) {
         search_timer_->stop();
         search_timer_->start(kSearchDelay);

@@ -201,6 +201,10 @@ void TitleBar::initConnections()
             this, &TitleBar::requestDonates);*/
     connect(user_menu_, &UserMenu::requestApps,
             this, &TitleBar::requestApps);
+    connect(this,&TitleBar::selectedKeyword,
+    this, [&](QString text) {
+        this->search_edit_->setText(text);
+    });
 }
 
 void TitleBar::initUI(bool support_sign_in)
