@@ -20,6 +20,10 @@
 
 #include <QObject>
 #include <QScopedPointer>
+#include <QTimer>
+#include <QMutex>
+#include <QMutexLocker>
+
 #include "services/search_result.h"
 
 namespace dstore
@@ -137,6 +141,7 @@ public Q_SLOTS:
     QVariantMap getJobInfo(const QString &job);
 
     QVariantMap getJobsInfo(const QStringList &jobs);
+    void fetchJobsInfo();
 
     QVariantMap getJobStatus(const QString &job);
 
