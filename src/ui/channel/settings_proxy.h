@@ -37,6 +37,7 @@ Q_SIGNALS:
     void raiseWindowRequested();
     void fontChangeRequested(const QString &fontFamily, int pixelSize);
     void authStateChanged();
+    void activeColorChanged(const QString &color);
 
 public Q_SLOTS:
     /**

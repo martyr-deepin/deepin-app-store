@@ -54,6 +54,7 @@ private:
 
 Q_SIGNALS:
     void authStateChanged();
+    void activeColorChanged(const QString &color);
 
 public Q_SLOTS:
     bool remoteDebug();
@@ -61,6 +62,8 @@ public Q_SLOTS:
     bool autoInstall() const;
     void setAutoInstall(bool autoinstall);
 
+    QString getActiveColor() const;
+    void onActiveColor(QString str, QMap<QString, QVariant> map, QStringList list);
     QString themeName() const;
     void setThemeName(const QString &themeName) const;
     QString appThemeName() const;
@@ -100,6 +103,7 @@ private:
 
     QDBusInterface *settings_ifc_;
     QDBusInterface *authorizationState_ifc_;
+    QDBusInterface *appearance_ifc_;
     SysInfo sysinfo;
 
     bool hasActivatorClient;

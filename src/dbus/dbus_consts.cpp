@@ -39,4 +39,7 @@ const char kLicenseService[] = "com.deepin.license";
 const char kLicenseInfoPath[] = "/com/deepin/license/Info";
 const char kLicenseInfoInterface[] = "com.deepin.license.Info";
 
+const char kAppearanceService[] = "com.deepin.daemon.Appearance";
+const char kAppearancePath[] = "/com/deepin/daemon/Appearance";
+const char kAppearanceInterface[] = "com.deepin.daemon.Appearance";
 }  // namespace dstore
