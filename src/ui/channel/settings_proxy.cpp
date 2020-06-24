@@ -19,6 +19,7 @@
 #include <QUrl>
 #include <QDebug>
 
+#include <DApplication>
 #include "ui/channel/settings_proxy.h"
 #include "services/settings_manager.h"
 
@@ -93,5 +94,9 @@ void SettingsProxy::raiseWindow()
     emit this->raiseWindowRequested();
 }
 
+QString SettingsProxy::getAppVersion()
+{
+    return  Dtk::Widget::DApplication::buildVersion("6.0.0.1");
+}
 
 }  // namespace dstore
