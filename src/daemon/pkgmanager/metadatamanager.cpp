@@ -531,13 +531,21 @@ QString WorkerDataBase::getPackageDesktop(QString packageName)
 
 qlonglong WorkerDataBase::getAppInstalledTime(QString id)
 {
-    QFileInfo info("/var/lib/dpkg/info/"+id+".md5sums");
-    if (info.exists()) {
-        return info.birthTime().toSecsSinceEpoch();
+    QDir dir("/var/lib/dpkg/info/");
+    if(!dir.exists()) {
+        qDebug()<<dir.absolutePath()<<"is not exist";
+        return false;
     }
-    else {
-        return  0;
+    QStringList filters;
+    filters << id+"*.md5sums";
+    dir.setNameFilters(filters);
+    QFileInfoList infoList = dir.entryInfoList();
+    QString cacheFile;
+    if(!infoList.isEmpty()) {
+        return infoList.takeFirst().birthTime().toSecsSinceEpoch();
     }
+    else
+        return 0;
 }
 
 WorkerDataBase::WorkerDataBase(QObject *parent) :
