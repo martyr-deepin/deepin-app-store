@@ -24,16 +24,41 @@
 
 #include <QDebug>
 #include <QDBusInterface>
+#include <QTimer>
+#include <QThread>
+#include <QSqlTableModel>
+#include <QSqlRecord>
+#include <QVariant>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
+
 #include "../../dbus/dbus_variant/app_version.h"
 #include "../../dbus/dbus_variant/installed_app_info.h"
 #include "../../dbus/dbus_variant/installed_app_timestamp.h"
-#include <QTimer>
 
 typedef struct CacheAppInfo{
     QString      Category;
     QString      PackageName;
-    QMap<QString,QString>  LocaleName;
+    QHash<QString,QString>  LocaleName;
 }cacheAppInfo;
+
+class WorkerDataBase : public QObject
+{
+  Q_OBJECT
+public:
+    WorkerDataBase(QObject *parent = nullptr);
+    ~WorkerDataBase();
+
+public slots:
+  void updateCache();
+  QString getPackageDesktop(QString packageName);
+  qlonglong getAppInstalledTime(QString id);
+signals:
+  void resultReady(const InstalledAppInfoList listInstalledInfo,const QHash<QString,qlonglong> listAppsSize,const QHash<QString,AppVersion> listApps);
+private:
+  QSqlDatabase db;
+};
 
 class MetaDataManagerPrivate;
 class MetaDataManager : public QObject
@@ -52,18 +77,19 @@ public:
 
 signals:
     void jobListChanged();
+    void updateCache();
 
 public slots:
     void cleanService(QStringList jobList);
     void jobController(QString cmd, QString jobId);
     void updateJobList();
-    void updateCacheList();
 
 private:
     QScopedPointer<MetaDataManagerPrivate> d_ptr;
     Q_DECLARE_PRIVATE_D(qGetPtrHelper(d_ptr), MetaDataManager)
 
-    QTimer *timer;
+    QThread thread;
+    WorkerDataBase *worker;
     QDBusInterface *m_pLastoreDaemon;
 };
 

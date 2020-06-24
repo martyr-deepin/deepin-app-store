@@ -98,7 +98,6 @@ InstalledAppInfoList PkgManagerService::ListInstalled()
 qlonglong PkgManagerService::QueryDownloadSize(const QString &id)
 {
     qlonglong size = m_pMetaDataManager->queryDownloadSize(id);
-    qDebug()<<size;
     if(size == 0) {
         QStringList partsList;
         partsList.append(id);
@@ -159,6 +158,7 @@ void PkgManagerService::lastoreJobListChanged(QString str, QMap<QString, QVarian
 
     if(!map.contains("JobList"))
         return;
+
     QVariant value;
     QStringList jobList;
     foreach (value, map) {
@@ -172,8 +172,6 @@ void PkgManagerService::lastoreJobListChanged(QString str, QMap<QString, QVarian
         }
         dbusArgs.endArray();
     }
-    m_pMetaDataManager->updateCacheList();
-
     m_pMetaDataManager->cleanService(jobList);
 }
 
