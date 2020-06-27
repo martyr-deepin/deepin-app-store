@@ -17,10 +17,6 @@ Build-Depends:
  qttools5-dev,
  qtbase5-private-dev,
  python3-lxml,
- golang-go,
- golang-dlib-dev,
- golang-github-linuxdeepin-go-dbus-factory-dev,
- golang-github-go-ini-ini-dev,
  libdframeworkdbus-dev
 Standards-Version: 3.9.5
 Homepage: https://www.deepin.com
@@ -38,6 +34,7 @@ Depends:${shlibs:Depends}, ${misc:Depends},
  libqt5webengine-data,
  apt-transport-https,
  aptitude,
+ curl,
  deepin-app-store-data (>=5.6),
  gnupg2
 Conflicts: dstore-client, deepin-appstore

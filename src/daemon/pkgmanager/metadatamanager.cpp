@@ -75,6 +75,11 @@ public:
 
     MetaDataManager *q_ptr;
     Q_DECLARE_PUBLIC(MetaDataManager)
+
+
+    QTimer *m_pTimer;
+    QProcess *m_pProcess;
+    QString updateEtag;
 };
 
 QHash<QString,CacheAppInfo> MetaDataManagerPrivate::listStorePackages()
@@ -288,6 +293,48 @@ MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent)
         Q_EMIT updateCache();
     });
 
+    //update source
+    d->m_pProcess = new QProcess(this);
+    d->m_pProcess->setReadChannel(QProcess::StandardOutput);
+    d->m_pProcess->setEnvironment(QStringList() <<"LC_ALL"<<"C");
+    QObject::connect(d->m_pProcess, &QProcess::readyReadStandardOutput,[=](){
+        QByteArray byte = d->m_pProcess->readAllStandardOutput();
+        QTextStream text(&byte,QIODevice::ReadOnly);
+        while (!text.atEnd()) {
+            QString line = text.readLine();
+            if(line.startsWith("etag") && line != d->updateEtag) {
+                qDebug()<<"updateSource ";
+                updateSource();
+                d->updateEtag = line;
+            }
+        }
+    });
+
+    d->m_pTimer = new QTimer(this);
+    d->m_pTimer->start(1000*60*5);
+    QObject::connect(d->m_pTimer, &QTimer::timeout,[=](){
+        //get app store url
+        QString appstore = QString("/etc/apt/sources.list.d/appstore.list");
+        QFile storeFile(appstore);
+        if(!storeFile.exists())
+            return;
+        if (!storeFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            return;
+        }
+
+        QString storeUrl;
+        while (!storeFile.atEnd()) {
+          QString line = storeFile.readLine();
+          if(line.startsWith("deb"))
+          {
+              storeUrl = line.section(' ',1,1);
+          }
+        }
+        storeFile.close();
+
+        QString url = QString("curl -I %1/dists/eagle/InRelease").arg(storeUrl);
+        d->m_pProcess->start("/bin/sh",QStringList() << "-c" <<url);
+    });
 }
 
 MetaDataManager::~MetaDataManager()
@@ -353,6 +400,14 @@ qlonglong MetaDataManager::queryDownloadSize(const QString &id)
 {
     Q_D(MetaDataManager);
     return  d->getAppSize(id);
+}
+
+void MetaDataManager::updateSource()
+{
+    const QDBusPendingReply<QDBusObjectPath> reply = m_pLastoreDaemon->call("UpdateSource");
+    if (reply.isError()) {
+        qDebug() << reply.error();
+    }
 }
 
 QDBusObjectPath MetaDataManager::addJob(QDBusObjectPath path)

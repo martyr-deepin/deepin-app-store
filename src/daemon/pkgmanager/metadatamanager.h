@@ -72,6 +72,7 @@ public:
     InstalledAppTimestampList getInstallationTimes(const QStringList &idList);
     qlonglong getAppInstalledTime(QString id);
     qlonglong queryDownloadSize(const QString &id);
+    void updateSource();
     QDBusObjectPath addJob(QDBusObjectPath);
     QList<QDBusObjectPath> getJobList();
 

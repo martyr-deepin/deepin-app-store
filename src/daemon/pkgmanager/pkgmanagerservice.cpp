@@ -145,10 +145,7 @@ QDBusObjectPath PkgManagerService::Remove(const QString &localName, const QStrin
 
 void PkgManagerService::UpdateSource()
 {
-    const QDBusPendingReply<QDBusObjectPath> reply = lastoreDaemon->call("UpdateSource");
-    if (reply.isError()) {
-        qDebug() << reply.error();
-    }
+    m_pMetaDataManager->updateSource();
 }
 
 void PkgManagerService::lastoreJobListChanged(QString str, QMap<QString, QVariant> map, QStringList list)
