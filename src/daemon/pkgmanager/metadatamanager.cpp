@@ -478,6 +478,7 @@ void WorkerDataBase::updateCache()
           versionInfo.pkg_name = appID;
           versionInfo.installed_version = appLocalVer;
           versionInfo.remote_version = appRemoteVer;
+          versionInfo.size = appSize;
           if(versionInfo.installed_version.isEmpty()) {
               versionInfo.upgradable = false;
           }

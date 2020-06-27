@@ -38,6 +38,7 @@ QDebug operator<<(QDebug debug, const AppVersion& info) {
   debug << info.pkg_name
         << info.installed_version
         << info.remote_version
+        << info.size
         << info.upgradable;
   return debug;
 }
@@ -48,6 +49,7 @@ QDBusArgument& operator<<(QDBusArgument& argument,
   argument << info.pkg_name
            << info.installed_version
            << info.remote_version
+           << info.size
            << info.upgradable;
   argument.endStructure();
   return argument;
@@ -57,6 +59,7 @@ QDataStream& operator<<(QDataStream& stream, const AppVersion& info) {
   stream << info.pkg_name
          << info.installed_version
          << info.remote_version
+         << info.size
          << info.upgradable;
   return stream;
 }
@@ -67,6 +70,7 @@ const QDBusArgument& operator>>(const QDBusArgument& argument,
   argument >> info.pkg_name
            >> info.installed_version
            >> info.remote_version
+           >> info.size
            >> info.upgradable;
   argument.endStructure();
   return argument;
@@ -76,6 +80,7 @@ const QDataStream& operator>>(QDataStream& stream, AppVersion& info) {
   stream >> info.pkg_name
          >> info.installed_version
          >> info.remote_version
+         >> info.size
          >> info.upgradable;
   return stream;
 }

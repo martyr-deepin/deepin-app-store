@@ -48,6 +48,7 @@ struct AppVersion {
   QString pkg_name;
   QString installed_version;
   QString remote_version;
+  qlonglong size;
   bool upgradable;
 };
 

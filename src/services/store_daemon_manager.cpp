@@ -470,6 +470,7 @@ QVariantMap StoreDaemonManager::query(const QVariantList &apps)
         pkg.localVersion = version.installed_version;
         pkg.remoteVersion = version.remote_version;
         pkg.upgradable = version.upgradable;
+        pkg.size = version.size;
         pkg.appName = packageID;
         result.insert(packageID, pkg);
     }
