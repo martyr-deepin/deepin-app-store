@@ -1,3 +1,5 @@
 #!/bin/sh
 userName=$(who)
 rm -rf /home/${userName%% *}/.cache/deepin/deepin-app-store
+rm /etc/dpkg/dpkg.cfg.d/pkg-config-hook-config
+rm /etc/apt/apt.conf.d/99appstore.conf

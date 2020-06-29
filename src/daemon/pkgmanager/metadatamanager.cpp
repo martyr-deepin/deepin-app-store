@@ -61,7 +61,7 @@ public:
     QMutex mutexAppSize;
     QMutex mutexAppAll;
 
-    AppVersion queryAppVersion(const QString &id);
+//    AppVersion queryAppVersion(const QString &id);
     QDBusObjectPath addJob(QDBusObjectPath);
     QHash<QString,CacheAppInfo> listStorePackages();
 
@@ -200,7 +200,7 @@ qlonglong MetaDataManagerPrivate::getAppSize(QString id)
     return listAppsSize.value(id);
 }
 
-AppVersion MetaDataManagerPrivate::queryAppVersion(const QString &id)
+/*AppVersion MetaDataManagerPrivate::queryAppVersion(const QString &id)
 {
     QHash<QString,CacheAppInfo> appInfoList = listStorePackages();
 
@@ -258,7 +258,7 @@ AppVersion MetaDataManagerPrivate::queryAppVersion(const QString &id)
         }
     }
     return  versionInfo;
-}
+}*/
 
 MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent) :
     QObject(parent),
@@ -297,6 +297,7 @@ MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent)
     d->m_pProcess = new QProcess(this);
     d->m_pProcess->setReadChannel(QProcess::StandardOutput);
     d->m_pProcess->setEnvironment(QStringList() <<"LC_ALL"<<"C");
+
     QObject::connect(d->m_pProcess, &QProcess::readyReadStandardOutput,[=](){
         QByteArray byte = d->m_pProcess->readAllStandardOutput();
         QTextStream text(&byte,QIODevice::ReadOnly);
@@ -350,13 +351,14 @@ AppVersionList MetaDataManager::queryVersion(const QStringList &idList)
     for(int i=0;i<idList.size();i++) {
         AppVersion versionInfo;
         QString appID = idList.value(i);
-        if(d->listAllApps.contains(appID)) {
-            versionInfo = d->getAppsInfo(appID);
-        }
-        else {
-            versionInfo = d->queryAppVersion(appID);
-            d->insertListAllApps(appID,versionInfo);
-        }
+//        if(d->listAllApps.contains(appID)) {
+//            versionInfo = d->getAppsInfo(appID);
+//        }
+//        else {
+//            versionInfo = d->queryAppVersion(appID);
+//            d->insertListAllApps(appID,versionInfo);
+//        }
+        versionInfo = d->getAppsInfo(appID);
 
         listVersionInfo.append(versionInfo);
     }

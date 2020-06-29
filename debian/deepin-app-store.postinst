@@ -19,13 +19,14 @@ if [ "$1" = "configure" ] ; then
     killall deepin-app-store-daemon
   fi
 
+  /usr/bin/deepin-app-store-pkgcache -c
+  mv /usr/share/deepin-app-store/pkg-config-hook-config /etc/dpkg/dpkg.cfg.d/
+  mv /usr/share/deepin-app-store/99appstore.conf /etc/apt/apt.conf.d/
+  
   if [ -f /usr/share/keyrings/appstore-keyring.gpg ]; then
     apt-key add /usr/share/keyrings/appstore-keyring.gpg
   fi
 fi
-
-/usr/bin/deepin-app-store-pkgcache -c
-mv /usr/share/deepin-app-store/pkg-config-hook-config /etc/dpkg/dpkg.cfg.d/
 
 if [ "$1" = "triggered" ]; then
   echo 'begin triggered appstore'
