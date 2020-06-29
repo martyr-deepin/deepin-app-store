@@ -54,6 +54,7 @@ public slots:
   void updateCache();
   QString getPackageDesktop(QString packageName);
   qlonglong getAppInstalledTime(QString id);
+  bool compareVersion(QString localVersion, QString remoteVersion);
 signals:
   void resultReady(const InstalledAppInfoList listInstalledInfo,const QHash<QString,qlonglong> listAppsSize,const QHash<QString,AppVersion> listApps);
 private:

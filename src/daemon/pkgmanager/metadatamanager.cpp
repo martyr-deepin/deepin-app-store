@@ -52,6 +52,8 @@ public:
     void resetInstalledInfoList(InstalledAppInfoList installedList);
     InstalledAppInfoList getInstalledInfoList();
 
+    bool compareVersion(QString localVersion,QString remoteVersion);
+
     void resetListAppsSize(QHash<QString,qlonglong> appSize);
     void insertListAppsSize(QString key,qlonglong size);
     qlonglong getAppSize(QString id);
@@ -540,7 +542,7 @@ void WorkerDataBase::updateCache()
               versionInfo.upgradable = false;
           }
           else {
-              versionInfo.upgradable = (QString::compare(versionInfo.installed_version,versionInfo.remote_version)<0);
+              versionInfo.upgradable = compareVersion(versionInfo.installed_version,versionInfo.remote_version);
           }
 
           listAppsSize.insert(appID,appSize);
@@ -604,6 +606,36 @@ qlonglong WorkerDataBase::getAppInstalledTime(QString id)
     }
     else
         return 0;
+}
+
+bool WorkerDataBase::compareVersion(QString localVersion, QString remoteVersion)
+{
+    QRegExp rx("[?\\.\\+\\-]");
+    QStringList localList;
+    QStringList remoteList;
+    localList = localVersion.split(rx, QString::SkipEmptyParts);
+    remoteList = remoteVersion.split(rx, QString::SkipEmptyParts);
+    int size = ((localList.size()>remoteList.size())?localList.size():remoteList.size());
+
+    QRegExp rxs("^[0-9]+$");
+    for(int i =0 ;i<size;i++) {
+        QString localSplit = localList.value(i);
+        QString remoteSplit = remoteList.value(i);
+
+        if (rxs.exactMatch(localSplit) && rxs.exactMatch(remoteSplit)) {//均为纯数字
+            if(localSplit.toInt() == remoteSplit.toInt())
+                continue;
+            else
+                return (localSplit.toInt() < remoteSplit.toInt());
+        }
+        else {           //不是纯数字
+            if(QString::compare(localSplit,remoteSplit) == 0)
+                continue;
+            else
+                return (QString::compare(localSplit,remoteSplit)<0);
+        }
+    }
+    return false;
 }
 
 WorkerDataBase::WorkerDataBase(QObject *parent) :
