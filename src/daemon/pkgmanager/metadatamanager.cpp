@@ -551,8 +551,8 @@ void WorkerDataBase::updateCache()
           {
               InstalledAppInfo installInfo;
               installInfo.packageName = appID;
-              installInfo.appName = appLocalVer;
-              installInfo.version = appRemoteVer;
+              installInfo.appName = appID;
+              installInfo.version = appLocalVer;
               installInfo.size = appSize;
       //            installInfo.localeNames = installInfo.appName;
               installInfo.desktop = getPackageDesktop(appID);
