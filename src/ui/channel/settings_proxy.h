@@ -68,11 +68,6 @@ public Q_SLOTS:
      * Raise main window.
      */
     void raiseWindow();
-
-    /**
-     * Get app version
-     */
-    QString getAppVersion();
 };
 
 }  // namespace dstore

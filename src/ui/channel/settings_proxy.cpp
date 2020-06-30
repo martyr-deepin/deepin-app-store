@@ -71,6 +71,8 @@ const QVariantMap SettingsProxy::getSettings()
         {"authorizationState", SettingsManager::instance()->authorizationState()},
         //get personalized settings active color
         {"activeColor", SettingsManager::instance()->getActiveColor()},
+        //get appstore version
+        {"appStoreVersion", Dtk::Widget::DApplication::buildVersion("6.0.0.2")},
     };
     qDebug() << settings;
     return settings;
@@ -95,11 +97,6 @@ void SettingsProxy::openUrl(const QString &url)
 void SettingsProxy::raiseWindow()
 {
     emit this->raiseWindowRequested();
-}
-
-QString SettingsProxy::getAppVersion()
-{
-    return  Dtk::Widget::DApplication::buildVersion("6.0.0.1");
 }
 
 }  // namespace dstore
