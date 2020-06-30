@@ -343,6 +343,7 @@ QVariantMap StoreDaemonManager::installedPackages()
         for (const auto& k : info.localeNames.keys()) {
             pkg.allLocalName[k] = info.localeNames[k];
         }
+        //防止断网后无法显示本地图标
         pkg.icon = dstore::GetThemeIconData(dstore::GetIconFromDesktop(pkg.desktop),48);
         pkg.installedTime = info.installationTime;
         result.append(pkg.toVariantMap());

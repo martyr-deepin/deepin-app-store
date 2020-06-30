@@ -555,7 +555,7 @@ void WorkerDataBase::updateCache()
               installInfo.version = appRemoteVer;
               installInfo.size = appSize;
       //            installInfo.localeNames = installInfo.appName;
-              installInfo.desktop = "";
+              installInfo.desktop = getPackageDesktop(appID);
               installInfo.installationTime = getAppInstalledTime(installInfo.packageName);
               listInstalledInfo.append(installInfo);
           }
