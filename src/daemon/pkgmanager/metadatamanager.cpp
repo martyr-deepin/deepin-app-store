@@ -27,6 +27,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QLocalServer>
+#include <QLocalSocket>
 
 #include "metadatamanager.h"
 #include "lastorejobservice.h"
@@ -293,6 +294,8 @@ MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent)
     }
     connect(m_server,&QLocalServer::newConnection, this,[=](){
         Q_EMIT updateCache();
+        QLocalSocket *localSocket = m_server->nextPendingConnection();
+        localSocket->abort();
     });
 
     //update source
