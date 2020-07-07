@@ -129,6 +129,11 @@ QVariant SettingService::getSupportAot(){
     return sysCfg->value(upSupportAot,false).toBool();
 }
 
+QVariant SettingService::getProductName()
+{
+    return sysCfg->value(upProductName,"").toString();
+}
+
 // GetInterfaceName return dbus interface name
 QString SettingService::GetInterfaceName(){
     return dbusSettingsInterface;
@@ -201,6 +206,9 @@ QDBusVariant SettingService::GetSettings(QString key)
         break;
     case SettingKey::SupportAot:
         value = getSupportAot();
+        break;
+    case SettingKey::ProductName:
+        value = getProductName();
         break;
     default:
         qDebug() << "Non-existent key value";

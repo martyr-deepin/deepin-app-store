@@ -73,6 +73,8 @@ const QVariantMap SettingsProxy::getSettings()
         {"activeColor", SettingsManager::instance()->getActiveColor()},
         //get appstore version
         {"appStoreVersion", Dtk::Widget::DApplication::buildVersion("6.0.0.2")},
+        //get product name
+        {"productName", SettingsManager::instance()->productName()},
     };
     qDebug() << settings;
     return settings;

@@ -72,7 +72,7 @@ const char upSupportSignIn[]      = "SupportSignIn";
 const char upAllowSwitchRegion[]  = "AllowSwitchRegion";
 const char upDefaultRegion[]      = "DefaultRegion";
 const char upUpyunBannerVisible[] = "UpyunBannerVisible";
-
+const char upProductName[] = "ProductName";
 }
 
 class SettingService : public QObject
@@ -94,7 +94,8 @@ public:
         UpyunBannerVisible,
         AllowSwitchRegion,
         AllowShowPackageName,
-        SupportAot
+        SupportAot,
+        ProductName
     };
     Q_ENUM(SettingKey)
 
@@ -124,6 +125,8 @@ private:
     QVariant getAllowShowPackageName();
 
     QVariant getSupportAot();
+
+    QVariant getProductName();
 
     QSettings *sysCfg;
 

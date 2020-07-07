@@ -92,6 +92,8 @@ public Q_SLOTS:
     QString desktopMode() const;
     QString GUIFramework() const;
 
+    QString productName() const;
+
     quint32 authorizationState() const;
     void authStateChange();
 
