@@ -19,6 +19,7 @@
 #include <QUrl>
 #include <QDebug>
 
+#include <DApplication>
 #include "ui/channel/settings_proxy.h"
 #include "services/settings_manager.h"
 
@@ -70,6 +71,10 @@ const QVariantMap SettingsProxy::getSettings()
         {"authorizationState", SettingsManager::instance()->authorizationState()},
         //get personalized settings active color
         {"activeColor", SettingsManager::instance()->getActiveColor()},
+        //get appstore version
+        {"appStoreVersion", Dtk::Widget::DApplication::buildVersion("6.0.0.2")},
+        //get product name
+        {"productName", SettingsManager::instance()->productName()},
     };
     qDebug() << settings;
     return settings;
@@ -95,6 +100,5 @@ void SettingsProxy::raiseWindow()
 {
     emit this->raiseWindowRequested();
 }
-
 
 }  // namespace dstore

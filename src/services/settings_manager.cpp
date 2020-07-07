@@ -56,6 +56,8 @@ const char kDefaultRegion[] = "DefaultRegion";
 const char kAllowSwitchRegion[] = "AllowSwitchRegion";
 
 const char kUpyunBannerVisible[] = "UpyunBannerVisible";
+
+const char kProductName[] = "ProductName";
 }
 
 SettingsManager::SettingsManager(QObject *parent)
@@ -134,6 +136,11 @@ quint32 SettingsManager::authorizationState() const
 QString SettingsManager::GUIFramework() const
 {
     return QProcessEnvironment::systemEnvironment().value("XDG_SESSION_TYPE");;
+}
+
+QString SettingsManager::productName() const
+{
+    return getSettings(kProductName).toString();
 }
 
 void SettingsManager::authStateChange()
