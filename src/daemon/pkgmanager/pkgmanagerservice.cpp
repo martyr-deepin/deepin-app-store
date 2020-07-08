@@ -165,6 +165,8 @@ void PkgManagerService::lastoreJobListChanged(QString str, QMap<QString, QVarian
         while (!dbusArgs.atEnd())
         {
             dbusArgs >> path;
+            if(path.path() == "/com/deepin/lastore/Jobupdate_source")
+                continue;
             jobList.append(path.path());
         }
         dbusArgs.endArray();
