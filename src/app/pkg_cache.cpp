@@ -91,24 +91,30 @@ bool getStoreList(QVariantMap &storeList,QMap<QString,QString> &versionList)
             QStringList list = packageList.value(i).split('\n');
             QMap<QString,QVariant> appMap;
             appMap.clear();
+
+            QRegExp rx("[?\\ \\:]");
             for(int i=0;i<list.size();i++) {
                 QString str = list.value(i);
-                if(str.startsWith("Package: ")) {
-                    QString appId = str.section("Package: ",1,1);
-                    appMap.insert("appID",appId);
-                    appMap.insert("localVer",versionList.value(appId));
+
+                QStringList localList = str.split(rx, QString::SkipEmptyParts);
+                QString type = localList.value(0);
+                QString value = localList.value(1);
+
+                if(type == "Package") {
+                    appMap.insert("appID",value);
+                    appMap.insert("localVer",versionList.value(value));
                 }
-                else if(str.startsWith("Version: ")) {
-                    appMap.insert("remoteVer",str.section("Version: ",1,1));
+                else if(type == "Version") {
+                    appMap.insert("remoteVer",value);
                 }
-                else if(str.startsWith("Architecture: ")) {
-                    appMap.insert("appArch",str.section("Architecture: ",1,1));
+                else if(type == "Architecture") {
+                    appMap.insert("appArch",value);
                 }
-                else if(str.startsWith("Installed-Size: ")) {
-                    appMap.insert("installSize",str.section("Installed-Size: ",1,1));
+                else if(type == "Installed-Size") {
+                    appMap.insert("installSize",value);
                 }
-                else if(str.startsWith("Size: ")) {
-                    appMap.insert("debSize",str.section("Size: ",1,1));
+                else if(type == "Size") {
+                    appMap.insert("debSize",value);
                 }
             }
             storeList.insert(appMap.value("appID").toString(),QVariant(appMap));
