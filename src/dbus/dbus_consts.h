@@ -43,6 +43,12 @@ extern const char kLicenseInfoInterface[];
 extern const char kAppearanceService[];
 extern const char kAppearancePath[];
 extern const char kAppearanceInterface[];
+
+extern const char kNetworkService[];
+extern const char kLauncherPath[];
+extern const char kLauncherInterface[];
+extern const char kNetworkProxyChainsPath[];
+extern const char kNetworkProxyChainsInterface[];
 }  // namespace dstore
 
 #endif  // DEEPIN_APPSTORE_DBUS_DBUS_CONSTS_H

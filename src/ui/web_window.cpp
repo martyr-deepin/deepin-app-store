@@ -128,6 +128,7 @@ WebWindow::WebWindow(QWidget *parent)
     : DMainWindow(parent),
       search_timer_(new QTimer(this))
 {
+    this->initServices();
     qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "9222");
 
     QFile scriptFile(":/qtwebchannel/qwebchannel.js");
@@ -156,7 +157,6 @@ WebWindow::WebWindow(QWidget *parent)
     search_timer_->setSingleShot(true);
 
     this->initUI();
-    this->initServices();
     this->initProxy();
 
     // Connect signals to slots after all of internal objects are constructed.
@@ -416,6 +416,45 @@ void WebWindow::initUI()
 
 void WebWindow::initServices()
 {
+    QDBusInterface networkInterface(kNetworkService,
+                                    kLauncherPath,
+                                    kLauncherInterface,
+                                    QDBusConnection::sessionBus());
+    QDBusReply<bool> isUseProxy = networkInterface.call(QLatin1String("GetUseProxy"),QLatin1String("deepin-app-store"));
+    qDebug()<< "deepin-app-store uses an application proxy : " << isUseProxy;
+
+    if(isUseProxy){
+        QDBusInterface proxyInterface(kNetworkService,
+                                      kNetworkProxyChainsPath,
+                                      kNetworkProxyChainsInterface,
+                                      QDBusConnection::sessionBus());
+
+        QString proxyType = proxyInterface.property("Type").toString();
+        QNetworkProxy networkProxy;
+
+        if (proxyType == "http"){
+            qDebug() << "Network proxy type is http";
+            networkProxy.setType(QNetworkProxy::HttpProxy);
+        }
+        else if(proxyType == "socks5"){
+            qDebug() << "Network proxy type is socks5";
+            networkProxy.setType(QNetworkProxy::Socks5Proxy);
+        }else {
+            qWarning() << "Please use http or sock5 application proxy type";
+            return;
+        }
+
+        QString ip = proxyInterface.property("IP").toString();
+        uint port = proxyInterface.property("Port").toUInt();
+        QString user = proxyInterface.property("User").toString();
+        QString psw = proxyInterface.property("Password").toString();
+
+        networkProxy.setHostName(ip);
+        networkProxy.setPort(static_cast<quint16>(port));
+        networkProxy.setUser(user);
+        networkProxy.setPassword(psw);
+        QNetworkProxy::setApplicationProxy(networkProxy);
+    }
 }
 
 bool WebWindow::eventFilter(QObject *watched, QEvent *event)

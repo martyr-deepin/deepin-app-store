@@ -22,14 +22,19 @@
 #include <DMainWindow>
 #include <QMenu>
 #include <QRegularExpression>
+#include <QNetworkProxy>
+#include <QDBusInterface>
+#include <QDBusReply>
+#include <QWebEngineUrlRequestInterceptor>
+
 #include <services/dbus_manager.h>
+#include <services/search_result.h>
+#include <dbus/dbus_consts.h>
 
 class QWebEngineView;
 class QThread;
 class QTimer;
 
-#include "services/search_result.h"
-#include <QWebEngineUrlRequestInterceptor>
 namespace dstore
 {
 

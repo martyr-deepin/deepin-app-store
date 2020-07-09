@@ -42,4 +42,10 @@ const char kLicenseInfoInterface[] = "com.deepin.license.Info";
 const char kAppearanceService[] = "com.deepin.daemon.Appearance";
 const char kAppearancePath[] = "/com/deepin/daemon/Appearance";
 const char kAppearanceInterface[] = "com.deepin.daemon.Appearance";
+
+const char kNetworkService[] = "com.deepin.daemon.Network";
+const char kLauncherPath[] = "/com/deepin/dde/daemon/Launcher";
+const char kLauncherInterface[] = "com.deepin.dde.daemon.Launcher";
+const char kNetworkProxyChainsPath[] = "/com/deepin/daemon/Network/ProxyChains";
+const char kNetworkProxyChainsInterface[] = "com.deepin.daemon.Network.ProxyChains";
 }  // namespace dstore
