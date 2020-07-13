@@ -87,7 +87,7 @@ QMap<QString,CacheAppInfo> MetaDataManagerPrivate::listStorePackages()
     process.setProcessEnvironment(env);
     process.start("/bin/bash");
 
-    process.write("/usr/bin/aptitude search '?origin(Uos)'");
+    process.write("/usr/bin/aptitude search '?Label(Uos_eagle)'");
     process.closeWriteChannel();
 
     QString dpkgQuery;
