@@ -476,29 +476,6 @@ QVariantMap StoreDaemonManager::query(const QVariantList &apps)
         result.insert(packageID, pkg);
     }
 
-    /*const QDBusPendingReply<InstalledAppTimestampList> installTimeReply =
-        d->deb_interface_->QueryInstallationTime(list);
-
-    while (!installTimeReply.isFinished()) {
-        qApp->processEvents();
-    }
-
-    if (installTimeReply.isError()) {
-        qDebug() << installTimeReply.error();
-    }
-
-//    installTimeReply.waitForFinished();
-
-    const InstalledAppTimestampList timestamp_list = installTimeReply.value();
-
-    for (const InstalledAppTimestamp &timestamp : timestamp_list) {
-        auto package_name = timestamp.pkg_name;
-        auto packageID =  package_name.split(":").first();
-        auto pkg = result.value(package_name);
-        pkg.installedTime =  timestamp.timestamp;
-        result.insert(package_name, pkg);
-    }*/
-
     QVariantMap data;
     for (auto &p : result) {
         data.insert(p.packageURI, p.toVariantMap());

@@ -120,7 +120,8 @@ qlonglong PkgManagerService::QueryDownloadSize(const QString &id)
 
 InstalledAppTimestampList PkgManagerService::QueryInstallationTime(const QStringList &idList)
 {
-    return  m_pMetaDataManager->getInstallationTimes(idList);
+    Q_UNUSED(idList);
+    return  InstalledAppTimestampList();
 }
 
 AppVersionList PkgManagerService::QueryVersion(const QStringList &idList)
