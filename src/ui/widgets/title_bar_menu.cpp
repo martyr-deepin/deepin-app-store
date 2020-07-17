@@ -52,8 +52,8 @@ void TitleBarMenu::initActions()
 
 void TitleBarMenu::privacyAgreementDialogRequested()
 {
-    QString privacyPolicyPathZH("/usr/share/deepin-deepinid-client/privacy/deepinid-Other-zh_CN.md");
-    QString privacyPolicyPathEN("/usr/share/deepin-deepinid-client/privacy/deepinid-Other-en_US.md");
+    QString privacyPolicyPathZH("/usr/share/deepin-deepinid-client/privacy/Privacy-Policy/Privacy-Policy-CN-zh_CN.md");
+    QString privacyPolicyPathEN("/usr/share/deepin-deepinid-client/privacy/Privacy-Policy/Privacy-Policy-CN-en_US.md");
 
     if (!QFile::exists(privacyPolicyPathZH)) {
         qCritical() << "can not find policy text" << privacyPolicyPathZH;
