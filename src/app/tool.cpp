@@ -68,15 +68,18 @@ void linkApp(const QJsonObject &app)
     auto sysShareDir = QDir("/usr/share");
     linkDir(appEntriesDir.absoluteFilePath("applications"), sysShareDir.absoluteFilePath("applications"));
     linkDir(appEntriesDir.absoluteFilePath("icons"), sysShareDir.absoluteFilePath("icons"));
-    linkDir(appEntriesDir.absoluteFilePath("mime"), sysShareDir.absoluteFilePath("mime"));
+    linkDir(appEntriesDir.absoluteFilePath("mime"), sysShareDir.absoluteFilePath("mime/packages"));
     linkDir(appEntriesDir.absoluteFilePath("glib-2.0"), sysShareDir.absoluteFilePath("glib-2.0"));
     linkDir(appEntriesDir.absoluteFilePath("services"), sysShareDir.absoluteFilePath("dbus-1/services"));
     linkDir(appEntriesDir.absoluteFilePath("GConf"), sysShareDir.absoluteFilePath("GConf"));
     linkDir(appEntriesDir.absoluteFilePath("help"), sysShareDir.absoluteFilePath("help"));
     linkDir(appEntriesDir.absoluteFilePath("locale"), sysShareDir.absoluteFilePath("locale"));
-    linkDir(appEntriesDir.absoluteFilePath("plugins/fcitx"), sysShareDir.absoluteFilePath("fcitx"));
-    linkDir(appEntriesDir.absoluteFilePath("plugins/fcitxlib"), "/usr/lib/x86_64-linux-gnu/fcitx");
-    linkDir(appEntriesDir.absoluteFilePath("plugins/webbrowser"), "/usr/lib/mozilla/plugins");
+    linkDir(appEntriesDir.absoluteFilePath("plugin/fcitx"), sysShareDir.absoluteFilePath("fcitx"));
+    linkDir(appEntriesDir.absoluteFilePath("plugin/fcitx-lib"), "/usr/lib/x86_64-linux-gnu/fcitx");
+    linkDir(appEntriesDir.absoluteFilePath("plugin/browser"), "/usr/lib/mozilla/plugins");
+    linkDir(appEntriesDir.absoluteFilePath("polkit"), sysShareDir.absoluteFilePath("polkit-1/actions"));
+    linkDir(appEntriesDir.absoluteFilePath("fonts/"+appID), sysShareDir.absoluteFilePath("fonts/apps"));
+    linkDir(appEntriesDir.absoluteFilePath("fonts/conf.d"), "/etc/fonts/conf.d");
 }
 
 void cleanLink()
@@ -92,15 +95,18 @@ void cleanLink()
     auto sysShareDir = QDir("/usr/share");
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("applications"));
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("icons"));
-    cleanDirBrokenLink(sysShareDir.absoluteFilePath("mime"));
+    cleanDirBrokenLink(sysShareDir.absoluteFilePath("mime/packages"));
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("glib-2.0"));
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("dbus-1/services"));
-    cleanDirBrokenLink(sysShareDir.absoluteFilePath("/etc/xdg/autostart"));
+    cleanDirBrokenLink("/etc/xdg/autostart");
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("fcitx"));
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("help"));
     cleanDirBrokenLink(sysShareDir.absoluteFilePath("locale"));
-    cleanDirBrokenLink(sysShareDir.absoluteFilePath("/usr/lib/x86_64-linux-gnu/fcitx"));
-    cleanDirBrokenLink(sysShareDir.absoluteFilePath("/usr/lib/mozilla/plugins"));
+    cleanDirBrokenLink("/usr/lib/x86_64-linux-gnu/fcitx");
+    cleanDirBrokenLink("/usr/lib/mozilla/plugins");
+    cleanDirBrokenLink(sysShareDir.absoluteFilePath("polkit-1/actions"));
+    cleanDirBrokenLink(sysShareDir.absoluteFilePath("fonts/apps"));
+    cleanDirBrokenLink("/etc/fonts/conf.d");
 }
 
 void update()
@@ -115,6 +121,10 @@ void update()
     p.waitForFinished();
 
     cmd = "update-desktop-database -q";
+    p.start("bash", QStringList{"-c", cmd});
+    p.waitForFinished();
+
+    cmd = "update-mime-database -V /usr/share/mime";
     p.start("bash", QStringList{"-c", cmd});
     p.waitForFinished();
 }
