@@ -43,11 +43,11 @@ void TitleBarMenu::initActions()
     this->addAction(QObject::tr("Clear cache"),
                     this, &TitleBarMenu::clearCacheRequested);
 
-    privacy_agreement_action_ = this->addAction(QObject::tr("Privacy Policy"));
-    connect(privacy_agreement_action_, &QAction::triggered,
-            this, &TitleBarMenu::privacyAgreementDialogRequested);
+//    privacy_agreement_action_ = this->addAction(QObject::tr("Privacy Policy"));
+//    connect(privacy_agreement_action_, &QAction::triggered,
+//            this, &TitleBarMenu::privacyAgreementDialogRequested);
 
-    this->addSeparator();
+//    this->addSeparator();
 }
 
 void TitleBarMenu::privacyAgreementDialogRequested()

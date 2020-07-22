@@ -62,6 +62,12 @@ int main(int argc, char **argv)
     app.setApplicationAcknowledgementPage(
         "https://www.deepin.org/acknowledgments/deepin-app-store/");
 
+    if (QLocale::system().name() == "zh_CN") {
+        app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-cn>《统信软件隐私政策》</a>");
+    }else {
+        app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-en>《UnionTech Software Privacy Policy》</a>");
+    }
+
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
 
