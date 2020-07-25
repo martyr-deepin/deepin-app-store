@@ -31,6 +31,7 @@
 #include "services/settings_manager.h"
 #include "services/rcc_scheme_handler.h"
 #include "ui/web_window.h"
+#include "base/sysinfo.h"
 
 int main(int argc, char **argv)
 {
@@ -62,10 +63,14 @@ int main(int argc, char **argv)
     app.setApplicationAcknowledgementPage(
         "https://www.deepin.org/acknowledgments/deepin-app-store/");
 
-    if (QLocale::system().name() == "zh_CN") {
-        app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-cn>《统信软件隐私政策》</a>");
-    }else {
-        app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-en>《UnionTech Software Privacy Policy》</a>");
+    SysInfo systeminfo;
+    qDebug()<<systeminfo.product();
+    if(systeminfo.product() != "community") {
+        if (QLocale::system().name() == "zh_CN") {
+            app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-cn>《统信软件隐私政策》</a>");
+        }else {
+            app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-en>《UnionTech Software Privacy Policy》</a>");
+        }
     }
 
     Dtk::Core::DLogManager::registerConsoleAppender();
