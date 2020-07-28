@@ -119,7 +119,6 @@ TWebEngineUrlRequestInterceptor::TWebEngineUrlRequestInterceptor(QObject *parent
 void TWebEngineUrlRequestInterceptor::interceptRequest(QWebEngineUrlRequestInfo &info)
 {
     if(info.resourceType() == QWebEngineUrlRequestInfo::ResourceTypeXhr) {
-        info.setHttpHeader("Access-Control-Allow-Origin", "*");
         info.setHttpHeader("Cache-Control","no-cache");
     }
 }
