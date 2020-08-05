@@ -128,7 +128,7 @@ WebWindow::WebWindow(QWidget *parent)
       search_timer_(new QTimer(this))
 {
     this->initServices();
-    qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "9222");
+    //qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "9222");
 
     QFile scriptFile(":/qtwebchannel/qwebchannel.js");
     scriptFile.open(QIODevice::ReadOnly);
