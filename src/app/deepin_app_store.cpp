@@ -47,6 +47,8 @@ int main(int argc, char **argv)
         app.setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
     }
 
+    app.setAttribute(Qt::AA_UseSoftwareOpenGL);
+
     auto themName = dstore::SettingsManager::instance()->themeName();
     app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
     app.setWindowIcon(QIcon(dstore::kImageDeepinAppStore));
