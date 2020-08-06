@@ -23,6 +23,8 @@
 #include <QDBusReply>
 #include <QDBusInterface>
 #include <QApplication>
+#include <QFontInfo>
+
 #include <DGuiApplicationHelper>
 
 #include "dbus/dbus_consts.h"
@@ -321,7 +323,8 @@ QString SettingsManager::fontFamily() const
 
 int SettingsManager::fontPixelSize() const
 {
-    return QApplication::font().pixelSize();
+    QFontInfo fontInfo(QApplication::font());
+    return fontInfo.pixelSize();
 }
 
 }  // namespace dstore
