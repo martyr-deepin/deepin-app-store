@@ -45,8 +45,8 @@ struct InstalledAppTimestamp {
   friend const QDataStream& operator>>(QDataStream& stream,
                                        InstalledAppTimestamp& info);
 
-  QString pkg_name;
-  qlonglong timestamp;
+  QString pkg_name = nullptr;
+  qlonglong timestamp = 0;
 };
 
 typedef QList<InstalledAppTimestamp> InstalledAppTimestampList;

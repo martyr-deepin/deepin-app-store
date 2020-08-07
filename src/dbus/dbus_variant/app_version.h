@@ -45,11 +45,11 @@ struct AppVersion {
   friend const QDataStream& operator>>(QDataStream& stream,
                                        AppVersion& info);
 
-  QString pkg_name;
-  QString installed_version;
-  QString remote_version;
-  qlonglong size;
-  bool upgradable;
+  QString pkg_name = nullptr;
+  QString installed_version = nullptr;
+  QString remote_version = nullptr;
+  qlonglong size = 0;
+  bool upgradable = false;
 };
 
 typedef QList<AppVersion> AppVersionList;

@@ -32,7 +32,7 @@ struct AppMetadata {
               const QString& category_)
       : name(name_),
         icon(icon_),
-        category(category_) { };
+        category(category_) { }
   ~AppMetadata();
 
   static void registerMetaType();
@@ -53,9 +53,9 @@ struct AppMetadata {
   friend const QDataStream& operator>>(QDataStream& stream,
                                        AppMetadata& info);
 
-  QString name;
-  QString icon;
-  QString category;
+  QString name = nullptr;
+  QString icon = nullptr;
+  QString category = nullptr;
 };
 
 Q_DECLARE_METATYPE(AppMetadata);

@@ -47,13 +47,13 @@ public:
     friend const QDataStream &operator>>(QDataStream &stream,
                                          InstalledAppInfo &info);
 
-    QString packageName;
-    QString appName;
-    QString version;
-    QString desktop;
-    qint64 size;
-    qint64 installationTime;
-    QMap<QString, QString>localeNames;
+    QString packageName = nullptr;
+    QString appName = nullptr;
+    QString version = nullptr;
+    QString desktop = nullptr;
+    qint64 size = 0;
+    qint64 installationTime = 0;
+    QMap<QString, QString>localeNames{};
 };
 
 typedef QList<InstalledAppInfo> InstalledAppInfoList;
