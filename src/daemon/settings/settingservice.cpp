@@ -20,6 +20,61 @@
  */
 #include "settingservice.h"
 
+namespace functions {
+QString product()
+{
+    const auto defaultProduct = "community";
+    using UosType = Dtk::Core::DSysInfo::UosType;
+    using EditionType = Dtk::Core::DSysInfo::UosEdition;
+
+    int spVersion = Dtk::Core::DSysInfo::spVersion().remove(0,2).toInt();
+
+    if(spVersion >= 2)
+    {
+        auto uosType = Dtk::Core::DSysInfo::uosType();
+        if(uosType == UosType::UosServer)
+        {
+            return "server";
+        }
+        else if(uosType == UosType::UosDesktop)
+        {
+            auto uosEdition = Dtk::Core::DSysInfo::uosEditionType();
+
+            if(uosEdition == EditionType::UosProfessional)
+            {
+                return "professional";
+            }
+            else if(uosEdition == EditionType::UosHome)
+            {
+                return "personal";
+            }
+            else if(uosEdition == EditionType::UosCommunity)
+            {
+                return "community";
+            }
+        }
+    }
+    else
+    {
+        switch (Dtk::Core::DSysInfo::deepinType())
+        {
+        case Dtk::Core::DSysInfo::DeepinDesktop:
+            return "community";
+        case Dtk::Core::DSysInfo::DeepinProfessional:
+            return "professional";
+        case Dtk::Core::DSysInfo::DeepinPersonal:
+            return "personal";
+        case Dtk::Core::DSysInfo::DeepinServer:
+            return "server";
+        default:
+            return "community";
+        }
+    }
+
+    return defaultProduct;
+}
+}
+
 SettingService::SettingService(QObject *parent) : QObject(parent)
 {
     QString dirPath = QProcessEnvironment::systemEnvironment().value("XDG_CONFIG_HOME");
@@ -34,16 +89,29 @@ SettingService::SettingService(QObject *parent) : QObject(parent)
 
     configFolder += "/deepin/deepin-app-store";
 
-    sysCfg = new QSettings(appStoreConfPath, QSettings::IniFormat);
-    qDebug()<<appStoreConfPath;
+
+    QString  strSystemType = functions::product();
+    QString strIniBasePath = QString::fromLocal8Bit(appStoreConfPath) ;//应用商店配置文件路径
+
+    if(strSystemType == "server")
+        strIniBasePath += "settings-server.ini";
+    else if(strSystemType == "professional")
+        strIniBasePath += "settings-professional.ini";
+    else if(strSystemType == "personal")
+        strIniBasePath += "settings-personal.ini";
+    else if(strSystemType == "community")
+        strIniBasePath += "settings-community.ini";
+
+    sysCfg = new QSettings(strIniBasePath, QSettings::IniFormat);
+
     userCfg = new QSettings(configFolder + "/settings.ini", QSettings::IniFormat);
 }
 
 QVariant SettingService::getServer(){
-//    QSettings setting("/etc/deepin-version", QSettings::IniFormat);
-//    setting.beginGroup("Release");
-//    QString version = setting.value("Type").toString();
-//    setting.endGroup();
+    //    QSettings setting("/etc/deepin-version", QSettings::IniFormat);
+    //    setting.beginGroup("Release");
+    //    QString version = setting.value("Type").toString();
+    //    setting.endGroup();
     qint16 version =  Dtk::Core::DSysInfo::deepinType();
     QString storeServer;
 

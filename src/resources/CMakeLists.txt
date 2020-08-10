@@ -13,5 +13,9 @@ install(FILES appstore-keyring.gpg
 install(FILES appstore.gpg
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/)
 
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/settings
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/
+        FILES_MATCHING
+        PATTERN "*")
 #install(FILES appstore.list
 #        DESTINATION /etc/apt/sources.list.d/)

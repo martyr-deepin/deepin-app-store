@@ -40,7 +40,7 @@ namespace
 {
 
 //settings file path
-const char appStoreConfPath[]        = "/usr/share/deepin-app-store/settings.ini";
+const char appStoreConfPath[]        = "/usr/share/deepin-app-store/settings/";
 const char appStoreConfPathDefault[] = "/usr/share/deepin-app-store/settings.ini.default";
 
 //dbus interface and path

@@ -60,20 +60,28 @@ int main(int argc, char **argv)
     app.loadTranslator();
     app.setApplicationDisplayName(QObject::tr("App Store"));
     app.setApplicationDescription(QObject::tr(
-        "App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click."
-        ));
+                                      "App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click."
+                                      ));
     app.setApplicationAcknowledgementPage(
-        "https://www.deepin.org/acknowledgments/deepin-app-store/");
+                "https://www.deepin.org/acknowledgments/deepin-app-store/");
 
     SysInfo systeminfo;
     qDebug()<<systeminfo.product();
-    if(systeminfo.product() != "community") {
+    if(systeminfo.product() == "professional" || systeminfo.product() == "personal") {
         if (QLocale::system().name() == "zh_CN") {
             app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-cn>《统信软件隐私政策》</a>");
         }else {
             app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-en>《UnionTech Software Privacy Policy》</a>");
         }
     }
+    else if (systeminfo.product() == "community") {
+//        if (QLocale::system().name() == "zh_CN") {
+//            app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-cn>《统信软件隐私政策》</a>");
+//        }else {
+//            app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-en>《UnionTech Software Privacy Policy》</a>");
+//        }
+    }
+
 
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
