@@ -36,52 +36,54 @@ QString SysInfo::arch() const
 QString SysInfo::product() const
 {
     const auto defaultProduct = "community";
+
+#ifdef DTK_VERSION
+#if DTK_VERSION >= 84017667
     using UosType = Dtk::Core::DSysInfo::UosType;
     using EditionType = Dtk::Core::DSysInfo::UosEdition;
 
-    int spVersion = Dtk::Core::DSysInfo::spVersion().remove(0,2).toInt();
-
-    if(spVersion >= 2)
+    auto uosType = Dtk::Core::DSysInfo::uosType();
+    if(uosType == UosType::UosServer)
     {
-        auto uosType = Dtk::Core::DSysInfo::uosType();
-        if(uosType == UosType::UosServer)
-        {
-            return "server";
-        }
-        else if(uosType == UosType::UosDesktop)
-        {
-            auto uosEdition = Dtk::Core::DSysInfo::uosEditionType();
-
-            if(uosEdition == EditionType::UosProfessional)
-            {
-                return "professional";
-            }
-            else if(uosEdition == EditionType::UosHome)
-            {
-                return "personal";
-            }
-            else if(uosEdition == EditionType::UosCommunity)
-            {
-                return "community";
-            }
-        }
+        return "server";
     }
-    else
+    else if(uosType == UosType::UosDesktop)
     {
-        switch (Dtk::Core::DSysInfo::deepinType())
+        auto uosEdition = Dtk::Core::DSysInfo::uosEditionType();
+
+        if(uosEdition == EditionType::UosProfessional)
         {
-        case Dtk::Core::DSysInfo::DeepinDesktop:
-            return "community";
-        case Dtk::Core::DSysInfo::DeepinProfessional:
             return "professional";
-        case Dtk::Core::DSysInfo::DeepinPersonal:
+        }
+        else if(uosEdition == EditionType::UosHome)
+        {
             return "personal";
-        case Dtk::Core::DSysInfo::DeepinServer:
-            return "server";
-        default:
+        }
+        else if(uosEdition == EditionType::UosCommunity)
+        {
             return "community";
         }
     }
+
+#else
+    switch (Dtk::Core::DSysInfo::deepinType())
+    {
+    case Dtk::Core::DSysInfo::DeepinDesktop:
+        return "community";
+    case Dtk::Core::DSysInfo::DeepinProfessional:
+        return "professional";
+    case Dtk::Core::DSysInfo::DeepinPersonal:
+        return "personal";
+    case Dtk::Core::DSysInfo::DeepinServer:
+        return "server";
+    default:
+        return "community";
+    }
+
+
+#endif
+#endif
+
 
     return defaultProduct;
 }

@@ -66,7 +66,6 @@ int main(int argc, char **argv)
                 "https://www.deepin.org/acknowledgments/deepin-app-store/");
 
     SysInfo systeminfo;
-    qDebug()<<systeminfo.product();
     if(systeminfo.product() == "professional" || systeminfo.product() == "personal") {
         if (QLocale::system().name() == "zh_CN") {
             app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-cn>《统信软件隐私政策》</a>");

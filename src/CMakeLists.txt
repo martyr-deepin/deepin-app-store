@@ -200,6 +200,7 @@ add_custom_command(
 
 add_executable(deepin-app-store-daemon
                daemon/main.cpp
+               ${BASE_FILES}
                ${PACKAGE_FILES}
                ${DBUS_FILES}
                ${SETTINGS_FILES})
