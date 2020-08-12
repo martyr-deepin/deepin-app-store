@@ -1,1 +1,1 @@
-post-invoke=if { test true; } && test -x /usr/share/pkg-config-dpkghook; then /usr/bin/deepin-app-store-pkgcache -u; fi
+post-invoke=if { test true; }; then /usr/bin/deepin-app-store-pkgcache -u; fi
