@@ -97,6 +97,8 @@ public Q_SLOTS:
     quint32 authorizationState() const;
     void authStateChange();
 
+    QString existRecommend(const QString& filePath) const;
+
 private:
     // TODO: use interface from dbus to xml
     QVariant getSettings(const QString &key) const;

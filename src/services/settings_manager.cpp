@@ -24,6 +24,7 @@
 #include <QDBusInterface>
 #include <QApplication>
 #include <QFontInfo>
+#include <QCommandLineParser>
 
 #include <DGuiApplicationHelper>
 
@@ -65,19 +66,19 @@ const char kProductName[] = "ProductName";
 SettingsManager::SettingsManager(QObject *parent)
 {
     settings_ifc_ = new QDBusInterface(
-        kAppstoreDaemonService,
-        kAppstoreDaemonSettingsPath,
-        kAppstoreDaemonSettingsInterface,
-        QDBusConnection::sessionBus(),
-        parent);
+                kAppstoreDaemonService,
+                kAppstoreDaemonSettingsPath,
+                kAppstoreDaemonSettingsInterface,
+                QDBusConnection::sessionBus(),
+                parent);
     qDebug() << "connect" << kAppstoreDaemonInterface << settings_ifc_->isValid();
 
     authorizationState_ifc_ = new  QDBusInterface(
-        kLicenseService,
-        kLicenseInfoPath,
-        kLicenseInfoInterface,
-        QDBusConnection::systemBus(),
-        parent);
+                kLicenseService,
+                kLicenseInfoPath,
+                kLicenseInfoInterface,
+                QDBusConnection::systemBus(),
+                parent);
     hasActivatorClient = authorizationState_ifc_->isValid();
     qDebug() << "connect" << kLicenseInfoInterface << hasActivatorClient;
 
@@ -85,20 +86,20 @@ SettingsManager::SettingsManager(QObject *parent)
             this, SLOT(authStateChange()));
 
     appearance_ifc_ = new QDBusInterface(
-        kAppearanceService,
-        kAppearancePath,
-        kAppearanceInterface,
-        QDBusConnection::sessionBus(),
-        parent);
+                kAppearanceService,
+                kAppearancePath,
+                kAppearanceInterface,
+                QDBusConnection::sessionBus(),
+                parent);
     qDebug() << "connect" << kAppearanceInterface << appearance_ifc_->isValid();
 
     QDBusConnection::sessionBus().connect(
-        kAppearanceService,
-        kAppearancePath,
-        "org.freedesktop.DBus.Properties",
-        QLatin1String("PropertiesChanged"),
-        this,
-        SLOT(onActiveColor(QString,QMap<QString,QVariant>,QStringList)));
+                kAppearanceService,
+                kAppearancePath,
+                "org.freedesktop.DBus.Properties",
+                QLatin1String("PropertiesChanged"),
+                this,
+                SLOT(onActiveColor(QString,QMap<QString,QVariant>,QStringList)));
 }
 
 SettingsManager::~SettingsManager()
@@ -148,6 +149,23 @@ QString SettingsManager::productName() const
 void SettingsManager::authStateChange()
 {
     emit this->authStateChanged();
+}
+
+QString SettingsManager::existRecommend(const QString& filePath) const
+{
+    if(QFile::exists(filePath))
+    {
+        QFile file(filePath);
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QString fileData = QTextStream(&file).readAll();
+            file.close();
+
+            return fileData;
+        }
+    }
+
+    return QString{};
 }
 
 bool SettingsManager::remoteDebug()
@@ -204,13 +222,13 @@ QString SettingsManager::themeName() const
     auto themeType = Dtk::Gui::DGuiApplicationHelper::instance()->themeType();
 
     switch (themeType) {
-        case Dtk::Gui::DGuiApplicationHelper::UnknownType:
-            return getSettings(kThemeName).toString();
-        case Dtk::Gui::DGuiApplicationHelper::DarkType:
-            return "dark";
-        case Dtk::Gui::DGuiApplicationHelper::LightType:
-        default:
-            return "light";
+    case Dtk::Gui::DGuiApplicationHelper::UnknownType:
+        return getSettings(kThemeName).toString();
+    case Dtk::Gui::DGuiApplicationHelper::DarkType:
+        return "dark";
+    case Dtk::Gui::DGuiApplicationHelper::LightType:
+    default:
+        return "light";
     }
 }
 

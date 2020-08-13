@@ -31,51 +31,68 @@ SettingsProxy::SettingsProxy(QObject *parent) : QObject(parent)
     this->setObjectName("SettingsProxy");
     connect(SettingsManager::instance(),&SettingsManager::authStateChanged,
             this,[&]()
-            {
-                emit this->authStateChanged();
-            });
+    {
+        emit this->authStateChanged();
+    });
     connect(SettingsManager::instance(),&SettingsManager::activeColorChanged,this,&SettingsProxy::activeColorChanged);
 }
 
 const QVariantMap SettingsProxy::getSettings()
 {
     auto settings = QVariantMap {
-        // user settings
-        { "themeName", SettingsManager::instance()->themeName() },
-        { "fontFamily", SettingsManager::instance()->fontFamily() },
-        { "fontPixelSize", SettingsManager::instance()->fontPixelSize() },
-        { "autoInstall",  SettingsManager::instance()->autoInstall() },
-        { "allowShowPackageName", SettingsManager::instance()->allowShowPackageName() },
+            // user settings
+    { "themeName", SettingsManager::instance()->themeName() },
+    { "fontFamily", SettingsManager::instance()->fontFamily() },
+    { "fontPixelSize", SettingsManager::instance()->fontPixelSize() },
+    { "autoInstall",  SettingsManager::instance()->autoInstall() },
+    { "allowShowPackageName", SettingsManager::instance()->allowShowPackageName() },
 
-        // system settings
-        { "server", SettingsManager::instance()->server() },
-        { "metadataServer", SettingsManager::instance()->metadataServer() },
-        { "operationServerMap", SettingsManager::instance()->operationServerMap()},
-        { "defaultRegion", SettingsManager::instance()->defaultRegion() },
-        { "allowSwitchRegion", SettingsManager::instance()->allowSwitchRegion() },
-        { "supportSignIn", SettingsManager::instance()->supportSignIn() },
-        {"supportAot", SettingsManager::instance()->supportAot()},
-        // Check whether UPYun banner should be shown in app-detail page.
-        {"upyunBannerVisible", SettingsManager::instance()->upyunBannerVisible()},
+            // system settings
+    { "server", SettingsManager::instance()->server() },
+    { "metadataServer", SettingsManager::instance()->metadataServer() },
+    { "operationServerMap", SettingsManager::instance()->operationServerMap()},
+    { "defaultRegion", SettingsManager::instance()->defaultRegion() },
+    { "allowSwitchRegion", SettingsManager::instance()->allowSwitchRegion() },
+    { "supportSignIn", SettingsManager::instance()->supportSignIn() },
+    {"supportAot", SettingsManager::instance()->supportAot()},
+            // Check whether UPYun banner should be shown in app-detail page.
+    {"upyunBannerVisible", SettingsManager::instance()->upyunBannerVisible()},
 
-        // debug
-        {"remoteDebug", SettingsManager::instance()->remoteDebug()},
+            // debug
+    {"remoteDebug", SettingsManager::instance()->remoteDebug()},
 
-        // sysinfo
-        {"arch", SettingsManager::instance()->arch()},
-        {"product", SettingsManager::instance()->product()},
-        {"desktopMode", SettingsManager::instance()->desktopMode()},
-        {"GUIFramework", SettingsManager::instance()->GUIFramework()},
+            // sysinfo
+    {"arch", SettingsManager::instance()->arch()},
+    {"product", SettingsManager::instance()->product()},
+    {"desktopMode", SettingsManager::instance()->desktopMode()},
+    {"GUIFramework", SettingsManager::instance()->GUIFramework()},
 
-        // authorization state
-        {"authorizationState", SettingsManager::instance()->authorizationState()},
-        //get personalized settings active color
-        {"activeColor", SettingsManager::instance()->getActiveColor()},
-        //get appstore version
-        {"appStoreVersion", Dtk::Widget::DApplication::buildVersion("6.0.0.2")},
-        //get product name
-        {"productName", SettingsManager::instance()->productName()},
-    };
+            // authorization state
+    {"authorizationState", SettingsManager::instance()->authorizationState()},
+            //get personalized settings active color
+    {"activeColor", SettingsManager::instance()->getActiveColor()},
+            //get appstore version
+    {"appStoreVersion", Dtk::Widget::DApplication::buildVersion("6.0.0.2")},
+            //get product name
+    {"productName", SettingsManager::instance()->productName()},
+
+};
+
+    //Check recommended for first-time application launch
+    QStringList args(QCoreApplication::arguments());
+    int argCount = args.count();
+
+    if (argCount >= 3)
+    {
+        QString option = args.at(1);
+        QString filePath = args.at(2);
+        if (option == "-l")
+        {
+            settings.insert("recommend",SettingsManager::instance()->existRecommend(filePath));
+        }
+    }
+
+
     qDebug() << settings;
     return settings;
 }

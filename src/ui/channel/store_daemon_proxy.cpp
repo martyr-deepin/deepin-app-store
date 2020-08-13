@@ -73,4 +73,5 @@ QVariantMap StoreDaemonProxy::updateSourceList()
     return this->manager_->updateSource();
 }
 
+
 }  // namespace dstore
