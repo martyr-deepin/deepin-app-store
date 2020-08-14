@@ -5,6 +5,7 @@
 
 #include "settings/settingservice.h"
 #include "pkgmanager/pkgmanagerservice.h"
+#include "pkgmanager/pkgcachemanager.h"
 #include <QTextCodec>
 
 int main(int argc, char *argv[])
@@ -29,6 +30,8 @@ int main(int argc, char *argv[])
 
     SettingService setting;
     PkgManagerService pkgManager;
+    PkgCacheManager cacheManager;
+    pkgManager.regitsterPkgCacheManager(&cacheManager);
 
     if (!QDBusConnection::sessionBus().registerObject(STOREDAEMON_SETTINGS_PATH,  &setting,
             QDBusConnection::ExportAllSlots/* |
@@ -45,5 +48,13 @@ int main(int argc, char *argv[])
         qDebug() << "registerObject setting dbus Error" << QDBusConnection::sessionBus().lastError();
         exit(0x0004);
     }
+
+    if (!QDBusConnection::sessionBus().registerObject(LASTOREDAEMON_CACHE_PATH,  &cacheManager,
+            QDBusConnection::ExportAllSlots|
+            QDBusConnection::ExportAllSignals)) {
+        qDebug() << "registerObject pkg chache manager dbus Error" << QDBusConnection::sessionBus().lastError().message();
+        exit(0x0005);
+    }
+
     return app.exec();
 }

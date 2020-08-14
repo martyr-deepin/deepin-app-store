@@ -36,6 +36,7 @@
 #include "../../dbus/dbus_variant/app_version.h"
 #include "../../dbus/dbus_variant/installed_app_info.h"
 #include "../../dbus/dbus_variant/installed_app_timestamp.h"
+#include "tcp_server.h"
 
 typedef struct CacheAppInfo{
     QString      Category;
@@ -62,7 +63,7 @@ private:
 };
 
 class MetaDataManagerPrivate;
-class MetaDataManager : public QObject
+class MetaDataManager : public QObject, data_proc_inerface
 {
     Q_OBJECT
 public:
@@ -75,9 +76,17 @@ public:
     QDBusObjectPath addJob(QDBusObjectPath);
     QList<QDBusObjectPath> getJobList();
 
+protected:
+    void msg_proc(QByteArray &data, QTcpSocket *sock) override;
+    void disconnect_proc(QString &str) override;
+
+private:
+    tcp_server server;
+
 signals:
     void jobListChanged();
     void updateCache();
+    void packageUpdated(QString CmdType,QString PackageName ,QString PackageVersion);
 
 public slots:
     void cleanService(QStringList jobList);

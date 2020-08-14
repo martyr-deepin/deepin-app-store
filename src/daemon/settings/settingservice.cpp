@@ -49,6 +49,7 @@ SettingService::SettingService(QObject *parent) : QObject(parent)
         strIniBasePath += "settings-community.ini";
 
     sysCfg = new QSettings(strIniBasePath, QSettings::IniFormat);
+    sysCfg->setAtomicSyncRequired(true);
 
     userCfg = new QSettings(configFolder + "/settings.ini", QSettings::IniFormat);
 }

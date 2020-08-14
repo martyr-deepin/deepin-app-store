@@ -56,7 +56,8 @@ set(Qt_LIBS Qt5::Core Qt5::DBus Qt5::Svg Qt5::Sql Qt5::Widgets Qt5::WebChannel Q
 set(LINK_LIBS
     ${Qt_LIBS}
     ${DtkWidget_LDFLAGS}
-    ${DtkFrameWorkDBus_LDFLAGS})
+    ${DtkFrameWorkDBus_LDFLAGS}
+    pthread)
 
 set(BASE_FILES
     base/sysinfo.cpp
@@ -175,7 +176,11 @@ set(PACKAGE_FILES
     daemon/pkgmanager/metadatamanager.cpp
     daemon/pkgmanager/metadatamanager.h
     daemon/pkgmanager/pkgmanagerservice.cpp
-    daemon/pkgmanager/pkgmanagerservice.h)
+    daemon/pkgmanager/pkgmanagerservice.h
+    daemon/pkgmanager/pkgcachemanager.cpp
+    daemon/pkgmanager/pkgcachemanager.h
+    daemon/pkgmanager/tcp_server.cpp
+    daemon/pkgmanager/tcp_server.h)
 
 set(SETTINGS_FILES
     daemon/settings/settingservice.cpp
@@ -231,7 +236,7 @@ endif()
 add_executable(deepin-app-store-tool app/tool.cpp)
 target_link_libraries(deepin-app-store-tool ${LINK_LIBS})
 
-add_executable(deepin-app-store-pkgcache app/pkg_cache.cpp)
+add_executable(deepin-app-store-pkgcache app/pkg_cache.cpp app/pkg_cache_implement.cpp app/tcp_client.cpp)
 target_link_libraries(deepin-app-store-pkgcache ${LINK_LIBS})
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
@@ -273,6 +278,8 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/translations
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/config/pkg-config-hook-config
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/config/dpkg-post-hook
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/config/99appstore.conf
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/)
 

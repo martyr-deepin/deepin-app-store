@@ -51,6 +51,17 @@ PkgManagerService::PkgManagerService(QObject *parent) : QObject(parent)
     InstalledAppTimestamp::registerMetaType();
 }
 
+bool PkgManagerService::regitsterPkgCacheManager(PkgCacheManager *pkgCachePtr)
+{
+    if(!pkgCachePtr)
+        return false;
+
+    m_pPkgCacheManager = pkgCachePtr;
+    connect(m_pMetaDataManager,SIGNAL(packageUpdated(QString,QString,QString)),m_pPkgCacheManager,SIGNAL(PackageUpdated(QString,QString,QString)));
+
+    return true;
+}
+
 void PkgManagerService::CleanArchives()
 {
     QDBusMessage reply = lastoreDaemon->call("CleanArchives");

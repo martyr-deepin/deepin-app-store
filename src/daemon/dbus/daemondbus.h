@@ -12,4 +12,7 @@
 #define LASTOREDAEMON_DEB_SERVICE           "com.deepin.AppStore.Daemon"
 #define LASTOREDAEMON_JOB_SERVICE            "com.deepin.AppStore.Daemon"
 
+#define LASTOREDAEMON_CACHE_PATH       "/com/deepin/AppStore/Backend/Cache"
+#define LASTOREDAEMON_CACHE_INTERFACE  "com.deepin.AppStore.Backend.Cache"
+
 #endif // DAEMONDBUS_H

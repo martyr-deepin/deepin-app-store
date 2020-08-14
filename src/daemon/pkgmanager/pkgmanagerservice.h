@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QDBusObjectPath>
 #include "metadatamanager.h"
+#include "pkgcachemanager.h"
 
 #include "../../dbus/dbus_variant/app_metadata.h"
 #include "../../dbus/dbus_variant/app_version.h"
@@ -39,6 +40,9 @@ class PkgManagerService : public QObject
     Q_PROPERTY(QList<QDBusObjectPath> JobList READ jobList NOTIFY jobListChanged)
 public:
     explicit PkgManagerService(QObject *parent = nullptr);
+
+public:
+    bool regitsterPkgCacheManager(PkgCacheManager* pkgCachePtr);
 
 signals:
     void jobListChanged();
@@ -61,6 +65,7 @@ public slots:
 private:
     QDBusInterface  *lastoreDaemon = nullptr;
     MetaDataManager *m_pMetaDataManager;
+    PkgCacheManager *m_pPkgCacheManager = nullptr;
 };
 
 #endif // PKGMANAGERSERVICE_H
