@@ -1,0 +1,91 @@
+#!/bin/bash
+
+if [ -f "/var/log/apt/history.log" -a -f "/var/log/dpkg.log" ]; then
+aptlasttime=$(cat /var/log/apt/history.log |tail -n 1 | sed 's/End-Date: //g')
+dpkglasttime=$(cat /var/log/dpkg.log |tail -n 1 | awk '{print $1,$2}')
+
+ns1=$(date --date "$aptlasttime" +%s%N)
+ns2=$(date --date "$dpkglasttime" +%s%N)
+
+result=$(bc <<< "($ns2 - $ns1) / 1000000000")
+
+if [ "$result" -gt 1 ]
+then
+	aptlasttime=$(sed 's#  # #' <<< "${aptlasttime}")	
+case $DPKG_HOOK_ACTION in
+	install|unpack)
+	
+	while read packageFullName version; 
+	do
+		oldIFS=$IFS
+		IFS=':'
+	   	read -a pkgname <<< "${packageFullName}"
+	   	IFS=$oldIFS
+       		/usr/bin/deepin-app-store-pkgcache -i ${pkgname[0]} $version
+	done < <(sed -n "/${aptlasttime}/, /*/p" /var/log/dpkg.log | grep -E 'install |upgrade ' | awk '{print $4,$6}')
+	;;
+   	remove|purge)
+
+	while read packageFullName version; 
+	do
+	   	oldIFS=$IFS
+       		IFS=':'
+	   	read -a pkgname <<< "${packageFullName}"
+	   	IFS=$oldIFS
+       		/usr/bin/deepin-app-store-pkgcache -r ${pkgname[0]} $version
+	done < <(sed -n "/${aptlasttime}/, /*/p" /var/log/dpkg.log | grep 'remove ' | awk '{print $4,$5}')
+	;;
+esac
+
+else
+	case $DPKG_HOOK_ACTION in
+	install|unpack)
+	pkgful=$(cat /var/log/apt/history.log |grep 'Commandline:' | tail -n 1 | sed 's|[/,]||g' |sed 's/Commandline: apt-get -y -o APT::Status-Fd=3 -c varliblastoreapt.conf autoremove --allow-change-held-packages -- //g' |sed 's/Commandline: apt-get -y -o APT::Status-Fd=3 -c varliblastoreapt.conf install -- //g' | sed 's/Commandline: apt//g' | sed 's/reinstall//g' | sed 's/install//g' |sed 's/-y//g' | sed 's/autoremove//g' | sed 's/remove//g')
+
+	pkginstall=$(cat /var/log/apt/history.log |grep 'Install:' | tail -n 1 | sed 's/Install://g')
+
+	IFS=',' read -ra ADDR <<< "$pkginstall"
+	for arrAllDetail in "${ADDR[@]}"; do
+    		for arrPackage in $pkgful; do
+			result=$(echo $arrAllDetail | grep $arrPackage)
+			if [[ "$result" != "" ]] 
+			then
+				IN=$arrAllDetail
+				arrpkgname=$(echo $IN | tr ":" "\n")
+				read -a pkgname <<< "${arrpkgname[0]}"
+				pkgversion=$(echo $arrAllDetail | grep -Po '(?<=\().*(?=\))')
+
+				/usr/bin/deepin-app-store-pkgcache -i $pkgname $pkgversion
+    			fi
+    		done
+	done	
+	;;
+
+   	remove|purge)
+	pkgful=$(cat /var/log/apt/history.log |grep 'Commandline:' | tail -n 1 | sed 's|[/,]||g' |sed 's/Commandline: apt-get -y -o APT::Status-Fd=3 -c varliblastoreapt.conf autoremove --allow-change-held-packages -- //g' |sed 's/Commandline: apt-get -y -o APT::Status-Fd=3 -c varliblastoreapt.conf install -- //g' | sed 's/Commandline: apt//g' | sed 's/reinstall//g' | sed 's/install//g' |sed 's/-y//g' | sed 's/autoremove//g' | sed 's/remove//g')
+
+	pkginstall=$(cat /var/log/apt/history.log |grep 'Remove:' | tail -n 1 | sed 's/Remove://g')
+
+	IFS=',' read -ra ADDR <<< "$pkginstall"
+	for arrAllDetail in "${ADDR[@]}"; do
+    		for arrPackage in $pkgful; do
+			result=$(echo $arrAllDetail | grep $arrPackage)
+			if [[ "$result" != "" ]] 
+			then
+				IN=$arrAllDetail
+				arrpkgname=$(echo $IN | tr ":" "\n")
+				read -a pkgname <<< "${arrpkgname[0]}"
+				pkgversion=$(echo $arrAllDetail | grep -Po '(?<=\().*(?=\))')
+				/usr/bin/deepin-app-store-pkgcache -r $pkgname $pkgversion
+    			fi
+    		done
+	done	
+	;;
+esac
+
+fi
+
+else
+	/usr/bin/deepin-app-store-pkgcache -u
+fi
+

@@ -148,7 +148,7 @@ qlonglong MetaDataManagerPrivate::getAppSize(QString id)
 }
 
 MetaDataManager::MetaDataManager(QDBusInterface *lastoreDaemon, QObject *parent) :
-    QObject(parent),
+    QObject(parent),server(29898,this),
     d_ptr(new MetaDataManagerPrivate(this)),
     m_pLastoreDaemon(lastoreDaemon)
 {
@@ -255,6 +255,33 @@ QList<QDBusObjectPath> MetaDataManager::getJobList()
 {
     Q_D(MetaDataManager);
     return d->m_jobList;
+}
+
+void MetaDataManager::msg_proc(QByteArray &data, QTcpSocket *sock)
+{
+    Q_EMIT updateCache();
+    qDebug() << "socket id = " << sock->socketDescriptor() << ", received data = " << data;
+
+    QString receivedData = QString::fromStdString(data.toStdString());
+
+    QStringList listPara = receivedData.split("##");
+
+    if(listPara.count() == 3)
+    {
+        qDebug() << "listPara = " << listPara;
+
+        QString CmdType = listPara.at(0) =="-i" ? "install":"remove";
+        QString packageName = listPara.at(1);
+        QString PackageVersion = listPara.at(2);
+
+        Q_EMIT packageUpdated(CmdType,packageName,PackageVersion);
+
+    }
+}
+
+void MetaDataManager::disconnect_proc(QString &str)
+{
+    (void)str;
 }
 
 //清理lastore接口对象，注销服务和dbus接口，更新job列表

@@ -22,6 +22,7 @@ if [ "$1" = "configure" ] ; then
   /usr/bin/deepin-app-store-pkgcache -c
   mv /usr/share/deepin-app-store/pkg-config-hook-config /etc/dpkg/dpkg.cfg.d/
   mv /usr/share/deepin-app-store/99appstore.conf /etc/apt/apt.conf.d/
+  chmod +x /usr/share/deepin-app-store/dpkg-post-hook
   
   if [ -f /usr/share/keyrings/appstore-keyring.gpg ]; then
     apt-key add /usr/share/keyrings/appstore-keyring.gpg
