@@ -69,7 +69,8 @@ set(BASE_FILES
     base/file_util.cpp
     base/file_util.h
     base/launcher.cpp
-    base/launcher.h)
+    base/launcher.h
+    base/iapppaycall.h)
 
 set(DBUS_FILES
     dbus/dbus_variant/app_metadata.cpp

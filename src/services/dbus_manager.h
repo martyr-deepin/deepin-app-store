@@ -65,6 +65,8 @@ Q_SIGNALS:
     void requestOpenCategory(const QString &request_id, const QString &category);
     void requestOpenTag(const QString &request_id, const QString &tag);
 
+    void appPayStatus(const QString& appID, const int& status);
+
 public Q_SLOTS:
     // Implement AppStore dbus service.
     Q_SCRIPTABLE void Raise();

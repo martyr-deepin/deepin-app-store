@@ -26,6 +26,7 @@
 
 #include "services/search_result.h"
 #include "services/store_daemon_manager.h"
+#include "../../base/iapppaycall.h"
 
 namespace dstore
 {
@@ -36,6 +37,11 @@ Q_OBJECT
 public:
     explicit StoreDaemonProxy(QObject *parent = nullptr);
     ~StoreDaemonProxy() override;
+
+    void registerWnd(IAppPayCall *call)
+    {
+        call_ = call;
+    }
 
 Q_SIGNALS:
     /*
@@ -247,11 +253,23 @@ public Q_SLOTS:
         return manager_->updateAppList(app_list);
     }
 
+    /**
+     * application payment interface
+     * @param appPayInfo
+     * appPayInfo contains appID and current payment status two elements
+     */
+    void appPayStatus(const QString &appId,const int& status)
+    {
+        if(call_)
+            call_->setPayStatus(appId,status);
+    }
+
 private:
     void initConnections();
 
     QThread *manager_thread_ = nullptr;
     StoreDaemonManager *manager_ = nullptr;
+    IAppPayCall *call_ = nullptr;
 };
 
 }  // namespace dstore
