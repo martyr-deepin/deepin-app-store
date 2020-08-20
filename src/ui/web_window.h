@@ -30,6 +30,7 @@
 #include <services/dbus_manager.h>
 #include <services/search_result.h>
 #include <dbus/dbus_consts.h>
+#include "../base/iapppaycall.h"
 
 class QWebEngineView;
 class QThread;
@@ -64,7 +65,7 @@ public:
 /**
  * Main window of app store.
  */
-class WebWindow: public Dtk::Widget::DMainWindow
+class WebWindow: public Dtk::Widget::DMainWindow,IAppPayCall
 {
 Q_OBJECT
 public:
@@ -80,16 +81,21 @@ public:
 
     bool eventFilter(QObject *watched, QEvent *event) override;
 
+Q_SIGNALS:
+    void appPayStatus(const QString& appID, const int& status);
+
 public slots:
     void setupDaemon(dstore::DBusManager *pManager);
     void raiseWindow();
     void showAppDetail(const QString &app_name);
+    void registerWnd();
 
 protected:
     // Update width of title bar when main window is resized.
     void resizeEvent(QResizeEvent *event) override;
     void focusInEvent(QFocusEvent *event) override;
     void closeEvent(QCloseEvent *event)  override;
+    void setPayStatus(const QString &appId,const int& status) override;
 
 private:
     void initConnections();

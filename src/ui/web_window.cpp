@@ -221,6 +221,11 @@ void WebWindow::showAppDetail(const QString &app_name)
     Q_EMIT search_proxy_->openApp(app_name);
 }
 
+void WebWindow::registerWnd()
+{
+    store_daemon_proxy_->registerWnd(this);
+}
+
 void WebWindow::raiseWindow()
 {
     this->raise();
@@ -520,6 +525,11 @@ void WebWindow::closeEvent(QCloseEvent *event)
     this->completion_window_->close();
 }
 
+void WebWindow::setPayStatus(const QString &appId,const int& status)
+{
+    Q_EMIT appPayStatus(appId,status);
+}
+
 void WebWindow::onSearchAppResult(const SearchMetaList &result)
 {
     completion_window_->setSearchResult(result);
@@ -681,6 +691,8 @@ void WebWindow::setupDaemon(dstore::DBusManager *pManager)
                      store_daemon_proxy_, &dstore::StoreDaemonProxy::requestOpenCategory);
     QObject::connect(pManager, &dstore::DBusManager::requestOpenTag,
                      store_daemon_proxy_, &dstore::StoreDaemonProxy::requestOpenTag);
+    QObject::connect(this,&dstore::WebWindow::appPayStatus,
+                     pManager, &dstore::DBusManager::appPayStatus);
 }
 
 }  // namespace dstore

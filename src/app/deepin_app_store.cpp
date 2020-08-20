@@ -115,6 +115,7 @@ int main(int argc, char **argv)
     dstore::WebWindow window;
 
     window.setupDaemon(&dbus_manager);
+    window.registerWnd();
 
     app.installEventFilter(&window);
 

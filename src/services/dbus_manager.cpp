@@ -53,6 +53,7 @@ bool DBusManager::registerDBus()
     if (session_bus.registerService(kAppStoreDbusService) &&
         session_bus.registerObject(kAppStoreDbusPath,
                                    this,
+                                   QDBusConnection::ExportAllSignals |
                                    QDBusConnection::ExportScriptableContents)) {
         if (!showAppName.isEmpty()){
             this->ShowAppDetail(showAppName);
