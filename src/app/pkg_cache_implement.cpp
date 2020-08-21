@@ -113,20 +113,20 @@ QVariantMap pkg_cache_implement::getStoreDistributedList(QMap<QString,QString>& 
                 QString type = localList.value(0);
                 QString value = localList.value(1);
 
-                if(type == "Package") {
+                if(!appMap.contains("appID") && type == "Package") {
                     appMap.insert("appID",value);
                     appMap.insert("localVer",versionList.value(value));
                 }
-                else if(type == "Version") {
+                else if(!appMap.contains("remoteVer") && type == "Version") {
                     appMap.insert("remoteVer",value);
                 }
-                else if(type == "Architecture") {
+                else if(!appMap.contains("appArch") && type == "Architecture") {
                     appMap.insert("appArch",value);
                 }
-                else if(type == "Installed-Size") {
+                else if(!appMap.contains("installSize") && type == "Installed-Size") {
                     appMap.insert("installSize",value);
                 }
-                else if(type == "Size") {
+                else if(!appMap.contains("debSize") && type == "Size") {
                     appMap.insert("debSize",value);
                 }
             }

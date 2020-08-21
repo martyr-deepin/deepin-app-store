@@ -45,6 +45,11 @@ void linkDir(const QString &source, const QString &target)
         if (tfi.isSymLink() && (tfi.canonicalFilePath() == sourceFile)) {
             continue;
         }
+        else {
+            QFile::remove(targetFile);
+        }
+
+
         ensureTargetDir(targetFile);
         auto ret = symlink(sourceFile.toStdString().c_str(), targetFile.toStdString().c_str());
         if (0 != ret) {
@@ -132,11 +137,12 @@ void update()
 int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
+
+    cleanLink();
+
     for (auto &a:enumAppInfoList()) {
         linkApp(a);
     }
-    // clean
-    cleanLink();
 
     // trigger
     update();
