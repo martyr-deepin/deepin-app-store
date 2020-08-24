@@ -344,7 +344,7 @@ QVariantMap StoreDaemonManager::installedPackages()
             pkg.allLocalName[k] = info.localeNames[k];
         }
         //防止断网后无法显示本地图标
-//        pkg.icon = dstore::GetThemeIconData(dstore::GetIconFromDesktop(pkg.desktop),48);
+        pkg.icon = dstore::GetThemeIconData(dstore::GetIconFromDesktop(pkg.desktop),48);
         pkg.installedTime = info.installationTime;
         pkg.upgradable = info.upgrade;
         result.append(pkg.toVariantMap());

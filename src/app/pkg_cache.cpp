@@ -43,30 +43,52 @@ int main(int argc, char **argv)
         pkg_cache_implement::instance()->updateDataBaseByRemove(argv[2]);
     }
 
-    if(argc == 4 && pkg_cache_implement::instance()->checkDaemonState())
+    if(pkg_cache_implement::instance()->checkDaemonState())
     {//仅安装卸载时，才通知daemon
         std::unique_ptr<tcp_session> tcp(new tcp_session("0.0.0.0",29898));
 
         if(tcp->connect() == 0)
         {
-            std::ostringstream oss;
-            oss << argv[1] << "##" << argv[2] << "##" << argv[3];
-            std::string szData = oss.str();
-
-            const char* buf = szData.c_str();
-            ssize_t nDataLen = static_cast<qint64>(szData.length());
-
-            ssize_t nSendSize = 0;
-            while (nSendSize != nDataLen)
+            if(argc == 4)
             {
-                ssize_t len_t = 0;
-                len_t = tcp->send(&buf[nSendSize], static_cast<size_t>(nDataLen-nSendSize));
+                std::ostringstream oss;
+                oss << argv[1] << "##" << argv[2] << "##" << argv[3];
+                std::string szData = oss.str();
 
-                if (len_t == -1)
-                    return -1;
+                const char* buf = szData.c_str();
+                ssize_t nDataLen = static_cast<qint64>(szData.length());
 
-                nSendSize += len_t;
+                ssize_t nSendSize = 0;
+                while (nSendSize != nDataLen)
+                {
+                    ssize_t len_t = 0;
+                    len_t = tcp->send(&buf[nSendSize], static_cast<size_t>(nDataLen-nSendSize));
+
+                    if (len_t == -1)
+                        return -1;
+
+                    nSendSize += len_t;
+                }
             }
+            else if(argc == 2)
+            {
+                std::string szData = argv[1];
+                const char* buf = szData.c_str();
+                ssize_t nDataLen = static_cast<qint64>(szData.length());
+
+                ssize_t nSendSize = 0;
+                while (nSendSize != nDataLen)
+                {
+                    ssize_t len_t = 0;
+                    len_t = tcp->send(&buf[nSendSize], static_cast<size_t>(nDataLen-nSendSize));
+
+                    if (len_t == -1)
+                        return -1;
+
+                    nSendSize += len_t;
+                }
+            }
+
         }
     }
 

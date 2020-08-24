@@ -129,8 +129,14 @@ quint32 SettingsManager::authorizationState() const
         qWarning() << "query authorization state is not valid";
     }
 
-    if(!hasActivatorClient) {
-        return AuthorizationState::Authorized;
+    SysInfo sysinfo;
+    auto systemType = sysinfo.product();
+
+    if(systemType == "server" || systemType == "community"){
+        return reply;
+    }
+    else if(!hasActivatorClient || (systemType == "professional" && reply == AuthorizationState::TrialExpired) || (systemType == "personal" && reply == AuthorizationState::Notauthorized)){
+        return AuthorizationState::Notauthorized;
     }
 
     return reply;

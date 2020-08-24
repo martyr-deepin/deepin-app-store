@@ -277,6 +277,10 @@ void MetaDataManager::msg_proc(QByteArray &data, QTcpSocket *sock)
         Q_EMIT packageUpdated(CmdType,packageName,PackageVersion);
 
     }
+    else
+    {
+        qDebug() << "listPara = " << listPara;
+    }
 }
 
 void MetaDataManager::disconnect_proc(QString &str)
@@ -347,10 +351,20 @@ void WorkerDataBase::updateCache()
     InstalledAppInfoList listInstalledInfo;
     QHash<QString,qlonglong> listAppsSize;
     QHash<QString,AppVersion> listAllApps;
+    QSqlDatabase db;
+    db = QSqlDatabase::addDatabase("QSQLITE","cache");
+    if (QSqlDatabase::contains("cache")) {
+        db = QSqlDatabase::database("cache");
+    } else {
+        db = QSqlDatabase::addDatabase("QSQLITE", "cache");
+    }
+
+    db.setDatabaseName("/usr/share/deepin-app-store/cache.db");
     bool isOk = db.open();
     if(!isOk) {
         qDebug()<<db.lastError();
-        exit(-1);
+        db.close();
+        return;
     } else {
         QString appID;
         QString appLocalVer;
@@ -478,16 +492,7 @@ bool WorkerDataBase::compareVersion(QString localVersion, QString remoteVersion)
 WorkerDataBase::WorkerDataBase(QObject *parent) :
     QObject(parent)
 {
-    db = QSqlDatabase::addDatabase("QSQLITE","cache");
-    if (QSqlDatabase::contains("cache")) {
-        db = QSqlDatabase::database("cache");
-    } else {
-        db = QSqlDatabase::addDatabase("QSQLITE", "cache");
-    }
 
-    db.setDatabaseName("/usr/share/deepin-app-store/cache.db");
-    db.setUserName("root");
-    db.setPassword("deepin-app-store");
 }
 
 WorkerDataBase::~WorkerDataBase()

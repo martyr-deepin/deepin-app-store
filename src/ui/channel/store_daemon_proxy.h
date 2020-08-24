@@ -258,10 +258,12 @@ public Q_SLOTS:
      * @param appPayInfo
      * appPayInfo contains appID and current payment status two elements
      */
-    void appPayStatus(const QString &appId,const int& status)
+    void appPayStatus(const QVariant &listPayStatus)
     {
+        auto para = listPayStatus.toMap();
+        qDebug() << "listPayStatus = " << para;
         if(call_)
-            call_->setPayStatus(appId,status);
+            call_->setPayStatus(para.value("appId").toString(),para.value("status").toInt());
     }
 
 private:
