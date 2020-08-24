@@ -58,8 +58,6 @@ public slots:
   bool compareVersion(QString localVersion, QString remoteVersion);
 signals:
   void resultReady(const InstalledAppInfoList listInstalledInfo,const QHash<QString,qlonglong> listAppsSize,const QHash<QString,AppVersion> listApps);
-private:
-  QSqlDatabase db;
 };
 
 class MetaDataManagerPrivate;

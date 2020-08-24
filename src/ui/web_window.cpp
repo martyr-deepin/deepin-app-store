@@ -527,6 +527,9 @@ void WebWindow::closeEvent(QCloseEvent *event)
 
 void WebWindow::setPayStatus(const QString &appId,const int& status)
 {
+    qDebug() << "appId = " << appId;
+    qDebug() << "status = " << status;
+
     Q_EMIT appPayStatus(appId,status);
 }
 

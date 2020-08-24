@@ -1,15 +1,23 @@
 #!/bin/bash
-
 if [ -f "/var/log/apt/history.log" -a -f "/var/log/dpkg.log" ]; then
-aptlasttime=$(cat /var/log/apt/history.log |tail -n 1 | sed 's/End-Date: //g')
+aptlasttime=$(cat /var/log/apt/history.log |tail -n 1)
 dpkglasttime=$(cat /var/log/dpkg.log |tail -n 1 | awk '{print $1,$2}')
+
+checkDate=$(echo "${aptlasttime}" | grep "End-Date" | wc -l)
+
+if [ "$checkDate" == "0" ]
+then
+	aptlasttime=${dpkglasttime}
+else
+	aptlasttime=$(echo "${aptlasttime}" | sed 's/End-Date: //g')
+fi
 
 ns1=$(date --date "$aptlasttime" +%s%N)
 ns2=$(date --date "$dpkglasttime" +%s%N)
 
 result=$(bc <<< "($ns2 - $ns1) / 1000000000")
 
-if [ "$result" -gt 1 ]
+if [ "${result}" -gt 1 ]
 then
 	aptlasttime=$(sed 's#  # #' <<< "${aptlasttime}")	
 case $DPKG_HOOK_ACTION in
@@ -41,24 +49,41 @@ else
 	case $DPKG_HOOK_ACTION in
 	install|unpack)
 	pkgful=$(cat /var/log/apt/history.log |grep 'Commandline:' | tail -n 1 | sed 's|[/,]||g' |sed 's/Commandline: apt-get -y -o APT::Status-Fd=3 -c varliblastoreapt.conf autoremove --allow-change-held-packages -- //g' |sed 's/Commandline: apt-get -y -o APT::Status-Fd=3 -c varliblastoreapt.conf install -- //g' | sed 's/Commandline: apt//g' | sed 's/reinstall//g' | sed 's/install//g' |sed 's/-y//g' | sed 's/autoremove//g' | sed 's/remove//g')
+    pkginstall=$(cat /var/log/apt/history.log |grep -E 'Install:|Upgrade:|Downgrade:'| tail -n 1 | sed 's/Install://g' | sed 's/Upgrade://g' | sed 's/Downgrade://g')
 
-	pkginstall=$(cat /var/log/apt/history.log |grep 'Install:' | tail -n 1 | sed 's/Install://g')
+    lastCmdLine=$(cat /var/log/apt/history.log |grep -n 'Commandline:'| tail -n 1 | cut -d':' -f1)
+    lastUpgradeLine=$(cat /var/log/apt/history.log |grep -nE 'Upgrade:|Downgrade:'| tail -n 1 | cut -d':' -f1)
 
-	IFS=',' read -ra ADDR <<< "$pkginstall"
-	for arrAllDetail in "${ADDR[@]}"; do
-    		for arrPackage in $pkgful; do
-			result=$(echo $arrAllDetail | grep $arrPackage)
-			if [[ "$result" != "" ]] 
-			then
-				IN=$arrAllDetail
-				arrpkgname=$(echo $IN | tr ":" "\n")
-				read -a pkgname <<< "${arrpkgname[0]}"
-				pkgversion=$(echo $arrAllDetail | grep -Po '(?<=\().*(?=\))')
+    if [[ $lastUpgradeLine > $lastCmdLine ]]
+    then
+        IN=$pkginstall
+        singlePkgCnt=$(echo $IN | tr ":" "\n"| wc -w)
+        if [ "$singlePkgCnt" -gt 4 ]
+        then
+            	/usr/bin/deepin-app-store-pkgcache -c
+        else
+	       	arrpkgname=$(echo $IN | tr ":" "\n")
+	       	read -a pkgname <<< "${arrpkgname[0]}"
+	       	pkgversion=$(echo $pkginstall | grep -Po '(?<=\().*(?=\))'|awk -F "," '{print $NF}' | sed 's/ //g')
+            	/usr/bin/deepin-app-store-pkgcache -i $pkgname $pkgversion
+        fi	   
+        
+    else
+	   IFS=',' read -ra ADDR <<< "$pkginstall"
+	   for arrAllDetail in "${ADDR[@]}"; do
+		result=$(echo $arrAllDetail)
+		if [[ "$result" != "" ]] 
+		then
+			IN=$arrAllDetail
+			arrpkgname=$(echo $IN | tr ":" "\n")
+			read -a pkgname <<< "${arrpkgname[0]}"
+			pkgversion=$(echo $arrAllDetail | grep -Po '(?<=\().*(?=\))'|awk -F "," '{print $NF}' | sed 's/ //g')
 
-				/usr/bin/deepin-app-store-pkgcache -i $pkgname $pkgversion
-    			fi
-    		done
-	done	
+			/usr/bin/deepin-app-store-pkgcache -i $pkgname $pkgversion
+    		fi
+	   done	
+    fi
+
 	;;
 
    	remove|purge)
@@ -68,17 +93,15 @@ else
 
 	IFS=',' read -ra ADDR <<< "$pkginstall"
 	for arrAllDetail in "${ADDR[@]}"; do
-    		for arrPackage in $pkgful; do
-			result=$(echo $arrAllDetail | grep $arrPackage)
-			if [[ "$result" != "" ]] 
-			then
-				IN=$arrAllDetail
-				arrpkgname=$(echo $IN | tr ":" "\n")
-				read -a pkgname <<< "${arrpkgname[0]}"
-				pkgversion=$(echo $arrAllDetail | grep -Po '(?<=\().*(?=\))')
-				/usr/bin/deepin-app-store-pkgcache -r $pkgname $pkgversion
-    			fi
-    		done
+		result=$(echo $arrAllDetail)
+		if [[ "$result" != "" ]] 
+		then
+			IN=$arrAllDetail
+			arrpkgname=$(echo $IN | tr ":" "\n")
+			read -a pkgname <<< "${arrpkgname[0]}"
+			pkgversion=$(echo $arrAllDetail | grep -Po '(?<=\().*(?=\))')
+			/usr/bin/deepin-app-store-pkgcache -r $pkgname $pkgversion
+    		fi
 	done	
 	;;
 esac
