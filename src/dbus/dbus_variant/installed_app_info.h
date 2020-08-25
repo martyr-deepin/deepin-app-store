@@ -53,6 +53,7 @@ public:
     QString desktop = nullptr;
     qint64 size = 0;
     qint64 installationTime = 0;
+    bool upgrade = false;
     QMap<QString, QString>localeNames{};
 };
 

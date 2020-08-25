@@ -45,6 +45,7 @@ QDebug operator<<(QDebug debug, const InstalledAppInfo &info)
           << info.desktop
           << info.size
           << info.installationTime
+          << info.upgrade
           << info.localeNames;
     return debug;
 }
@@ -59,6 +60,7 @@ QDBusArgument &operator<<(QDBusArgument &argument,
              << info.desktop
              << info.size
              << info.installationTime
+             << info.upgrade
              << info.localeNames;
     argument.endStructure();
     return argument;
@@ -72,6 +74,7 @@ QDataStream &operator<<(QDataStream &stream, const InstalledAppInfo &info)
            << info.desktop
            << info.size
            << info.installationTime
+           << info.upgrade
            << info.localeNames;
     return stream;
 }
@@ -86,6 +89,7 @@ const QDBusArgument &operator>>(const QDBusArgument &argument,
              >> info.desktop
              >> info.size
              >> info.installationTime
+             >> info.upgrade
              >> info.localeNames;
     argument.endStructure();
     return argument;
@@ -99,6 +103,7 @@ const QDataStream &operator>>(QDataStream &stream, InstalledAppInfo &info)
            >> info.desktop
            >> info.size
            >> info.installationTime
+           >> info.upgrade
            >> info.localeNames;;
     return stream;
 }
