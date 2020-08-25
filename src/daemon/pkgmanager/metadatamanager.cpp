@@ -390,6 +390,7 @@ void WorkerDataBase::updateCache()
               installInfo.appName = appID;
               installInfo.version = appLocalVer;
               installInfo.size = appSize;
+              installInfo.upgrade = versionInfo.upgradable;
       //            installInfo.localeNames = installInfo.appName;
               installInfo.desktop = getPackageDesktop(appID);
               installInfo.installationTime = getAppInstalledTime(installInfo.packageName);
