@@ -22,12 +22,15 @@ endif()
 add_subdirectory(dbus)
 add_subdirectory(resources)
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_C_STANDARD 14)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+set(CMAKE_CXX_FLAGS "-Wl,-as-need -fPIE")
+set(CMAKE_EXE_LINKER_FLAGS "-pie")
+
 
 add_definitions("-DQT_MESSAGELOGCONTEXT")
 
