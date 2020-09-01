@@ -542,15 +542,20 @@ void WebWindow::onSearchAppResult(const SearchMetaList &result)
         completion_window_->hide();
     }
     else {
-        completion_window_->show();
-        completion_window_->raise();
-        completion_window_->autoResize();
-        // Move to below of search edit.
-        const QPoint local_point(this->rect().width() / 2 - 176, 42);
-        const QPoint global_point(this->mapToGlobal(local_point));
-        completion_window_->move(global_point);
-        completion_window_->setFocusPolicy(Qt::NoFocus);
-        completion_window_->setFocusPolicy(Qt::StrongFocus);
+
+        if(isActiveWindow())
+        {
+            completion_window_->show();
+            completion_window_->raise();
+            completion_window_->autoResize();
+            // Move to below of search edit.
+            const QPoint local_point(this->rect().width() / 2 - 176, 42);
+            const QPoint global_point(this->mapToGlobal(local_point));
+            completion_window_->move(global_point);
+            completion_window_->setFocusPolicy(Qt::NoFocus);
+            completion_window_->setFocusPolicy(Qt::StrongFocus);
+        }
+
     }
 }
 
