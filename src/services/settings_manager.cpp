@@ -132,10 +132,25 @@ quint32 SettingsManager::authorizationState() const
     SysInfo sysinfo;
     auto systemType = sysinfo.product();
 
-    if( (systemType == "professional" && reply == AuthorizationState::TrialExpired) || (systemType == "personal" && reply == AuthorizationState::Notauthorized)){
+    qDebug() << "systemType = " << systemType;
+    qDebug() << "reply = " << reply;
+
+    if(!hasActivatorClient)
+    {
+        qDebug() << "hasActivatorClient = nullptr";
+        return AuthorizationState::Authorized;
+    }
+
+    if( (systemType == "professional" && (reply == AuthorizationState::TrialExpired || reply == AuthorizationState::Notauthorized)) ||
+            (systemType == "personal" && (reply == AuthorizationState::TrialExpired || reply == AuthorizationState::Notauthorized))){
+
+        qDebug() << "AuthorizationState::Notauthorized";
+
         return AuthorizationState::Notauthorized;
     }
     else {
+        qDebug() << "AuthorizationState::Authorized";
+
         return AuthorizationState::Authorized;
     }
 
