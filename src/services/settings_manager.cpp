@@ -132,14 +132,13 @@ quint32 SettingsManager::authorizationState() const
     SysInfo sysinfo;
     auto systemType = sysinfo.product();
 
-    if(!hasActivatorClient || systemType == "server" || systemType == "community"){
-        return AuthorizationState::Authorized;
-    }
-    else if( (systemType == "professional" && reply == AuthorizationState::TrialExpired) || (systemType == "personal" && reply == AuthorizationState::Notauthorized)){
+    if( (systemType == "professional" && reply == AuthorizationState::TrialExpired) || (systemType == "personal" && reply == AuthorizationState::Notauthorized)){
         return AuthorizationState::Notauthorized;
     }
+    else {
+        return AuthorizationState::Authorized;
+    }
 
-    return reply;
 }
 
 QString SettingsManager::GUIFramework() const
