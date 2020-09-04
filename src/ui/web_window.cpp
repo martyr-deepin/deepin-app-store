@@ -38,6 +38,7 @@
 #include <QtWebEngineWidgets/QWebEngineView>
 #include <QtWebEngineWidgets/QWebEnginePage>
 #include <QWebEngineSettings>
+#include <QAuthenticator>
 
 #include "base/consts.h"
 #include "resources/images.h"
@@ -110,19 +111,6 @@ void RestoreWindowState(QWidget *widget)
 
 }  // namespace
 
-TWebEngineUrlRequestInterceptor::TWebEngineUrlRequestInterceptor(QObject *parent)
-    : QWebEngineUrlRequestInterceptor(parent)
-{
-}
-
-//拦截http请求添加跨域http头
-void TWebEngineUrlRequestInterceptor::interceptRequest(QWebEngineUrlRequestInfo &info)
-{
-    if(info.resourceType() == QWebEngineUrlRequestInfo::ResourceTypeXhr) {
-        info.setHttpHeader("Cache-Control","no-cache");
-    }
-}
-
 WebWindow::WebWindow(QWidget *parent)
     : DMainWindow(parent),
       search_timer_(new QTimer(this))
@@ -144,10 +132,6 @@ WebWindow::WebWindow(QWidget *parent)
 
     dstore::RccSchemeHandler *handler = new dstore::RccSchemeHandler();
     QWebEngineProfile::defaultProfile()->installUrlSchemeHandler(RccSchemeHandler::schemeName(), handler);
-    //拦截http请求添加跨域http头
-    TWebEngineUrlRequestInterceptor *webInterceptor = new TWebEngineUrlRequestInterceptor();
-    QWebEngineProfile::defaultProfile()->setRequestInterceptor(webInterceptor);
-
 
     this->setObjectName("WebWindow");
     // 使用 redirectContent 模式，用于内嵌 x11 窗口时能有正确的圆角效果
@@ -322,6 +306,12 @@ void WebWindow::initConnections()
         this->onLoadingStateChanged();
     });
 
+    connect(web_view_->page(), &QWebEnginePage::proxyAuthenticationRequired,
+    web_view_->page(), [&](const QUrl&, QAuthenticator* authenticator, const QString&) {
+        authenticator->setUser(std::get<0>(tpNetProxyUserPwd_));
+        authenticator->setPassword(std::get<1>(tpNetProxyUserPwd_));
+    });
+
     connect(settings_proxy_, &SettingsProxy::raiseWindowRequested,
             this, &WebWindow::raiseWindow);
 
@@ -449,12 +439,19 @@ void WebWindow::initServices()
         }
 
         QString ip = proxyInterface.property("IP").toString();
-        uint port = proxyInterface.property("Port").toUInt();
+        QString port = proxyInterface.property("Port").toString();
         QString user = proxyInterface.property("User").toString();
         QString psw = proxyInterface.property("Password").toString();
 
+        if(ip == "" || port == "0")
+        {
+            return;
+        }
+
+        tpNetProxyUserPwd_ = std::make_tuple(user,psw);
+
         networkProxy.setHostName(ip);
-        networkProxy.setPort(static_cast<quint16>(port));
+        networkProxy.setPort(static_cast<quint16>(port.toInt()));
         networkProxy.setUser(user);
         networkProxy.setPassword(psw);
         QNetworkProxy::setApplicationProxy(networkProxy);

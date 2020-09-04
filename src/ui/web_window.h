@@ -53,15 +53,6 @@ class TitleBar;
 class TitleBarMenu;
 class WebEventDelegate;
 
-class TWebEngineUrlRequestInterceptor : public QWebEngineUrlRequestInterceptor
-{
-    Q_OBJECT
-
-public:
-    TWebEngineUrlRequestInterceptor(QObject *parent = Q_NULLPTR);
-    void interceptRequest(QWebEngineUrlRequestInfo &info);
-};
-
 /**
  * Main window of app store.
  */
@@ -120,6 +111,7 @@ private:
     TitleBar *title_bar_ = nullptr;
     TitleBarMenu *tool_bar_menu_ = nullptr;
     QString completionKeyword;
+    std::tuple<QString,QString> tpNetProxyUserPwd_;
 
 private slots:
     void onSearchAppResult(const SearchMetaList &result);
