@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 {
     //Disable function: Qt::AA_ForceRasterWidgets, solve the display problem of domestic platform (loongson mips)
     qputenv("DTK_FORCE_RASTER_WIDGETS", "FALSE");
-    qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--single-process");
+    qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--single-process --disable-web-security");
 
 #ifndef DSTORE_NO_DXCB
     Dtk::Widget::DApplication::loadDXcbPlugin();
