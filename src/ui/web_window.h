@@ -92,7 +92,6 @@ private:
     void initConnections();
     void initUI();
     void initProxy();
-    void initServices();
     void prepareSearch(bool entered);
 
     QWebEngineView* web_view_ = nullptr;
@@ -111,7 +110,6 @@ private:
     TitleBar *title_bar_ = nullptr;
     TitleBarMenu *tool_bar_menu_ = nullptr;
     QString completionKeyword;
-    std::tuple<QString,QString> tpNetProxyUserPwd_;
 
 private slots:
     void onSearchAppResult(const SearchMetaList &result);

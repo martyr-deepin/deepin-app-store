@@ -38,7 +38,6 @@
 #include <QtWebEngineWidgets/QWebEngineView>
 #include <QtWebEngineWidgets/QWebEnginePage>
 #include <QWebEngineSettings>
-#include <QAuthenticator>
 
 #include "base/consts.h"
 #include "resources/images.h"
@@ -115,7 +114,6 @@ WebWindow::WebWindow(QWidget *parent)
     : DMainWindow(parent),
       search_timer_(new QTimer(this))
 {
-    this->initServices();
     //qputenv("QTWEBENGINE_REMOTE_DEBUGGING", "9222");
 
     QFile scriptFile(":/qtwebchannel/qwebchannel.js");
@@ -306,12 +304,6 @@ void WebWindow::initConnections()
         this->onLoadingStateChanged();
     });
 
-    connect(web_view_->page(), &QWebEnginePage::proxyAuthenticationRequired,
-    web_view_->page(), [&](const QUrl&, QAuthenticator* authenticator, const QString&) {
-        authenticator->setUser(std::get<0>(tpNetProxyUserPwd_));
-        authenticator->setPassword(std::get<1>(tpNetProxyUserPwd_));
-    });
-
     connect(settings_proxy_, &SettingsProxy::raiseWindowRequested,
             this, &WebWindow::raiseWindow);
 
@@ -406,56 +398,6 @@ void WebWindow::initUI()
     this->setFocusPolicy(Qt::ClickFocus);
 
     Dtk::Widget::DThemeManager::instance()->registerWidget(this->titlebar(), "DTitlebar");
-}
-
-void WebWindow::initServices()
-{
-    QDBusInterface networkInterface(kNetworkService,
-                                    kLauncherPath,
-                                    kLauncherInterface,
-                                    QDBusConnection::sessionBus());
-    QDBusReply<bool> isUseProxy = networkInterface.call(QLatin1String("GetUseProxy"),QLatin1String("deepin-app-store"));
-    qDebug()<< "deepin-app-store uses an application proxy : " << isUseProxy;
-
-    if(isUseProxy){
-        QDBusInterface proxyInterface(kNetworkService,
-                                      kNetworkProxyChainsPath,
-                                      kNetworkProxyChainsInterface,
-                                      QDBusConnection::sessionBus());
-
-        QString proxyType = proxyInterface.property("Type").toString();
-        QNetworkProxy networkProxy;
-
-        if (proxyType == "http"){
-            qDebug() << "Network proxy type is http";
-            networkProxy.setType(QNetworkProxy::HttpProxy);
-        }
-        else if(proxyType == "socks5"){
-            qDebug() << "Network proxy type is socks5";
-            networkProxy.setType(QNetworkProxy::Socks5Proxy);
-        }else {
-            qWarning() << "Please use http or sock5 application proxy type";
-            return;
-        }
-
-        QString ip = proxyInterface.property("IP").toString();
-        QString port = proxyInterface.property("Port").toString();
-        QString user = proxyInterface.property("User").toString();
-        QString psw = proxyInterface.property("Password").toString();
-
-        if(ip == "" || port == "0")
-        {
-            return;
-        }
-
-        tpNetProxyUserPwd_ = std::make_tuple(user,psw);
-
-        networkProxy.setHostName(ip);
-        networkProxy.setPort(static_cast<quint16>(port.toInt()));
-        networkProxy.setUser(user);
-        networkProxy.setPassword(psw);
-        QNetworkProxy::setApplicationProxy(networkProxy);
-    }
 }
 
 bool WebWindow::eventFilter(QObject *watched, QEvent *event)
