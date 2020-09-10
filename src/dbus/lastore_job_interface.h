@@ -31,7 +31,7 @@ public:
     { return "com.deepin.AppStore.Backend.Deb.Job"; }
 
 public:
-    LastoreJobInterface(const QString &service, const QString &path, const QDBusConnection &connection, QObject *parent = 0);
+    LastoreJobInterface(const QString &service, const QString &path, const QDBusConnection &connection, QObject *parent = nullptr);
 
     ~LastoreJobInterface();
 
