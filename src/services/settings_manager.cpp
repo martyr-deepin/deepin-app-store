@@ -166,6 +166,16 @@ QString SettingsManager::productName() const
     return getSettings(kProductName).toString();
 }
 
+QString SettingsManager::getAppDetailID() const
+{
+    return  appDetialID;
+}
+
+void SettingsManager::setAppDetailID(QString appid)
+{
+    appDetialID = appid;
+}
+
 void SettingsManager::authStateChange()
 {
     emit this->authStateChanged();

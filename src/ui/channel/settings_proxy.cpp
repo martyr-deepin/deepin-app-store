@@ -93,6 +93,11 @@ const QVariantMap SettingsProxy::getSettings()
     }
 
 
+    if (! SettingsManager::instance()->getAppDetailID().isEmpty())
+    {
+        settings.insert("appid",SettingsManager::instance()->getAppDetailID());
+    }
+
     qDebug() << settings;
     return settings;
 }

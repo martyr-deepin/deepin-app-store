@@ -524,9 +524,6 @@ void WebWindow::closeEvent(QCloseEvent *event)
 
 void WebWindow::setPayStatus(const QString &appId,const int& status)
 {
-    qDebug() << "appId = " << appId;
-    qDebug() << "status = " << status;
-
     Q_EMIT appPayStatus(appId,status);
 }
 
@@ -698,6 +695,8 @@ void WebWindow::setupDaemon(dstore::DBusManager *pManager)
                      store_daemon_proxy_, &dstore::StoreDaemonProxy::requestOpenTag);
     QObject::connect(this,&dstore::WebWindow::appPayStatus,
                      pManager, &dstore::DBusManager::appPayStatus);
+    QObject::connect(pManager, &dstore::DBusManager::appDetails,
+                     store_daemon_proxy_, &dstore::StoreDaemonProxy::requestAppDetails);
 }
 
 }  // namespace dstore

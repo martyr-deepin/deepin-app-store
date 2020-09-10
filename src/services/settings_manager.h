@@ -94,6 +94,9 @@ public Q_SLOTS:
 
     QString productName() const;
 
+    QString getAppDetailID() const;
+    void setAppDetailID(QString appid);
+
     quint32 authorizationState() const;
     void authStateChange();
 
@@ -109,6 +112,8 @@ private:
     QDBusInterface *authorizationState_ifc_;
     QDBusInterface *appearance_ifc_;
     SysInfo sysinfo;
+
+    QString appDetialID;
 
     bool hasActivatorClient;
 };
