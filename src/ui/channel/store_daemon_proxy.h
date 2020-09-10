@@ -48,6 +48,7 @@ Q_SIGNALS:
      * 将Web端的请求返回给Window做处理
      */
     void requestFinished(const QString &reqID, const QVariantMap &result);
+    void requestAppDetails(const QString &appID);
 
 Q_SIGNALS:
     // void isDbusConnectedReply(bool state);

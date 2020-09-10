@@ -66,11 +66,13 @@ Q_SIGNALS:
     void requestOpenTag(const QString &request_id, const QString &tag);
 
     void appPayStatus(const QString& appID, const int& status);
+    void appDetails(const QString& appID);
 
 public Q_SLOTS:
     // Implement AppStore dbus service.
     Q_SCRIPTABLE void Raise();
     Q_SCRIPTABLE void ShowAppDetail(const QString &appName);
+    Q_SCRIPTABLE void AppDetails(QString appID);
 
     Q_SCRIPTABLE QVariantMap Install(const QString &appID);
     Q_SCRIPTABLE QVariantMap Update(const QString &appID);

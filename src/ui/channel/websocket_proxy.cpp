@@ -47,7 +47,6 @@ void WebSocketProxy::onConnected()
 
 void WebSocketProxy::onTextReceived(QString msg)
 {
-    qDebug()<<msg;
     Q_EMIT onMsg(msg);
 }
 

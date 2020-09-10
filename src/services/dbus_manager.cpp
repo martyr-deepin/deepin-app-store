@@ -16,6 +16,7 @@
  */
 
 #include "services/dbus_manager.h"
+#include "services/settings_manager.h"
 
 #include <QCommandLineParser>
 #include <QDebug>
@@ -144,6 +145,12 @@ void DBusManager::onRequestFinished(const QString &reqID, const QVariantMap &res
     reply << result;
 
     QDBusConnection::sessionBus().send(reply);
+}
+
+void DBusManager::AppDetails(QString appID)
+{
+    Q_EMIT appDetails(appID);
+    SettingsManager::instance()->setAppDetailID(appID);
 }
 
 RequestData *DBusManager::newRequest()
