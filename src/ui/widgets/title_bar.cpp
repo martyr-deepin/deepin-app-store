@@ -23,6 +23,7 @@
 #include <QPainter>
 #include <QVariantMap>
 #include <DThemeManager>
+#include <QPainterPath>
 
 #include "ui/widgets/search_edit.h"
 #include "ui/widgets/user_menu.h"
