@@ -2,3 +2,6 @@
 rm -f /usr/share/deepin-app-store/dpkg-post-hook
 rm -f /etc/dpkg/dpkg.cfg.d/pkg-config-hook-config
 rm -f /etc/apt/apt.conf.d/99appstore.conf
+rm -f /var/lib/dpkg/info/deepin-app-store.postrm
+rm -f /var/lib/dpkg/info/deepin-app-store.postinst
+rm -f /var/lib/dpkg/info/deepin-app-store.preinst
