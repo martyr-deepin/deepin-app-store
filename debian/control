@@ -34,7 +34,6 @@ Depends:${shlibs:Depends}, ${misc:Depends},
  libqt5webengine-data,
  apt-transport-https,
  aptitude,
- patchelf,
  deepin-app-store-data (>=5.6),
  gnupg2
 Conflicts: dstore-client, deepin-appstore
