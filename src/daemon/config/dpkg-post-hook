@@ -46,67 +46,85 @@ case $DPKG_HOOK_ACTION in
 esac
 
 else
-	case $DPKG_HOOK_ACTION in
-	install|unpack)
-   	pkginstall=$(cat /var/log/apt/history.log |grep -aE 'Install:|Upgrade:|Downgrade:'| tail -n 1 | sed 's/Install://g' | sed 's/Upgrade://g' | sed 's/Downgrade://g')
 
     	lastCmdLine=$(cat /var/log/apt/history.log |grep -an 'Commandline:'| tail -n 1 | cut -d':' -f1)
-    	lastUpgradeLine=$(cat /var/log/apt/history.log |grep -anE 'Upgrade:|Downgrade:'| tail -n 1 | cut -d':' -f1)
+    lastInstallLine=$(cat /var/log/apt/history.log |grep -an 'Install:'| tail -n 1 | cut -d':' -f1)
+    lastRemoveLine=$(cat /var/log/apt/history.log |grep -anE 'Remove:'| tail -n 1 | cut -d':' -f1)
+    	lastUpgradeLine=$(cat /var/log/apt/history.log |grep -anE 'Upgrade:'| tail -n 1 | cut -d':' -f1)
+    lastDowngradeLine=$(cat /var/log/apt/history.log |grep -anE 'Downgrade:'| tail -n 1 | cut -d':' -f1)
 
     	if [[ $lastUpgradeLine > $lastCmdLine ]]
     	then
-        IN=$pkginstall
-        singlePkgCnt=$(echo $IN | tr ":" "\n"| wc -w)
-        if [ "$singlePkgCnt" -gt 4 ]
-        then
-            	/usr/bin/deepin-app-store-pkgcache -c
-        else
-	       	arrpkgname=$(echo $IN | tr ":" "\n")
-	       	read -a pkgname <<< "${arrpkgname[0]}"
-	       	pkgversion=$(echo $pkginstall | grep -Po '(?<=\().*(?=\))'|awk -F "," '{print $NF}' | sed 's/ //g')
-            	/usr/bin/deepin-app-store-pkgcache -i $pkgname $pkgversion
-        fi	   
+        	pkginstall=$(cat /var/log/apt/history.log |grep -aE 'Upgrade:'| tail -n 1 | sed 's/Install://g' | sed 's/Upgrade://g' | sed 's/Downgrade://g')
+        	IN=$pkginstall
+        	singlePkgCnt=$(echo $IN | tr ":" "\n"| wc -w)
+        	if [ "$singlePkgCnt" -gt 4 ]
+        	then
+            		/usr/bin/deepin-app-store-pkgcache -u
+        	else
+	       		arrpkgname=$(echo $IN | tr ":" "\n")
+	       		read -a pkgname <<< "${arrpkgname[0]}"
+	       		pkgversion=$(echo $pkginstall | grep -Po '(?<=\().*(?=\))'|awk -F "," '{print $NF}' | sed 's/ //g')
+            		/usr/bin/deepin-app-store-pkgcache -i $pkgname $pkgversion
+        	fi
+    	fi
+
+    	if [[ $lastDowngradeLine > $lastCmdLine ]]
+    	then
+        	pkginstall=$(cat /var/log/apt/history.log |grep -aE 'Downgrade:'| tail -n 1 | sed 's/Install://g' | sed 's/Upgrade://g' | sed 's/Downgrade://g')
+        	IN=$pkginstall
+        	singlePkgCnt=$(echo $IN | tr ":" "\n"| wc -w)
+        	if [ "$singlePkgCnt" -gt 4 ]
+        	then
+            		/usr/bin/deepin-app-store-pkgcache -u
+        	else
+	       		arrpkgname=$(echo $IN | tr ":" "\n")
+	       		read -a pkgname <<< "${arrpkgname[0]}"
+	       		pkgversion=$(echo $pkginstall | grep -Po '(?<=\().*(?=\))'|awk -F "," '{print $NF}' | sed 's/ //g')
+            		/usr/bin/deepin-app-store-pkgcache -i $pkgname $pkgversion
+        	fi
+    	fi	   
         
-    else
+    	if [[ $lastInstallLine > $lastCmdLine ]]
+    	then
+        	pkginstall=$(cat /var/log/apt/history.log |grep -a 'Install:'| tail -n 1 | sed 's/Install://g' | sed 's/Upgrade://g' | sed 's/Downgrade://g')
+	    	IFS=',' read -ra ADDR <<< "$pkginstall"
+	    	for arrAllDetail in "${ADDR[@]}"; do
+			result=$(echo $arrAllDetail)
+			if [[ "$result" != "" ]] 
+			then
+				IN=$arrAllDetail
+				arrpkgname=$(echo $IN | tr ":" "\n")
+				read -a pkgname <<< "${arrpkgname[0]}"
+				pkgversion=$(echo $arrAllDetail | grep -Po '(?<=\().*(?=\))'|awk -F "," '{print $NF}' | sed 's/ //g')
+
+				/usr/bin/deepin-app-store-pkgcache -i $pkgname $pkgversion
+    			fi
+	   	done	
+    	fi
+
+    if [[ $lastRemoveLine > $lastCmdLine ]]
+    	then
+	   pkginstall=$(cat /var/log/apt/history.log |grep -a 'Remove:' | tail -n 1 | sed 's/Remove://g')
+
 	   IFS=',' read -ra ADDR <<< "$pkginstall"
 	   for arrAllDetail in "${ADDR[@]}"; do
 		result=$(echo $arrAllDetail)
-		if [[ "$result" != "" ]] 
-		then
-			IN=$arrAllDetail
-			arrpkgname=$(echo $IN | tr ":" "\n")
-			read -a pkgname <<< "${arrpkgname[0]}"
-			pkgversion=$(echo $arrAllDetail | grep -Po '(?<=\().*(?=\))'|awk -F "," '{print $NF}' | sed 's/ //g')
-
-			/usr/bin/deepin-app-store-pkgcache -i $pkgname $pkgversion
-    		fi
-	   done	
-    fi
-
-	;;
-
-   	remove|purge)
-
-	pkginstall=$(cat /var/log/apt/history.log |grep -a 'Remove:' | tail -n 1 | sed 's/Remove://g')
-
-	IFS=',' read -ra ADDR <<< "$pkginstall"
-	for arrAllDetail in "${ADDR[@]}"; do
-		result=$(echo $arrAllDetail)
-		if [[ "$result" != "" ]] 
-		then
+		  if [[ "$result" != "" ]] 
+		  then
 			IN=$arrAllDetail
 			arrpkgname=$(echo $IN | tr ":" "\n")
 			read -a pkgname <<< "${arrpkgname[0]}"
 			pkgversion=$(echo $arrAllDetail | grep -Po '(?<=\().*(?=\))')
 			/usr/bin/deepin-app-store-pkgcache -r $pkgname $pkgversion
-    		fi
-	done	
-	;;
-esac
+    		  fi
+	   done	
+    fi
 
 fi
 
 else
 	/usr/bin/deepin-app-store-pkgcache -u
 fi
+
 
