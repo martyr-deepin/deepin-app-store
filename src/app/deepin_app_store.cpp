@@ -37,8 +37,14 @@ int main(int argc, char **argv)
 {
     //Disable function: Qt::AA_ForceRasterWidgets, solve the display problem of domestic platform (loongson mips)
     qputenv("DTK_FORCE_RASTER_WIDGETS", "FALSE");
-    qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--single-process --disable-web-security");
 
+    SysInfo systeminfo;
+    if(systeminfo.arch() == "mips64"){
+        qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--single-process --disable-web-security");
+    }
+    else if(systeminfo.product() != "community" && systeminfo.product() != "personal"){
+        qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--single-process --disable-web-security");
+    }
 #ifndef DSTORE_NO_DXCB
     Dtk::Widget::DApplication::loadDXcbPlugin();
 #endif
@@ -66,7 +72,6 @@ int main(int argc, char **argv)
     app.setApplicationAcknowledgementPage(
                 "https://www.deepin.org/acknowledgments/deepin-app-store/");
 
-    SysInfo systeminfo;
     if(systeminfo.product() == "professional" || systeminfo.product() == "personal") {
         if (QLocale::system().name() == "zh_CN") {
             app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-cn>《统信软件隐私政策》</a>");

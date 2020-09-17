@@ -30,6 +30,7 @@ QString SysInfo::arch() const
     if (arch.isEmpty()) {
         arch = machine;
     }
+
     return arch;
 }
 
