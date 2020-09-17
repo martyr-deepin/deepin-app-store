@@ -225,7 +225,7 @@ void ImageViewer::initUI() {
   this->setAttribute(Qt::WA_TranslucentBackground, true);
   this->setModal(true);
 
-  Dtk::Widget::DThemeManager::instance()->registerWidget(this);
+  Dtk::Widget::DThemeManager::instance()->registerWidget(this, "ImageViewer");
 }
 
 void ImageViewer::mousePressEvent(QMouseEvent* event) {

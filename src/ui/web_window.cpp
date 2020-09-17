@@ -377,7 +377,7 @@ void WebWindow::initProxy()
 
 void WebWindow::initUI()
 {
-    Dtk::Widget::DThemeManager::instance()->registerWidget(this);
+    Dtk::Widget::DThemeManager::instance()->registerWidget(this, "WebWindow");
 
     this->titlebar()->setIcon(QIcon::fromTheme("deepin-app-store"));
 

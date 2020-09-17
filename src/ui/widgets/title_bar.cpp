@@ -267,7 +267,7 @@ void TitleBar::initUI(bool support_sign_in)
     this->setAttribute(Qt::WA_TranslucentBackground, true);
 
     Dtk::Widget::DThemeManager::instance()->registerWidget(avatar_button_, "dstore--TitleBar");
-    Dtk::Widget::DThemeManager::instance()->registerWidget(this);
+    Dtk::Widget::DThemeManager::instance()->registerWidget(this, "TitleBar");
 
     if (!support_sign_in) {
         avatar_button_->hide();
