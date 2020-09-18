@@ -283,7 +283,8 @@ install(DIRECTORY ${CMAKE_BINARY_DIR}/translations
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/config/pkg-config-hook-config
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/config/dpkg-post-hook
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/)
+	PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/daemon/config/99appstore.conf
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-app-store/)
 
