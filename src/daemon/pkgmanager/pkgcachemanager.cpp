@@ -38,7 +38,12 @@ QString PkgCacheManager::RequestPackageName(QString path)
 {
     QSqlDatabase db;
 
-    db = QSqlDatabase::addDatabase("QSQLITE");
+    if (QSqlDatabase::contains("PkgCacheManager")) {
+        db = QSqlDatabase::database("PkgCacheManager");
+    } else {
+        db = QSqlDatabase::addDatabase("QSQLITE", "PkgCacheManager");
+    }
+
     db.setDatabaseName("/usr/share/deepin-app-store/cache.db");
 
     db.open();

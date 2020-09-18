@@ -352,14 +352,13 @@ void WorkerDataBase::updateCache()
     QHash<QString,qlonglong> listAppsSize;
     QHash<QString,AppVersion> listAllApps;
     QSqlDatabase db;
-    db = QSqlDatabase::addDatabase("QSQLITE","cache");
     if (QSqlDatabase::contains("cache")) {
         db = QSqlDatabase::database("cache");
     } else {
         db = QSqlDatabase::addDatabase("QSQLITE", "cache");
     }
-
     db.setDatabaseName("/usr/share/deepin-app-store/cache.db");
+
     bool isOk = db.open();
     if(!isOk) {
         qDebug()<<db.lastError();

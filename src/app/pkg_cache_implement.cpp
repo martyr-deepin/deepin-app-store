@@ -138,7 +138,11 @@ QVariantMap pkg_cache_implement::getStoreDistributedList(QMap<QString,QString>& 
 
 void pkg_cache_implement::connectToDataBase()
 {
-    m_db = QSqlDatabase::addDatabase("QSQLITE");
+    if (QSqlDatabase::contains("pkgcache")) {
+        m_db = QSqlDatabase::database("pkgcache");
+    } else {
+        m_db = QSqlDatabase::addDatabase("QSQLITE", "pkgcache");
+    }
 
     m_db.setDatabaseName("/usr/share/deepin-app-store/cache.db");
     m_db.setUserName("root");
@@ -667,6 +671,12 @@ void pkg_cache_implement::updateDataBaseByInstall(const std::string& packageName
 {
     while (sem_wait(sem) == -1 && errno == EINTR);
 
+    if(packageName.substr(0,3) == "lib" && packageName.find('.') == std::string::npos){
+        sem_post(sem);
+        return;
+    }
+
+
     connectToDataBase();
     updateStoreTableByInstall(packageName,packageVersion);
     updateAppPathTableByInstall(packageName);
@@ -677,6 +687,11 @@ void pkg_cache_implement::updateDataBaseByInstall(const std::string& packageName
 void pkg_cache_implement::updateDataBaseByRemove(const std::string& packageName)
 {
     while (sem_wait(sem) == -1 && errno == EINTR);
+
+    if(packageName.substr(0,3) == "lib" && packageName.find('.') == std::string::npos){
+        sem_post(sem);
+        return;
+    }
 
     connectToDataBase();
     updateStoreTableByRemove(packageName);
