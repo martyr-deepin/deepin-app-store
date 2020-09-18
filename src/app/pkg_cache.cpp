@@ -45,6 +45,14 @@ int main(int argc, char **argv)
 
     if(pkg_cache_implement::instance()->checkDaemonState())
     {//仅安装卸载时，才通知daemon
+        if(argc == 4){
+            std::string packageName{argv[2]};
+            if(packageName.substr(0,3) == "lib" && packageName.find('.') == std::string::npos){
+                return 0;
+            }
+        }
+
+
         std::unique_ptr<tcp_session> tcp(new tcp_session("0.0.0.0",29898));
 
         if(tcp->connect() == 0)
