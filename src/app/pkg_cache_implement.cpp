@@ -175,6 +175,7 @@ bool pkg_cache_implement::insertPackageTable(QVariantMap& storeList)
         return false;
 
     QSqlQuery query(m_db);
+    query.exec("delete from Packages");
 
     m_db.transaction();
 
@@ -675,7 +676,6 @@ void pkg_cache_implement::updateDataBaseByInstall(const std::string& packageName
         sem_post(sem);
         return;
     }
-
 
     connectToDataBase();
     updateStoreTableByInstall(packageName,packageVersion);
