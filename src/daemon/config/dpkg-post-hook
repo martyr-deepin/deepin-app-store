@@ -46,6 +46,8 @@ case $DPKG_HOOK_ACTION in
 esac
 
 else
+    case $DPKG_HOOK_ACTION in
+	install|unpack|remove|purge)
 
     	lastCmdLine=$(cat /var/log/apt/history.log |grep -an 'Commandline:'| tail -n 1 | cut -d':' -f1)
     lastInstallLine=$(cat /var/log/apt/history.log |grep -an 'Install:'| tail -n 1 | cut -d':' -f1)
@@ -146,6 +148,9 @@ else
     		  fi
 	   done	
     fi
+
+	;;
+esac
 
 fi
 
