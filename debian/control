@@ -35,7 +35,8 @@ Depends:${shlibs:Depends}, ${misc:Depends},
  apt-transport-https,
  aptitude,
  deepin-app-store-data (>=5.6),
- gnupg2
+ gnupg2,
+ patchelf
 Conflicts: dstore-client, deepin-appstore
 Replaces: dstore-client, deepin-appstore
 Description: Deepin App Store
