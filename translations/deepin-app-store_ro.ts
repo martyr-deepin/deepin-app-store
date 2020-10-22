@@ -2,19 +2,18 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/ui/widgets/title_bar.cpp" line="235"/>
+        <location filename="../src/ui/widgets/title_bar.cpp" line="250"/>
         <source>Search</source>
         <translation>Caută</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="41"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="43"/>
         <source>Clear cache</source>
         <translation>Golire cache</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="44"/>
         <source>Privacy Policy</source>
-        <translation>Politică confidențialitate</translation>
+        <translation type="vanished">Politică confidențialitate</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="73"/>
@@ -53,14 +52,20 @@
         <translation>Selectează tot</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="115"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="61"/>
         <source>App Store</source>
         <translation>Magazin de aplicații</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="116"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="62"/>
         <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
         <translation>App Store este un centru software cu aplicații diverse și de calitate, ce suportă instalarea și dezinstalarea cu un singur clic.</translation>
+    </message>
+    <message>
+        <location filename="../src/app/deepin_app_store.cpp" line="71"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="73"/>
+        <source>UnionTech Software Privacy Policy</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>

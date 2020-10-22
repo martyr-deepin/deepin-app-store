@@ -68,9 +68,9 @@ int main(int argc, char **argv)
     SysInfo systeminfo;
     if(systeminfo.product() == "professional" || systeminfo.product() == "personal") {
         if (QLocale::system().name() == "zh_CN") {
-            app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-cn>《统信软件隐私政策》</a>");
+            app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-cn>" + QObject::tr("UnionTech Software Privacy Policy") + "</a>");
         }else {
-            app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-en>《UnionTech Software Privacy Policy》</a>");
+            app.setApplicationLicense("<a href = https://www.uniontech.com/agreement/privacy-en> <i>" + QObject::tr("UnionTech Software Privacy Policy") + "</i> </a>");
         }
     }
     else if (systeminfo.product() == "community") {

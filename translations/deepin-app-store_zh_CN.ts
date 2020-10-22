@@ -2,19 +2,18 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/ui/widgets/title_bar.cpp" line="235"/>
+        <location filename="../src/ui/widgets/title_bar.cpp" line="250"/>
         <source>Search</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="41"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="43"/>
         <source>Clear cache</source>
         <translation>清除缓存</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="44"/>
         <source>Privacy Policy</source>
-        <translation>隐私政策</translation>
+        <translation type="vanished">隐私政策</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="73"/>
@@ -53,14 +52,20 @@
         <translation>全选</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="115"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="61"/>
         <source>App Store</source>
         <translation>应用商店</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="116"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="62"/>
         <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
         <translation>应用商店是一款品质精良、内容丰富的应用商店。精选热门推荐、新品应用和专题介绍。支持一键式下载安装、卸载等功能。</translation>
+    </message>
+    <message>
+        <location filename="../src/app/deepin_app_store.cpp" line="71"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="73"/>
+        <source>UnionTech Software Privacy Policy</source>
+        <translation>《统信软件隐私政策》</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>

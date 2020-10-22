@@ -2,19 +2,18 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/ui/widgets/title_bar.cpp" line="235"/>
+        <location filename="../src/ui/widgets/title_bar.cpp" line="250"/>
         <source>Search</source>
         <translation>Etsi</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="41"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="43"/>
         <source>Clear cache</source>
         <translation>Tyhjennä välimuisti</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="44"/>
         <source>Privacy Policy</source>
-        <translation>Tietosuojakäytäntö</translation>
+        <translation type="vanished">Tietosuojakäytäntö</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="73"/>
@@ -53,14 +52,20 @@
         <translation>Valitse kaikki</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="115"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="61"/>
         <source>App Store</source>
         <translation>Sovelluskauppa</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="116"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="62"/>
         <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
-        <translation>App Store on ohjelmistokeskus, jossa on monipuoliset ja laadukkaat sovellukset. Tukee asennusta ja asennuksen poistoa yhdellä klikkauksella.</translation>
+        <translation>Sovelluskaupasta löydät monipuolisesti laadukkaita ohjelmia. Helppo asennus ja asennuksen poistoa yhdellä painalluksella.</translation>
+    </message>
+    <message>
+        <location filename="../src/app/deepin_app_store.cpp" line="71"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="73"/>
+        <source>UnionTech Software Privacy Policy</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
@@ -78,12 +83,12 @@
     <message>
         <location filename="../src/ui/channel/account_proxy.cpp" line="35"/>
         <source>Activate</source>
-        <translation type="unfinished"/>
+        <translation>Aktivoi</translation>
     </message>
     <message>
         <location filename="../src/ui/channel/account_proxy.cpp" line="44"/>
         <source>Your system is not activated. Please activate as soon as possible for normal use.</source>
-        <translation type="unfinished"/>
+        <translation>Järjestelmä ei ole aktivoitu. Aktivoi mahdollisimman pian normaaliin käyttöön.</translation>
     </message>
 </context>
 <context>
@@ -96,7 +101,7 @@
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="16"/>
         <source>My comments</source>
-        <translation>Minun kommenttini</translation>
+        <translation>Minun kommentit</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="24"/>

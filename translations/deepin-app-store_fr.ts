@@ -2,24 +2,23 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/ui/widgets/title_bar.cpp" line="235"/>
+        <location filename="../src/ui/widgets/title_bar.cpp" line="250"/>
         <source>Search</source>
         <translation>Rechercher</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="41"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="43"/>
         <source>Clear cache</source>
         <translation> Vider le cache</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="44"/>
         <source>Privacy Policy</source>
-        <translation>Politique de confidentialité</translation>
+        <translation type="vanished">Politique de confidentialité</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="73"/>
         <source>Undo</source>
-        <translation>Défaire</translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="78"/>
@@ -53,14 +52,20 @@
         <translation>Tout sélectionner </translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="115"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="61"/>
         <source>App Store</source>
         <translation>Magasin d&apos;applications</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="116"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="62"/>
         <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
         <translation>L&apos;App Store est un centre logiciel avec des applications diverses et de qualité, prenant en charge l&apos;installation et la désinstallation en un seul clic.</translation>
+    </message>
+    <message>
+        <location filename="../src/app/deepin_app_store.cpp" line="71"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="73"/>
+        <source>UnionTech Software Privacy Policy</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
@@ -78,12 +83,12 @@
     <message>
         <location filename="../src/ui/channel/account_proxy.cpp" line="35"/>
         <source>Activate</source>
-        <translation type="unfinished"/>
+        <translation>Activer</translation>
     </message>
     <message>
         <location filename="../src/ui/channel/account_proxy.cpp" line="44"/>
         <source>Your system is not activated. Please activate as soon as possible for normal use.</source>
-        <translation type="unfinished"/>
+        <translation>Votre système n&apos;est pas activé. Veuillez l&apos;activer dès que possible pour une utilisation normale.</translation>
     </message>
 </context>
 <context>

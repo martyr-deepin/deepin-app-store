@@ -2,19 +2,18 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/ui/widgets/title_bar.cpp" line="235"/>
+        <location filename="../src/ui/widgets/title_bar.cpp" line="250"/>
         <source>Search</source>
         <translation>Претражи</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="41"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="43"/>
         <source>Clear cache</source>
         <translation>Очисти кеш</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="44"/>
         <source>Privacy Policy</source>
-        <translation>Политика приватности</translation>
+        <translation type="vanished">Политика приватности</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="73"/>
@@ -53,14 +52,20 @@
         <translation>Изабери све</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="115"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="61"/>
         <source>App Store</source>
         <translation>Продавница</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="116"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="62"/>
         <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
         <translation>Продавница је софтверси центар са разноврсним и квалитетним програмима. Подржава инсталирање и деинсталирање једним кликом.</translation>
+    </message>
+    <message>
+        <location filename="../src/app/deepin_app_store.cpp" line="71"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="73"/>
+        <source>UnionTech Software Privacy Policy</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
@@ -78,12 +83,12 @@
     <message>
         <location filename="../src/ui/channel/account_proxy.cpp" line="35"/>
         <source>Activate</source>
-        <translation type="unfinished"/>
+        <translation>Активирај</translation>
     </message>
     <message>
         <location filename="../src/ui/channel/account_proxy.cpp" line="44"/>
         <source>Your system is not activated. Please activate as soon as possible for normal use.</source>
-        <translation type="unfinished"/>
+        <translation>Ваш ситем није активиран. Молимо активирајте га у најкраћем року за нормалну употребу.</translation>
     </message>
 </context>
 <context>

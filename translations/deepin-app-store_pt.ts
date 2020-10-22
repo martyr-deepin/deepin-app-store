@@ -2,19 +2,18 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/ui/widgets/title_bar.cpp" line="235"/>
+        <location filename="../src/ui/widgets/title_bar.cpp" line="250"/>
         <source>Search</source>
-        <translation>Procurar</translation>
+        <translation>Pesquisar</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="41"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="43"/>
         <source>Clear cache</source>
         <translation>Limpar cache</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="44"/>
         <source>Privacy Policy</source>
-        <translation>Política de privacidade</translation>
+        <translation type="vanished">Política de privacidade</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="73"/>
@@ -50,27 +49,33 @@
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="105"/>
         <source>Select all</source>
-        <translation>Selecionar todos</translation>
+        <translation>Selecionar tudo</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="115"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="61"/>
         <source>App Store</source>
         <translation>Loja de Aplicações</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app_store.cpp" line="116"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="62"/>
         <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
-        <translation>A Loja de Aplicações é um centro de software com aplicações diversas e de qualidade, suportando a instalação e desinstalação com um simples clique.</translation>
+        <translation>A Loja de Aplicações é um centro de software com aplicações diversas e de qualidade com suporte a instalação e desinstalação com um simples clique.</translation>
+    </message>
+    <message>
+        <location filename="../src/app/deepin_app_store.cpp" line="71"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="73"/>
+        <source>UnionTech Software Privacy Policy</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
         <source>Search for &quot;%1&quot; in Store</source>
-        <translation>Procurar por &quot;%1&quot; na loja</translation>
+        <translation>Pesquisar por &quot;%1&quot; na Loja</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
         <source>Search &quot;%1&quot; in Store</source>
-        <translation>Procurar por &quot;%1&quot; na Loja</translation>
+        <translation>Pesquisar &quot;%1&quot; na Loja</translation>
     </message>
 </context>
 <context>
@@ -78,12 +83,12 @@
     <message>
         <location filename="../src/ui/channel/account_proxy.cpp" line="35"/>
         <source>Activate</source>
-        <translation type="unfinished"/>
+        <translation>Ativar</translation>
     </message>
     <message>
         <location filename="../src/ui/channel/account_proxy.cpp" line="44"/>
         <source>Your system is not activated. Please activate as soon as possible for normal use.</source>
-        <translation type="unfinished"/>
+        <translation>O seu sistema não está ativado. Ativar o mais rapidamente possível para utilização normal.</translation>
     </message>
 </context>
 <context>

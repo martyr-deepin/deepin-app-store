@@ -1,65 +1,65 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ko" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="hi_IN" version="2.1">
 <context>
     <name>QObject</name>
     <message>
         <location filename="../src/ui/widgets/title_bar.cpp" line="250"/>
         <source>Search</source>
-        <translation>검색</translation>
+        <translation>खोजें</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/title_bar_menu.cpp" line="43"/>
         <source>Clear cache</source>
-        <translation>캐시 지우기</translation>
+        <translation>कैश हटाएँ</translation>
     </message>
     <message>
         <source>Privacy Policy</source>
-        <translation type="vanished">개인정보 보호정책</translation>
+        <translation type="vanished">गोपनीयता नीति</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="73"/>
         <source>Undo</source>
-        <translation>되돌리기</translation>
+        <translation>पूर्ववत करें</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="78"/>
         <source>Redo</source>
-        <translation>재실행</translation>
+        <translation>पुनः करें</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="84"/>
         <source>Cut</source>
-        <translation>잘라내기</translation>
+        <translation>कट करें</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="89"/>
         <location filename="../src/ui/web_event_delegate.cpp" line="113"/>
         <source>Copy</source>
-        <translation>복사</translation>
+        <translation>कॉपी करें</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="94"/>
         <source>Paste</source>
-        <translation>붙여넣기</translation>
+        <translation>पेस्ट करें</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="99"/>
         <source>Delete</source>
-        <translation>삭제</translation>
+        <translation>हटाएँ</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="105"/>
         <source>Select all</source>
-        <translation>모두 선택</translation>
+        <translation>सभी चुनें</translation>
     </message>
     <message>
         <location filename="../src/app/deepin_app_store.cpp" line="61"/>
         <source>App Store</source>
-        <translation>앱 스토어</translation>
+        <translation>अनुप्रयोग स्टोर</translation>
     </message>
     <message>
         <location filename="../src/app/deepin_app_store.cpp" line="62"/>
         <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
-        <translation>앱스토어는 한 번의 클릭으로 설치와 제거를 지원하는 다양하고 질 좋은 어플리케이션을 갖춘 소프트웨어 센터입니다.</translation>
+        <translation>ऐप स्टोर एक क्लिक के साथ इंस्टॉलेशन और अनिंस्टोलेशन का समर्थन करने वाले विविध और गुणवत्ता अनुप्रयोगों के साथ एक सॉफ्टवेयर केंद्र है।</translation>
     </message>
     <message>
         <location filename="../src/app/deepin_app_store.cpp" line="71"/>
@@ -70,12 +70,12 @@
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
         <source>Search for &quot;%1&quot; in Store</source>
-        <translation>스토어에서 &quot;%1&quot; 검색</translation>
+        <translation>स्टोर में &quot;% 1&quot; के लिए खोजें</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
         <source>Search &quot;%1&quot; in Store</source>
-        <translation>스토어에서 &quot;%1&quot; 검색</translation>
+        <translation>स्टोर में &quot;% 1&quot; खोजें</translation>
     </message>
 </context>
 <context>
@@ -83,12 +83,12 @@
     <message>
         <location filename="../src/ui/channel/account_proxy.cpp" line="35"/>
         <source>Activate</source>
-        <translation>활성화</translation>
+        <translation>सक्रिय</translation>
     </message>
     <message>
         <location filename="../src/ui/channel/account_proxy.cpp" line="44"/>
         <source>Your system is not activated. Please activate as soon as possible for normal use.</source>
-        <translation>시스템이 활성화되지 않았습니다. 정상적인 사용을 위해 가능한 빨리 활성화하십시오.</translation>
+        <translation>आपका सिस्टम सक्रिय नहीं है। कृपया सामान्य उपयोग के लिए जल्द से जल्द सक्रिय करें।</translation>
     </message>
 </context>
 <context>
@@ -96,22 +96,22 @@
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="13"/>
         <source>Username</source>
-        <translation>사용자 이름</translation>
+        <translation>उपयोक्ता नाम</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="16"/>
         <source>My comments</source>
-        <translation>내 의견</translation>
+        <translation>मेरी टिप्पणियाँ</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="24"/>
         <source>My apps</source>
-        <translation>내 앱</translation>
+        <translation>मेरे अनुप्रयोग</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="30"/>
         <source>Sign out</source>
-        <translation>로그아웃</translation>
+        <translation>लॉगआउट करें</translation>
     </message>
 </context>
 </TS>

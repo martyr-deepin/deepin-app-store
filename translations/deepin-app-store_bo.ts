@@ -1,65 +1,65 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ko" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="bo" version="2.1">
 <context>
     <name>QObject</name>
     <message>
         <location filename="../src/ui/widgets/title_bar.cpp" line="250"/>
         <source>Search</source>
-        <translation>검색</translation>
+        <translation>འཚོལ་ཞིབ།</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/title_bar_menu.cpp" line="43"/>
         <source>Clear cache</source>
-        <translation>캐시 지우기</translation>
+        <translation>ཤོང་གསོག་གཙང་སེལ།</translation>
     </message>
     <message>
         <source>Privacy Policy</source>
-        <translation type="vanished">개인정보 보호정책</translation>
+        <translation type="vanished">གསང་དོན་སྲིད་ཇུས།</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="73"/>
         <source>Undo</source>
-        <translation>되돌리기</translation>
+        <translation>ཕྱིར་འཐེན།</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="78"/>
         <source>Redo</source>
-        <translation>재실행</translation>
+        <translation>བསྐྱར་བཟོ།</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="84"/>
         <source>Cut</source>
-        <translation>잘라내기</translation>
+        <translation>དྲས་གཏུབ།</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="89"/>
         <location filename="../src/ui/web_event_delegate.cpp" line="113"/>
         <source>Copy</source>
-        <translation>복사</translation>
+        <translation>པར་སློག</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="94"/>
         <source>Paste</source>
-        <translation>붙여넣기</translation>
+        <translation>སྦྱར་བ།</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="99"/>
         <source>Delete</source>
-        <translation>삭제</translation>
+        <translation>སུབ་པ།</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="105"/>
         <source>Select all</source>
-        <translation>모두 선택</translation>
+        <translation>ཡོངས་འདེམས།</translation>
     </message>
     <message>
         <location filename="../src/app/deepin_app_store.cpp" line="61"/>
         <source>App Store</source>
-        <translation>앱 스토어</translation>
+        <translation>ཉེར་སྤྱོད་ཚོང་ཁང་།</translation>
     </message>
     <message>
         <location filename="../src/app/deepin_app_store.cpp" line="62"/>
         <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
-        <translation>앱스토어는 한 번의 클릭으로 설치와 제거를 지원하는 다양하고 질 좋은 어플리케이션을 갖춘 소프트웨어 센터입니다.</translation>
+        <translation>ཉེར་སྤྱོད་ཚོང་ཁང་ནི་སྤུས་ཚད་ལེགས་ལ་ནང་དོན་ཕུན་སུམ་ཚོགས་པའི་ཉེར་སྤྱོད་ཚོང་ཁང་ཞིག་རེད། སྤྱོད་མཁན་མང་བའི་ཉེར་སྤྱོད་དང་། ཉེར་སྤྱོད་གསར་པ། ཆེད་བརྗོད་ངོ་སྤྲོད་སོགས་ཡོད། སྟབས་བདེའི་ངང་སྒྲིག་སྦྱོར་ཕབ་ལེན་དང་བཤིག་འདོན་སོགས་པའི་བྱེད་ནུས་ཡོད།</translation>
     </message>
     <message>
         <location filename="../src/app/deepin_app_store.cpp" line="71"/>
@@ -70,12 +70,12 @@
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
         <source>Search for &quot;%1&quot; in Store</source>
-        <translation>스토어에서 &quot;%1&quot; 검색</translation>
+        <translation>ཉེར་སྤྱོད་ཚོང་ཁང་དུ་“%1”འཚོལ་བ།</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
         <source>Search &quot;%1&quot; in Store</source>
-        <translation>스토어에서 &quot;%1&quot; 검색</translation>
+        <translation>ཉེར་སྤྱོད་ཚོང་ཁང་དུ་“%1”འཚོལ་བ།</translation>
     </message>
 </context>
 <context>
@@ -83,12 +83,12 @@
     <message>
         <location filename="../src/ui/channel/account_proxy.cpp" line="35"/>
         <source>Activate</source>
-        <translation>활성화</translation>
+        <translation>སྐུལ་སློང་།</translation>
     </message>
     <message>
         <location filename="../src/ui/channel/account_proxy.cpp" line="44"/>
         <source>Your system is not activated. Please activate as soon as possible for normal use.</source>
-        <translation>시스템이 활성화되지 않았습니다. 정상적인 사용을 위해 가능한 빨리 활성화하십시오.</translation>
+        <translation>ཁྱེད་ཀྱི་མ་ལག་སྐུལ་སློང་བྱས་མེད་པས། རྒྱུན་ལྡན་ངང་སྤྱོད་ཐུབ་ཆེད། མགྱོགས་མྱུར་སྐུལ་སློང་གནང་རོགས།</translation>
     </message>
 </context>
 <context>
@@ -96,22 +96,22 @@
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="13"/>
         <source>Username</source>
-        <translation>사용자 이름</translation>
+        <translation>སྤྱོད་མཁན་མིང་།</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="16"/>
         <source>My comments</source>
-        <translation>내 의견</translation>
+        <translation>ངའི་དཔྱད་གླེང་།</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="24"/>
         <source>My apps</source>
-        <translation>내 앱</translation>
+        <translation>ངའི་ཉེར་སྤྱོད།</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="30"/>
         <source>Sign out</source>
-        <translation>로그아웃</translation>
+        <translation>ཐོ་འབུད།</translation>
     </message>
 </context>
 </TS>

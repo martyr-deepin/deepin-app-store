@@ -2,47 +2,18 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
-        <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
-        <source>Search &quot;%1&quot; in Deepin Store</source>
-        <translation>於 Deepin 商店搜尋「%1」</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar.cpp" line="206"/>
+        <location filename="../src/ui/widgets/title_bar.cpp" line="250"/>
         <source>Search</source>
         <translation>搜尋</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="55"/>
-        <source>Recommend App</source>
-        <translation>推薦程式</translation>
-    </message>
-    <message>
-        <source>Select region</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>China</source>
-        <translation type="vanished">中國</translation>
-    </message>
-    <message>
-        <source>International</source>
-        <translation type="vanished">國際</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="60"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="43"/>
         <source>Clear cache</source>
-        <translation type="unfinished"/>
+        <translation>清除緩衝</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="64"/>
-        <source>Dark theme</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="70"/>
         <source>Privacy Policy</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">私隱政策</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="73"/>
@@ -81,14 +52,43 @@
         <translation>全選</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app-store.cpp" line="107"/>
-        <source>Deepin Store</source>
-        <translation>Deepin 商店</translation>
+        <location filename="../src/app/deepin_app_store.cpp" line="61"/>
+        <source>App Store</source>
+        <translation>應用商店</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app-store.cpp" line="108"/>
-        <source>Deepin Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
-        <translation type="unfinished"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="62"/>
+        <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
+        <translation>應用商店是一款品質精良、內容豐富的應用商店。精選熱門推薦、新品應用和專題介紹。支持一鍵式下載安裝、卸載等功能。</translation>
+    </message>
+    <message>
+        <location filename="../src/app/deepin_app_store.cpp" line="71"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="73"/>
+        <source>UnionTech Software Privacy Policy</source>
+        <translation>《統信軟件私隱政策》</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
+        <source>Search for &quot;%1&quot; in Store</source>
+        <translation>在應用商店中搜索“%1”</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
+        <source>Search &quot;%1&quot; in Store</source>
+        <translation>在應用商店中搜索“%1”</translation>
+    </message>
+</context>
+<context>
+    <name>dstore::AccountProxy</name>
+    <message>
+        <location filename="../src/ui/channel/account_proxy.cpp" line="35"/>
+        <source>Activate</source>
+        <translation>啟動</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/channel/account_proxy.cpp" line="44"/>
+        <source>Your system is not activated. Please activate as soon as possible for normal use.</source>
+        <translation>您的系統尚未啟動，為確保正常使用，請儘快啟動。</translation>
     </message>
 </context>
 <context>
@@ -102,11 +102,6 @@
         <location filename="../src/ui/widgets/user_menu.cpp" line="16"/>
         <source>My comments</source>
         <translation>我的評論</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/user_menu.cpp" line="20"/>
-        <source>My donations</source>
-        <translation>我的捐獻</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="24"/>

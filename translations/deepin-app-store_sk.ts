@@ -2,47 +2,18 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
-        <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
-        <source>Search &quot;%1&quot; in Deepin Store</source>
-        <translation>Vyhľadať &quot;%1&quot; v Deepin Obchode</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar.cpp" line="206"/>
+        <location filename="../src/ui/widgets/title_bar.cpp" line="250"/>
         <source>Search</source>
         <translation>Vyhľadávanie</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="55"/>
-        <source>Recommend App</source>
-        <translation>Odporúčané aplikácie</translation>
-    </message>
-    <message>
-        <source>Select region</source>
-        <translation type="vanished">Výber regiónu</translation>
-    </message>
-    <message>
-        <source>China</source>
-        <translation type="vanished">Čína</translation>
-    </message>
-    <message>
-        <source>International</source>
-        <translation type="vanished">Medzinárodný</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="60"/>
+        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="43"/>
         <source>Clear cache</source>
         <translation>Vymazať vyrovnávaciu pamäť</translation>
     </message>
     <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="64"/>
-        <source>Dark theme</source>
-        <translation>Tmavá téma</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/title_bar_menu.cpp" line="70"/>
         <source>Privacy Policy</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Zásady ochrany osobných údajov</translation>
     </message>
     <message>
         <location filename="../src/ui/web_event_delegate.cpp" line="73"/>
@@ -81,14 +52,43 @@
         <translation>Vybrať všetko</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app-store.cpp" line="107"/>
-        <source>Deepin Store</source>
-        <translation>Deepin Obchod</translation>
+        <location filename="../src/app/deepin_app_store.cpp" line="61"/>
+        <source>App Store</source>
+        <translation>App Store</translation>
     </message>
     <message>
-        <location filename="../src/app/deepin_app-store.cpp" line="108"/>
-        <source>Deepin Store is an App Store with diverse and quality applications. It features popular recommendations, newly updated apps and hot topics, and supports one-click installation, updating and uninstalling.</source>
-        <translation>Deepin Obchod je Appstore s kvalitnými a bohatými aplikáciami. Sú k dispozícii obľúbené odporúčania, nové aktualizované aplikácie a horúce témy. Podporuje stiahnutie, inštaláciu, aktualizáciu, odinštalovanie atď. jedným klikom.</translation>
+        <location filename="../src/app/deepin_app_store.cpp" line="62"/>
+        <source>App Store is a software center with diverse and quality applications, supporting installation and uninstallation with one click.</source>
+        <translation>Obchod aplikácií je softvérové centrum s rôznymi a kvalitnými aplikáciami, ktoré podporuje inštaláciu a odinštalovanie jedným kliknutím.</translation>
+    </message>
+    <message>
+        <location filename="../src/app/deepin_app_store.cpp" line="71"/>
+        <location filename="../src/app/deepin_app_store.cpp" line="73"/>
+        <source>UnionTech Software Privacy Policy</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/ui/widgets/search_completion_window.cpp" line="115"/>
+        <source>Search for &quot;%1&quot; in Store</source>
+        <translation>Vyhľadať &quot;%1&quot; v Obchode</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/widgets/search_completion_window.cpp" line="164"/>
+        <source>Search &quot;%1&quot; in Store</source>
+        <translation>Hľadať &quot;%1&quot; v Obchode</translation>
+    </message>
+</context>
+<context>
+    <name>dstore::AccountProxy</name>
+    <message>
+        <location filename="../src/ui/channel/account_proxy.cpp" line="35"/>
+        <source>Activate</source>
+        <translation>Aktivovať</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/channel/account_proxy.cpp" line="44"/>
+        <source>Your system is not activated. Please activate as soon as possible for normal use.</source>
+        <translation>Váš systém nie je aktivovaný. Prosím aktivujte ho čo najskôr pre bežné použitie.</translation>
     </message>
 </context>
 <context>
@@ -96,22 +96,17 @@
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="13"/>
         <source>Username</source>
-        <translation type="unfinished"/>
+        <translation>Používateľské meno</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="16"/>
         <source>My comments</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/ui/widgets/user_menu.cpp" line="20"/>
-        <source>My donations</source>
-        <translation type="unfinished"/>
+        <translation>Moje komentáre</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="24"/>
         <source>My apps</source>
-        <translation type="unfinished"/>
+        <translation>Moje aplikácie</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/user_menu.cpp" line="30"/>

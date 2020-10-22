@@ -31,7 +31,6 @@ class TitleBarMenu : public QMenu {
   ~TitleBarMenu() override;
 
 public slots:
-  void privacyAgreementDialogRequested();
 
  signals:
   void switchThemeRequested(QString themeName);

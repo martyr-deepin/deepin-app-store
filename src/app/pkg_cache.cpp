@@ -13,10 +13,10 @@ int main(int argc, char **argv)
     Dtk::Core::DLogManager::registerFileAppender();
 
     QCommandLineParser parser;
-    QCommandLineOption create({"c", "create"}, QObject::tr("create package cache."));
-    QCommandLineOption update({"u", "update"}, QObject::tr("update package cache."));
-    QCommandLineOption install({"i", "install"}, QObject::tr("install package cache."));
-    QCommandLineOption remove({"r", "remove"}, QObject::tr("remove package cache."));
+    QCommandLineOption create({"c", "create"}, "create package cache.");
+    QCommandLineOption update({"u", "update"}, "update package cache.");
+    QCommandLineOption install({"i", "install"}, "install package cache.");
+    QCommandLineOption remove({"r", "remove"}, "remove package cache.");
     parser.addOption(create);
     parser.addOption(update);
     parser.addOption(install);
