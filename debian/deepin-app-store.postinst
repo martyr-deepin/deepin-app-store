@@ -9,8 +9,8 @@ if [ "$1" = "configure" ] ; then
   eval $(apt-config shell APT_TRUSTED_PARTS Dir::Etc::trustedparts/d)
   TRUSTED_PART=${APT_TRUSTED_PARTS}appstore.gpg
 
-  if [ ! -f TRUSTED_PART ]; then
-    cp $GPG TRUSTED_PART
+  if [ ! -f "$TRUSTED_PART" ]; then
+    cp $GPG $TRUSTED_PART
   fi
 
   count=$(ps -ef |grep deepin-app-store-daemon |grep -v grep |wc -l)
