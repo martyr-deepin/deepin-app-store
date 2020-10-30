@@ -14,7 +14,7 @@ if [ "$1" = "configure" ] ; then
   fi
 
   count=$(ps -ef |grep deepin-app-store-daemon |grep -v grep |wc -l)
-  if [ "$count" -eq "1" ]
+  if [ "$count" -gt "0" ]
   then
     ps -ef | grep deepin-app-store-daemon | grep -v grep | awk '{print $2}' | xargs kill -9
   fi
